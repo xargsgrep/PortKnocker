@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PortKnocker</string>
+    <string name="host_tab_name">Host</string>
+    <string name="ports_tab_name">Ports</string>
+    <string name="misc_tab_name">Misc</string>
+    <string name="host_label_label">Label:</string>
+    <string name="host_name_label">Host Name:</string>
+    <string name="delay_label">Delay (ms):</string>
+    <string name="port_label">Port:</string>
+
+</resources>

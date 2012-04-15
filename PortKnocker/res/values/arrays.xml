@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="protocols">
+		<item>TCP</item>
+		<item>UDP</item>
+	</string-array>
+</resources>
