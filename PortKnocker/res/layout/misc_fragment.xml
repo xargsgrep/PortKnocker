@@ -10,7 +10,7 @@
         android:text="@string/delay_label" />
 	
 	<EditText
-	    android:id="@+id/delay"
+	    android:id="@+id/delay_edit"
 	    android:inputType="number"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

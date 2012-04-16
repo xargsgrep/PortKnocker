@@ -21,7 +21,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String PORT_TABLE_NAME = "port";
     public static final String PORT_ID_COLUMN = BaseColumns._ID;
     public static final String PORT_HOST_ID_COLUMN = "host_id";
-    public static final String PORT_INDEX_COLUMN = "index";
+    public static final String PORT_INDEX_COLUMN = "idx";
     public static final String PORT_PORT_COLUMN = "port";
     public static final String PORT_PROTOCOL_COLUMN = "protocol";
     

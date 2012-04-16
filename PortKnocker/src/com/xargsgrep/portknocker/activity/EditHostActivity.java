@@ -4,21 +4,27 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
+import com.google.inject.Inject;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
+import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.manager.TabManager;
+import com.xargsgrep.portknocker.model.Host;
 
 public class EditHostActivity extends RoboSherlockFragmentActivity {
 	
     TabManager tabManager;
+    
+    @Inject HostDataManager hostDataManager;
     
 	@InjectView(R.id.tab_host) TabHost tabHost;
 	
@@ -71,11 +77,31 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
 	    		Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
 	    		return true;
 	    	case MENU_SAVE_ITEM_ID:
-	    		Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+	    		saveHost();
 	    		return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
     	}
+    }
+    
+    private void saveHost() {
+    	Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+    	
+    	// Can't inject these using roboguice because they will be null at that point
+    	EditText hostLabelEdit = (EditText) findViewById(R.id.host_label_edit);
+    	EditText hostNameEdit = (EditText) findViewById(R.id.host_name_edit);
+    	EditText delayEdit = (EditText) findViewById(R.id.delay_edit);
+    	
+    	String hostLabel = HostFragment.hostLabel;
+    	String hostName = HostFragment.hostname;
+    	int delay = MiscFragment.delay;
+    	
+    	Host host = new Host();
+    	host.setLabel(hostLabel);
+    	host.setHostname(hostName);
+    	host.setDelay(delay);
+    	
+    	hostDataManager.addHost(host);
     }
     
     /*

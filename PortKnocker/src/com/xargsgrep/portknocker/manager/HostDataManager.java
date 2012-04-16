@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.inject.Inject;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
@@ -16,6 +17,7 @@ public class HostDataManager {
 
 	private DatabaseManager databaseManager;
 
+	@Inject
 	public HostDataManager(Context context) {
 		databaseManager = new DatabaseManager(context);
 	}
@@ -32,7 +34,7 @@ public class HostDataManager {
 			null,
 			null,
 			null,
-			DatabaseManager.PORT_HOST_ID_COLUMN
+			DatabaseManager.HOST_ID_COLUMN
 		);
 		hostsCursor.moveToFirst();
 		
@@ -40,6 +42,7 @@ public class HostDataManager {
 			Host host = cursorToHost(hostsCursor);
 			List<Port> ports = getPortsForHost(database, host.getId());
 			host.setPorts(ports);
+			hosts.add(host);
 			hostsCursor.moveToNext();
 		}
 		
@@ -60,7 +63,7 @@ public class HostDataManager {
 			new String[] { new Long(hostId).toString() },
 			null,
 			null,
-			DatabaseManager.PORT_HOST_ID_COLUMN
+			DatabaseManager.HOST_ID_COLUMN
 		);
 		hostCursor.moveToFirst();
 		

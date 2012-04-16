@@ -1,5 +1,7 @@
 package com.xargsgrep.portknocker.activity;
 
+import java.util.List;
+
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +10,15 @@ import android.widget.LinearLayout;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.google.inject.Inject;
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.model.Host;
 
 public class HostListActivity extends RoboSherlockActivity {
 	
+    @Inject HostDataManager hostDataManager;
+    
 	@InjectView(R.id.host_list) LinearLayout hostList;
 	
 	private static final int MENU_ADD_ITEM_ID = 1;
@@ -21,6 +28,9 @@ public class HostListActivity extends RoboSherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_list);
         getSupportActionBar().setHomeButtonEnabled(false);
+        
+        List<Host> hosts = hostDataManager.getAllHosts();
+        System.out.println(hosts);
     }
 
 	@Override

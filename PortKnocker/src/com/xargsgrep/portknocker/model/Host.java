@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Host {
 	
-	private long id = -1;
+	private long id;
 	private String label;
 	private String hostname;
 	private int delay = 0;

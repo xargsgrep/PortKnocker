@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/host_fragment">
 
 	<TextView
-	    android:layout_width="wrap_content"
+	    android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/host_label_label" />
 	
 	<EditText
-	    android:id="@+id/host_label"
+	    android:id="@+id/host_label_edit"
 	    android:inputType="text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:singleLine="true" />
 	
@@ -22,7 +24,7 @@
         android:text="@string/host_name_label" />
 	
 	<EditText
-	    android:id="@+id/host_name"
+	    android:id="@+id/host_name_edit"
 	    android:inputType="text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

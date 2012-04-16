@@ -37,8 +37,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             if (newTab != null) {
                 if (newTab.fragment == null) {
-                    newTab.fragment = Fragment.instantiate(activity,
-                            newTab.clazz.getName(), newTab.args);
+                    newTab.fragment = Fragment.instantiate(activity, newTab.clazz.getName(), newTab.args);
                     ft.add(containerId, newTab.fragment, newTab.tag);
                 } else {
                     ft.attach(newTab.fragment);
