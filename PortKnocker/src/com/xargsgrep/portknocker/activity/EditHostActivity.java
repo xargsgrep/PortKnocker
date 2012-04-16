@@ -4,7 +4,6 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -34,7 +33,7 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
 	
 	private static final int MENU_CANCEL_ITEM_ID = 1;
 	private static final int MENU_SAVE_ITEM_ID = 2;
-
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,20 +41,14 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
         
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         tabHost.setup();
         tabManager = new TabManager(this, tabHost, R.id.real_tab_content);
         
-        tabManager.addTab(tabHost.newTabSpec("host").setIndicator(hostTabName), HostFragment.class, null);
-        tabManager.addTab(tabHost.newTabSpec("ports").setIndicator(portsTabName), PortsFragment.class, null);
-        tabManager.addTab(tabHost.newTabSpec("misc").setIndicator(miscTabName), MiscFragment.class, null);
+        tabManager.addTab(tabHost.newTabSpec(hostTabName).setIndicator(hostTabName), HostFragment.class, null);
+        tabManager.addTab(tabHost.newTabSpec(portsTabName).setIndicator(portsTabName), PortsFragment.class, null);
+        tabManager.addTab(tabHost.newTabSpec(miscTabName).setIndicator(miscTabName), MiscFragment.class, null);
         
-        /*
-        if (savedInstanceState != null) {
-            tabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-        }
-        */
     }
     
 	@Override
@@ -87,28 +80,25 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
     private void saveHost() {
     	Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
     	
-    	// Can't inject these using roboguice because they will be null at that point
-    	EditText hostLabelEdit = (EditText) findViewById(R.id.host_label_edit);
-    	EditText hostNameEdit = (EditText) findViewById(R.id.host_name_edit);
-    	EditText delayEdit = (EditText) findViewById(R.id.delay_edit);
+        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(hostTabName);
+        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(portsTabName);
+        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(miscTabName);
     	
-    	String hostLabel = HostFragment.hostLabel;
-    	String hostName = HostFragment.hostname;
-    	int delay = MiscFragment.delay;
+    	String hostLabel = hostFragment.getHostLabelEdit().getText().toString();
+    	String hostname = hostFragment.getHostnameEdit().getText().toString();
+    	
+    	int delay = 0;
+    	if (miscFragment != null) {
+    		String delayStr = miscFragment.getDelayEdit().getText().toString();
+    		delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
+    	}
     	
     	Host host = new Host();
     	host.setLabel(hostLabel);
-    	host.setHostname(hostName);
+    	host.setHostname(hostname);
     	host.setDelay(delay);
     	
-    	hostDataManager.addHost(host);
+    	hostDataManager.saveHost(host);
     }
     
-    /*
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("tab", tabHost.getCurrentTabTag());
-    }
-    */
 }

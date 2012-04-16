@@ -5,13 +5,18 @@ import java.util.List;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.google.inject.Inject;
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 
@@ -19,7 +24,7 @@ public class HostListActivity extends RoboSherlockActivity {
 	
     @Inject HostDataManager hostDataManager;
     
-	@InjectView(R.id.host_list) LinearLayout hostList;
+	@InjectView(R.id.host_list) ListView hostList;
 	
 	private static final int MENU_ADD_ITEM_ID = 1;
 	
@@ -30,7 +35,21 @@ public class HostListActivity extends RoboSherlockActivity {
         getSupportActionBar().setHomeButtonEnabled(false);
         
         List<Host> hosts = hostDataManager.getAllHosts();
-        System.out.println(hosts);
+		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, R.layout.host_row, hosts);
+		
+		/*
+		final Intent editHostIntent = new Intent(this, EditHostActivity.class);
+		hostList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position, Toast.LENGTH_SHORT).show();
+				editHostIntent.putExtra("hostId", -1L);
+		        startActivity(editHostIntent);
+			}
+		});
+		*/
+		
+		hostList.setAdapter(hostAdapter);
     }
 
 	@Override

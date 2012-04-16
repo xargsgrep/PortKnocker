@@ -12,25 +12,14 @@ import com.xargsgrep.portknocker.R;
 
 public class MiscFragment extends RoboSherlockFragment {
 	
-	public static int delay;
-	
 	@InjectView(R.id.delay_edit) EditText delayEdit;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		delay = 0;
-	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.misc_fragment, container, false);
     }
 
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	delay = (delayEdit.getText() != null) ? Integer.parseInt(delayEdit.getText().toString()) : 0;
+    public EditText getDelayEdit() {
+    	return delayEdit;
     }
-	
 }

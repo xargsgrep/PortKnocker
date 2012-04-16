@@ -78,7 +78,7 @@ public class HostDataManager {
 		return host;
 	}
 	
-	public void addHost(Host host) {
+	public void saveHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
 		ContentValues hostValues = new ContentValues();

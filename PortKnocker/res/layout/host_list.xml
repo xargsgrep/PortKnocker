@@ -4,10 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <ListView
         android:id="@+id/host_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    </LinearLayout>
+    </ListView>
 </LinearLayout>
