@@ -4,6 +4,9 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -48,7 +51,6 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
         tabManager.addTab(tabHost.newTabSpec(hostTabName).setIndicator(hostTabName), HostFragment.class, null);
         tabManager.addTab(tabHost.newTabSpec(portsTabName).setIndicator(portsTabName), PortsFragment.class, null);
         tabManager.addTab(tabHost.newTabSpec(miscTabName).setIndicator(miscTabName), MiscFragment.class, null);
-        
     }
     
 	@Override
@@ -83,13 +85,26 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
         HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(hostTabName);
         PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(portsTabName);
         MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(miscTabName);
+        
+        String hostLabel = null;
+        String hostname = null;
+        int delay = 0;
+        
+    	if (hostFragment != null) { // should never be null since this is the default tab
+	    	hostLabel = hostFragment.getHostLabelEditTextView().getText().toString();
+	    	hostname = hostFragment.getHostnameEditTextView().getText().toString();
+    	}
     	
-    	String hostLabel = hostFragment.getHostLabelEdit().getText().toString();
-    	String hostname = hostFragment.getHostnameEdit().getText().toString();
+    	if (portsFragment != null) { // could be null if user clicked save without going to this tab
+    		LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
+    		for (int i=0; i<portListView.getChildCount(); i++) {
+    			LinearLayout row = (LinearLayout) portListView.getChildAt(i);
+    			System.out.println(((EditText) row.getChildAt(1)).getText().toString());
+    			System.out.println(((Spinner) row.getChildAt(2)).getSelectedItem().toString());
+    		}
+    	}
     	
-    	int delay = 0;
-    	if (miscFragment != null) {
-    		String delayStr = miscFragment.getDelayEdit().getText().toString();
+    	if (miscFragment != null) { // could be null if user clicked save without going to this tab    		String delayStr = miscFragment.getDelayEdit().getText().toString();
     		delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
     	}
     	
@@ -98,7 +113,7 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
     	host.setHostname(hostname);
     	host.setDelay(delay);
     	
-    	hostDataManager.saveHost(host);
+    	//hostDataManager.saveHost(host);
     }
     
 }

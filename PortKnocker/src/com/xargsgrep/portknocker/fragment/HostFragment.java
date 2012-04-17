@@ -17,14 +17,16 @@ public class HostFragment extends RoboSherlockFragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.host_fragment, container, false);
     }
 
-    public EditText getHostLabelEdit() {
+    public EditText getHostLabelEditTextView() {
     	return hostLabelEdit;
     }
     
-    public EditText getHostnameEdit() {
+    public EditText getHostnameEditTextView() {
     	return hostnameEdit;
     }
+    
 }
