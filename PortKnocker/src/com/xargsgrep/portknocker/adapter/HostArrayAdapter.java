@@ -34,11 +34,16 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			view = inflater.inflate(R.layout.host_row, null);
 		}
 		
+		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
+		TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);
+		TextView portsView = (TextView) view.findViewById(R.id.host_row_ports);
+		
 		Host host = hosts.get(position);
 		
-		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
-		
 		labelView.setText(host.getLabel());
+		hostnameView.setText(host.getHostname());
+		portsView.setText("2565:TCP, 2345:UDP");
+		
 		/*
 		TextView tt = (TextView) view.findViewById(R.id.toptext);
 		TextView bt = (TextView) view.findViewById(R.id.bottomtext);
