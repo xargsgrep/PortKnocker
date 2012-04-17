@@ -5,11 +5,7 @@ import java.util.List;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -31,8 +27,11 @@ public class HostListActivity extends RoboSherlockActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.host_list);
         getSupportActionBar().setHomeButtonEnabled(false);
+        
+        hostList.setItemsCanFocus(true);
         
         List<Host> hosts = hostDataManager.getAllHosts();
 		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, R.layout.host_row, hosts);
@@ -43,8 +42,8 @@ public class HostListActivity extends RoboSherlockActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position, Toast.LENGTH_SHORT).show();
-				editHostIntent.putExtra("hostId", -1L);
-		        startActivity(editHostIntent);
+				//editHostIntent.putExtra("hostId", -1L);
+		        //startActivity(editHostIntent);
 			}
 		});
 		*/
