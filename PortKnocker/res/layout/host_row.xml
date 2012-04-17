@@ -12,17 +12,26 @@
         android:layout_gravity="right"
         android:layout_weight="1"
         android:gravity="center_vertical" />
-    <ImageView
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_divider_dashed" />
+
+    <ImageButton
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_action_delete"
-        android:contentDescription="Delete" />
-    <ImageView
+        android:src="@drawable/ic_action_delete" />
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_divider_dashed" />
+    <ImageButton
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_action_edit" 
-        android:contentDescription="Edit" />
+        android:src="@drawable/ic_action_edit" />
 
 </LinearLayout>
