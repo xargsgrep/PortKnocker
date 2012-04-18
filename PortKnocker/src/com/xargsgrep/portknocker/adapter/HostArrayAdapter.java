@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -51,25 +50,6 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 				Toast.makeText(context, "Click ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
 			}
 		});
-		
-		/*
-		TextView tt = (TextView) view.findViewById(R.id.toptext);
-		TextView bt = (TextView) view.findViewById(R.id.bottomtext);
-		ImageView imageView = (ImageView) view.findViewById(R.id.icon);
-
-		if (tt != null) {
-			tt.setText(contact.getName());
-		}
-		if (bt != null) {
-			bt.setText(contact.getDate());
-		}
-		if (imageView != null) {
-			if ("WEB".equals(contact.getLeadType()))
-				imageView.setImageResource(R.drawable.email_icon);
-			else if ("CALL".equals(contact.getLeadType()))
-				imageView.setImageResource(R.drawable.phone_icon);
-		}
-		*/
 		
 		return view;
 	}

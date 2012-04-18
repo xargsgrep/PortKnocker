@@ -50,23 +50,24 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         ActionBar.Tab hostTab = getSupportActionBar().newTab();
-        hostTab.setTag(hostTabName.toLowerCase());
         hostTab.setText(hostTabName);
         hostTab.setTabListener(this);
         
         ActionBar.Tab portsTab = getSupportActionBar().newTab();
-        portsTab.setTag(portsTabName.toLowerCase());
         portsTab.setText(portsTabName);
         portsTab.setTabListener(this);
         
         ActionBar.Tab miscTab = getSupportActionBar().newTab();
-        miscTab.setTag(miscTabName.toLowerCase());
         miscTab.setText(miscTabName);
         miscTab.setTabListener(this);
         
         getSupportActionBar().addTab(hostTab);
         getSupportActionBar().addTab(portsTab);
         getSupportActionBar().addTab(miscTab);
+        
+        if (savedInstanceState != null) {
+        	
+        }
     }
     
 	@Override
@@ -110,6 +111,17 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
 		    default:
 		    	return super.onOptionsItemSelected(item);
     	}
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	outState.putString("hostLabel", null);
+    	outState.putString("hostname", null);
+    	outState.putIntArray("ports", new int[] {});
+    	outState.putIntArray("protocols", new int[] {});
+    	outState.putString("delay", null);
+    	outState.putString("launchApp", null);
     }
     
     private void saveHost() {
