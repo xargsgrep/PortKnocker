@@ -1,32 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="16dip"
+    android:layout_marginRight="16dip"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground"
+	android:focusable="true"
+>
     
-	<TextView
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="@string/port_label" />
-		<EditText
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:inputType="number"
-	    android:singleLine="true" />
-
-	<Spinner
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:entries="@array/protocols" />
-	
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="8dip"
+        android:paddingBottom="8dip"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="8dip"
+    >
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+	        android:textColor="#FFFFFF"
+	        android:textSize="18sp"
+	        android:singleLine="true"
+		    android:text="@string/port_label"
+		/>
+		<EditText
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:inputType="number"
+		    android:singleLine="true"
+		    android:maxLength="5"
+		    android:ems="5"
+		/>
+		
+<!--
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+	        android:textColor="#FFFFFF"
+	        android:textSize="18sp"
+	        android:singleLine="true"
+		    android:text="Protocol:"
+		/>
+-->		
+		<Spinner
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:entries="@array/protocols"
+		/>
+    </LinearLayout>
+    
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_divider_dashed" />
-	
+        android:layout_width="1dp"
+        android:layout_height="32dip"
+        android:background="@drawable/ic_divider_dashed"
+        android:layout_gravity="center_vertical"
+    />
     <ImageButton
-        android:layout_width="wrap_content"
+        android:src="@drawable/ic_action_delete"
+        android:layout_width="48dip"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_action_delete" />
-</LinearLayout>
+        android:paddingLeft="8dip"
+        android:paddingTop="8dip"
+        android:paddingBottom="8dip"
+        android:paddingRight="8dip"
+        android:scaleType="center"
+        android:background="?android:attr/selectableItemBackground"
+    />
+</LinearLayout>
