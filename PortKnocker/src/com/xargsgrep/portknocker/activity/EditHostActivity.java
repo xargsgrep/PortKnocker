@@ -1,15 +1,17 @@
 package com.xargsgrep.portknocker.activity;
 
 import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
@@ -19,23 +21,24 @@ import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
-import com.xargsgrep.portknocker.manager.TabManager;
 import com.xargsgrep.portknocker.model.Host;
 
-public class EditHostActivity extends RoboSherlockFragmentActivity {
+public class EditHostActivity extends RoboSherlockFragmentActivity implements ActionBar.TabListener {
 	
-    TabManager tabManager;
-    
     @Inject HostDataManager hostDataManager;
+    @Inject HostFragment hostFragment;
+    @Inject PortsFragment portsFragment;
+    @Inject MiscFragment miscFragment;
     
-	@InjectView(R.id.tab_host) TabHost tabHost;
-	
 	@InjectResource(R.string.host_tab_name) String hostTabName;
 	@InjectResource(R.string.ports_tab_name) String portsTabName;
 	@InjectResource(R.string.misc_tab_name) String miscTabName;
 	
 	private static final int MENU_CANCEL_ITEM_ID = 1;
 	private static final int MENU_SAVE_ITEM_ID = 2;
+	private static final int TAB_HOST_INDEX = 0;
+	private static final int TAB_PORTS_INDEX = 1;
+	private static final int TAB_MISC_INDEX = 2;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,15 +47,45 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
         
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
-        tabHost.setup();
-        tabManager = new TabManager(this, tabHost, R.id.real_tab_content);
+        ActionBar.Tab hostTab = getSupportActionBar().newTab();
+        hostTab.setTag(hostTabName.toLowerCase());
+        hostTab.setText(hostTabName);
+        hostTab.setTabListener(this);
         
-        tabManager.addTab(tabHost.newTabSpec(hostTabName).setIndicator(hostTabName), HostFragment.class, null);
-        tabManager.addTab(tabHost.newTabSpec(portsTabName).setIndicator(portsTabName), PortsFragment.class, null);
-        tabManager.addTab(tabHost.newTabSpec(miscTabName).setIndicator(miscTabName), MiscFragment.class, null);
+        ActionBar.Tab portsTab = getSupportActionBar().newTab();
+        portsTab.setTag(portsTabName.toLowerCase());
+        portsTab.setText(portsTabName);
+        portsTab.setTabListener(this);
+        
+        ActionBar.Tab miscTab = getSupportActionBar().newTab();
+        miscTab.setTag(miscTabName.toLowerCase());
+        miscTab.setText(miscTabName);
+        miscTab.setTabListener(this);
+        
+        getSupportActionBar().addTab(hostTab);
+        getSupportActionBar().addTab(portsTab);
+        getSupportActionBar().addTab(miscTab);
     }
     
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		switch (tab.getPosition()) {
+			case TAB_HOST_INDEX:
+				ft.replace(R.id.fragment_content, hostFragment, hostTabName);
+				break;
+			case TAB_PORTS_INDEX:
+				ft.replace(R.id.fragment_content, portsFragment, portsTabName);
+				break;
+			case TAB_MISC_INDEX:
+				ft.replace(R.id.fragment_content, miscFragment, miscTabName);
+				break;
+			default:
+				break;
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_CANCEL_ITEM_ID, 0, null).setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -80,33 +113,30 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
     }
     
     private void saveHost() {
-    	Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+    	//Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
     	
-        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(hostTabName);
-        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(portsTabName);
-        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(miscTabName);
-        
-        String hostLabel = null;
-        String hostname = null;
-        int delay = 0;
-        
-    	if (hostFragment != null) { // should never be null since this is the default tab
-	    	hostLabel = hostFragment.getHostLabelEditTextView().getText().toString();
-	    	hostname = hostFragment.getHostnameEditTextView().getText().toString();
-    	}
+    	String hostLabel = hostFragment.getHostLabelEditTextView().getText().toString();
+    	String hostname = hostFragment.getHostnameEditTextView().getText().toString();
     	
-    	if (portsFragment != null) { // could be null if user clicked save without going to this tab
-    		LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
-    		for (int i=0; i<portListView.getChildCount(); i++) {
-    			LinearLayout row = (LinearLayout) portListView.getChildAt(i);
-    			System.out.println(((EditText) row.getChildAt(1)).getText().toString());
-    			System.out.println(((Spinner) row.getChildAt(2)).getSelectedItem().toString());
-    		}
-    	}
+		LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
+		if (portListView != null) { // could be null if user saves without going to ports tab
+			for (int i=0; i<portListView.getChildCount(); i++) {
+				View row = portListView.getChildAt(i);
+				
+				EditText portEditText = (EditText) row.findViewById(R.id.port_row_port);
+				Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
+				
+				System.out.println(portEditText.getText().toString());
+				System.out.println(protocolSpinner.getSelectedItem().toString());
+			}
+		}
     	
-    	if (miscFragment != null) { // could be null if user clicked save without going to this tab    		String delayStr = miscFragment.getDelayEdit().getText().toString();
-    		delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
-    	}
+		EditText delayEditTextView = miscFragment.getDelayEdit();
+		int delay = 0;
+		if (delayEditTextView != null) { // could be null if user saves without going to misc tab
+			String delayStr = delayEditTextView.getText().toString();
+			delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
+		}
     	
     	Host host = new Host();
     	host.setLabel(hostLabel);
@@ -115,5 +145,11 @@ public class EditHostActivity extends RoboSherlockFragmentActivity {
     	
     	//hostDataManager.saveHost(host);
     }
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) { }
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) { }
     
 }
