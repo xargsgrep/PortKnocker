@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.google.inject.Inject;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
@@ -17,7 +16,6 @@ public class HostDataManager {
 
 	private DatabaseManager databaseManager;
 
-	@Inject
 	public HostDataManager(Context context) {
 		databaseManager = new DatabaseManager(context);
 	}

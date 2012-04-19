@@ -2,36 +2,32 @@ package com.xargsgrep.portknocker.activity;
 
 import java.util.List;
 
-import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
-import com.google.inject.Inject;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 
-public class HostListActivity extends RoboSherlockActivity {
+public class HostListActivity extends SherlockListActivity {
 	
-    @Inject HostDataManager hostDataManager;
+    HostDataManager hostDataManager;
     
-	@InjectView(R.id.host_list) ListView hostList;
-	
 	private static final int MENU_ADD_ITEM_ID = 1;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.host_list);
-        getSupportActionBar().setHomeButtonEnabled(false);
+        hostDataManager = new HostDataManager(getApplicationContext());
         
-        hostList.setItemsCanFocus(true);
+        setContentView(R.layout.host_list);
+        getListView().setItemsCanFocus(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
         
         List<Host> hosts = hostDataManager.getAllHosts();
 		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, R.layout.host_row, hosts);
@@ -48,7 +44,7 @@ public class HostListActivity extends RoboSherlockActivity {
 		});
 		*/
 		
-		hostList.setAdapter(hostAdapter);
+		getListView().setAdapter(hostAdapter);
     }
 
 	@Override

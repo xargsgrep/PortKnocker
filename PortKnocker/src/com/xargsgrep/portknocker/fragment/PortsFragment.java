@@ -1,21 +1,18 @@
 package com.xargsgrep.portknocker.fragment;
 
-import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.xargsgrep.portknocker.R;
 
-public class PortsFragment extends RoboSherlockFragment {
-	
-	@InjectView(R.id.port_list) LinearLayout linearLayout;
+public class PortsFragment extends SherlockFragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +31,8 @@ public class PortsFragment extends RoboSherlockFragment {
     	super.onViewCreated(view, savedInstanceState);
     	View row1 = getLayoutInflater(savedInstanceState).inflate(R.layout.port_row, null);
     	View row2 = getLayoutInflater(savedInstanceState).inflate(R.layout.port_row, null);
-    	linearLayout.addView(row1);
-    	linearLayout.addView(row2);
+    	getPortListLinearLayoutView().addView(row1);
+    	getPortListLinearLayoutView().addView(row2);
     }
     
     @Override
@@ -45,7 +42,7 @@ public class PortsFragment extends RoboSherlockFragment {
     }
     
     public LinearLayout getPortListLinearLayoutView() {
-    	return linearLayout;
+    	return (LinearLayout) getView().findViewById(R.id.port_list);
     }
     
 }

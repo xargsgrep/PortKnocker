@@ -1,18 +1,15 @@
 package com.xargsgrep.portknocker.fragment;
 
-import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.xargsgrep.portknocker.R;
 
-public class MiscFragment extends RoboSherlockFragment {
-	
-	@InjectView(R.id.delay_edit) EditText delayEdit;
+public class MiscFragment extends SherlockFragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -21,6 +18,6 @@ public class MiscFragment extends RoboSherlockFragment {
     }
 
     public EditText getDelayEdit() {
-    	return delayEdit;
+    	return (EditText) getView().findViewById(R.id.delay_edit);
     }
 }

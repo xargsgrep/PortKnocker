@@ -1,19 +1,15 @@
 package com.xargsgrep.portknocker.fragment;
 
-import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.xargsgrep.portknocker.R;
 
-public class HostFragment extends RoboSherlockFragment {
-	
-	@InjectView(R.id.host_label_edit) EditText hostLabelEdit;
-	@InjectView(R.id.host_name_edit) EditText hostnameEdit;
+public class HostFragment extends SherlockFragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -22,11 +18,11 @@ public class HostFragment extends RoboSherlockFragment {
     }
 
     public EditText getHostLabelEditTextView() {
-    	return hostLabelEdit;
+    	return (EditText) getView().findViewById(R.id.host_label_edit);
     }
     
     public EditText getHostnameEditTextView() {
-    	return hostnameEdit;
+    	return (EditText) getView().findViewById(R.id.host_name_edit);
     }
     
 }

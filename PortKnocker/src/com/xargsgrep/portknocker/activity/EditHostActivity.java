@@ -1,7 +1,7 @@
 package com.xargsgrep.portknocker.activity;
 
-import roboguice.inject.InjectResource;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -12,10 +12,9 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-import com.google.inject.Inject;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
@@ -23,17 +22,14 @@ import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 
-public class EditHostActivity extends RoboSherlockFragmentActivity implements ActionBar.TabListener {
+public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
-    @Inject HostDataManager hostDataManager;
-    @Inject HostFragment hostFragment;
-    @Inject PortsFragment portsFragment;
-    @Inject MiscFragment miscFragment;
+	Resources resources;
+    HostDataManager hostDataManager;
+    HostFragment hostFragment;
+    PortsFragment portsFragment;
+    MiscFragment miscFragment;
     
-	@InjectResource(R.string.host_tab_name) String hostTabName;
-	@InjectResource(R.string.ports_tab_name) String portsTabName;
-	@InjectResource(R.string.misc_tab_name) String miscTabName;
-	
 	private static final int MENU_CANCEL_ITEM_ID = 1;
 	private static final int MENU_SAVE_ITEM_ID = 2;
 	private static final int TAB_HOST_INDEX = 0;
@@ -45,20 +41,28 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_host);
         
+        resources = getResources();
+        
+        hostDataManager = new HostDataManager(getApplicationContext());
+        
+        hostFragment = new HostFragment();
+        portsFragment = new PortsFragment();
+        miscFragment = new MiscFragment();
+        
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         ActionBar.Tab hostTab = getSupportActionBar().newTab();
-        hostTab.setText(hostTabName);
+        hostTab.setText(resources.getString(R.string.host_tab_name));
         hostTab.setTabListener(this);
         
         ActionBar.Tab portsTab = getSupportActionBar().newTab();
-        portsTab.setText(portsTabName);
+        portsTab.setText(resources.getString(R.string.ports_tab_name));
         portsTab.setTabListener(this);
         
         ActionBar.Tab miscTab = getSupportActionBar().newTab();
-        miscTab.setText(miscTabName);
+        miscTab.setText(resources.getString(R.string.misc_tab_name));
         miscTab.setTabListener(this);
         
         getSupportActionBar().addTab(hostTab);
@@ -66,7 +70,9 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
         getSupportActionBar().addTab(miscTab);
         
         if (savedInstanceState != null) {
-        	
+        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("selectedTabIndex"));
+        	//hostFragment.getHostLabelEditTextView().setText(savedInstanceState.getString("hostLabel"));
+        	//hostFragment.getHostnameEditTextView().setText(savedInstanceState.getString("hostname"));
         }
     }
     
@@ -74,13 +80,13 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		switch (tab.getPosition()) {
 			case TAB_HOST_INDEX:
-				ft.replace(R.id.fragment_content, hostFragment, hostTabName);
+				ft.replace(R.id.fragment_content, hostFragment, resources.getString(R.string.host_tab_name));
 				break;
 			case TAB_PORTS_INDEX:
-				ft.replace(R.id.fragment_content, portsFragment, portsTabName);
+				ft.replace(R.id.fragment_content, portsFragment, resources.getString(R.string.ports_tab_name));
 				break;
 			case TAB_MISC_INDEX:
-				ft.replace(R.id.fragment_content, miscFragment, miscTabName);
+				ft.replace(R.id.fragment_content, miscFragment, resources.getString(R.string.misc_tab_name));
 				break;
 			default:
 				break;
@@ -116,8 +122,9 @@ public class EditHostActivity extends RoboSherlockFragmentActivity implements Ac
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
-    	outState.putString("hostLabel", null);
-    	outState.putString("hostname", null);
+    	outState.putInt("selectedTabIndex", getSupportActionBar().getSelectedNavigationIndex());
+    	//outState.putString("hostLabel", hostFragment.getHostLabelEditTextView().getText().toString());
+    	//outState.putString("hostname", hostFragment.getHostnameEditTextView().getText().toString());
     	outState.putIntArray("ports", new int[] {});
     	outState.putIntArray("protocols", new int[] {});
     	outState.putString("delay", null);
