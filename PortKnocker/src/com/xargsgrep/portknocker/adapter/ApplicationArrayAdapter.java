@@ -39,8 +39,17 @@ public class ApplicationArrayAdapter extends ArrayAdapter<Application> {
 		
 		Application application = applications.get(position);
 		((TextView) view).setText(application.getLabel());
-		//TextView checkedTextView = (TextView) getDropDownView(position, convertView, parent);
-		//checkedTextView.setText(application.getLabel());
+		
+		return view;
+	}
+	
+	@Override
+	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+		View view = convertView;
+		if (view == null) view = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item, null);
+		
+		Application application = applications.get(position);
+		((TextView) view).setText(application.getLabel());
 		
 		return view;
 	}

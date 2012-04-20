@@ -51,7 +51,6 @@ public class MiscFragment extends SherlockFragment {
         
         ArrayAdapter<Application> adapter = new ApplicationArrayAdapter(getActivity(), applications);
         Spinner launchAppSpinner = (Spinner) view.findViewById(R.id.launch_app);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         launchAppSpinner.setAdapter(adapter);
     }
     
