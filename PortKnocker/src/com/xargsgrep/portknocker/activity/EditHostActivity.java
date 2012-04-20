@@ -112,9 +112,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 	    	case android.R.id.home: 
-				Intent hostListIntent = new Intent(this, HostListActivity.class);
-				hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		        startActivity(hostListIntent);
+	    		returnToHostListActivity();
 		        return true;
 	    	case MENU_ITEM_CANCEL:
 	    		Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
@@ -134,8 +132,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     }
     
     private void saveHost() {
-    	//Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
-    	
 		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.host_tab_name));
 		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
 		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
@@ -178,6 +174,13 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		}
     	
     	hostDataManager.saveHost(host);
+    	returnToHostListActivity();
+    }
+    
+    private void returnToHostListActivity() {
+		Intent hostListIntent = new Intent(this, HostListActivity.class);
+		hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(hostListIntent);
     }
 
 	@Override

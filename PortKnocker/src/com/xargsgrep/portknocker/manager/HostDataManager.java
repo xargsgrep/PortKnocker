@@ -79,66 +79,88 @@ public class HostDataManager {
 	public void saveHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
-		ContentValues hostValues = new ContentValues();
-		hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
-		hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
-		hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-		hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
-		
-		long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
-		
-		int i = 0;
-		for (Port port : host.getPorts()) {
-			ContentValues portValues = new ContentValues();
-			portValues.put(DatabaseManager.PORT_HOST_ID_COLUMN, hostId);
-			portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
-			portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
-			portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+		database.beginTransaction();
+		try {
+			ContentValues hostValues = new ContentValues();
+			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
+			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
+			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
 			
-			database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
-			i++;
+			long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
+			if (hostId == -1) return;
+			
+			int i = 0;
+			for (Port port : host.getPorts()) {
+				ContentValues portValues = new ContentValues();
+				portValues.put(DatabaseManager.PORT_HOST_ID_COLUMN, hostId);
+				portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
+				portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
+				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+				
+				long portId = database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
+				if (portId == -1) return;
+				
+				i++;
+			}
+			
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+			database.close();
 		}
-		
-		database.close();
 	}
 	
 	public void updateHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
-		ContentValues hostValues = new ContentValues();
-		hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
-		hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
-		hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-		hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
-		
-		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
-		database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
-		
-		int i = 0;
-		for (Port port : host.getPorts()) {
-			ContentValues portValues = new ContentValues();
-			portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
-			portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
-			portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+		database.beginTransaction();
+		try {
+			ContentValues hostValues = new ContentValues();
+			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
+			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
+			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
 			
-			String portSelection = String.format("%s = ?", DatabaseManager.PORT_ID_COLUMN);
-			database.update(DatabaseManager.PORT_TABLE_NAME, portValues, portSelection, new String[] { new Long(port.getId()).toString() });
-			i++;
+			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
+			int rowsAffected = database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
+			if (rowsAffected == 0) return;
+			
+			int i = 0;
+			for (Port port : host.getPorts()) {
+				ContentValues portValues = new ContentValues();
+				portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
+				portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
+				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+				
+				String portSelection = String.format("%s = ?", DatabaseManager.PORT_ID_COLUMN);
+				database.update(DatabaseManager.PORT_TABLE_NAME, portValues, portSelection, new String[] { new Long(port.getId()).toString() });
+				i++;
+			}
+			
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+			database.close();
 		}
-		
-		database.close();
 	}
 	
 	public void deleteHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
-		String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
-		database.delete(DatabaseManager.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
-		
-		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
-		database.delete(DatabaseManager.HOST_TABLE_NAME, hostSelection, new String[] { new Long(host.getId()).toString() });
-		
-		database.close();
+		database.beginTransaction();
+		try {
+			String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
+			database.delete(DatabaseManager.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
+			
+			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
+			database.delete(DatabaseManager.HOST_TABLE_NAME, hostSelection, new String[] { new Long(host.getId()).toString() });
+			
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+			database.close();
+		}
 	}
 	
 	private List<Port> getPortsForHost(SQLiteDatabase database, long hostId) {
