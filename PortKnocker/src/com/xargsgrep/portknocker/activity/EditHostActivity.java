@@ -1,8 +1,8 @@
 package com.xargsgrep.portknocker.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.EditText;
@@ -24,14 +24,11 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
-	Resources resources;
     HostDataManager hostDataManager;
-    HostFragment hostFragment;
-    PortsFragment portsFragment;
-    MiscFragment miscFragment;
     
 	private static final int MENU_CANCEL_ITEM_ID = 1;
 	private static final int MENU_SAVE_ITEM_ID = 2;
+	
 	private static final int TAB_HOST_INDEX = 0;
 	private static final int TAB_PORTS_INDEX = 1;
 	private static final int TAB_MISC_INDEX = 2;
@@ -41,58 +38,65 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_host);
         
-        resources = getResources();
-        
         hostDataManager = new HostDataManager(getApplicationContext());
-        
-        hostFragment = new HostFragment();
-        portsFragment = new PortsFragment();
-        miscFragment = new MiscFragment();
         
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
-        ActionBar.Tab hostTab = getSupportActionBar().newTab();
-        hostTab.setText(resources.getString(R.string.host_tab_name));
-        hostTab.setTabListener(this);
-        
-        ActionBar.Tab portsTab = getSupportActionBar().newTab();
-        portsTab.setText(resources.getString(R.string.ports_tab_name));
-        portsTab.setTabListener(this);
-        
-        ActionBar.Tab miscTab = getSupportActionBar().newTab();
-        miscTab.setText(resources.getString(R.string.misc_tab_name));
-        miscTab.setTabListener(this);
-        
-        getSupportActionBar().addTab(hostTab);
-        getSupportActionBar().addTab(portsTab);
-        getSupportActionBar().addTab(miscTab);
+        addTab(getString(R.string.host_tab_name));
+        addTab(getString(R.string.ports_tab_name));
+        addTab(getString(R.string.misc_tab_name));
         
         if (savedInstanceState != null) {
         	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("selectedTabIndex"));
-        	//hostFragment.getHostLabelEditTextView().setText(savedInstanceState.getString("hostLabel"));
-        	//hostFragment.getHostnameEditTextView().setText(savedInstanceState.getString("hostname"));
         }
+    }
+    
+    private void addTab(String text) {
+        ActionBar.Tab tab = getSupportActionBar().newTab();
+        tab.setText(text);
+        tab.setTabListener(this);
+        getSupportActionBar().addTab(tab);
     }
     
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.host_tab_name));
+		Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
+		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
+		
 		switch (tab.getPosition()) {
 			case TAB_HOST_INDEX:
-				ft.replace(R.id.fragment_content, hostFragment, resources.getString(R.string.host_tab_name));
-				break;
+				if (hostFragment == null) {
+					hostFragment = new HostFragment();
+					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
+				}
+    			ft.show(hostFragment);
+    			if (portsFragment != null) ft.hide(portsFragment);
+    			if (miscFragment != null) ft.hide(miscFragment);
+    			break;
 			case TAB_PORTS_INDEX:
-				ft.replace(R.id.fragment_content, portsFragment, resources.getString(R.string.ports_tab_name));
-				break;
+				if (portsFragment == null) {
+					portsFragment = new PortsFragment();
+					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
+				}
+    			ft.show(portsFragment);
+    			if (hostFragment != null) ft.hide(hostFragment);
+    			if (miscFragment != null) ft.hide(miscFragment);
+    			break;
 			case TAB_MISC_INDEX:
-				ft.replace(R.id.fragment_content, miscFragment, resources.getString(R.string.misc_tab_name));
-				break;
-			default:
-				break;
+				if (miscFragment == null) {
+					miscFragment = new MiscFragment();
+					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
+				}
+    			ft.show(miscFragment);
+    			if (hostFragment != null) ft.hide(hostFragment);
+    			if (portsFragment != null) ft.hide(portsFragment);
+    			break;
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_CANCEL_ITEM_ID, 0, null).setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -123,22 +127,20 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
     	outState.putInt("selectedTabIndex", getSupportActionBar().getSelectedNavigationIndex());
-    	//outState.putString("hostLabel", hostFragment.getHostLabelEditTextView().getText().toString());
-    	//outState.putString("hostname", hostFragment.getHostnameEditTextView().getText().toString());
-    	outState.putIntArray("ports", new int[] {});
-    	outState.putIntArray("protocols", new int[] {});
-    	outState.putString("delay", null);
-    	outState.putString("launchApp", null);
     }
     
     private void saveHost() {
     	//Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
     	
+		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.host_tab_name));
+		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
+		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
+    	
     	String hostLabel = hostFragment.getHostLabelEditTextView().getText().toString();
     	String hostname = hostFragment.getHostnameEditTextView().getText().toString();
     	
-		LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
-		if (portListView != null) { // could be null if user saves without going to ports tab
+		if (portsFragment != null) { // could be null if user saves without going to ports tab
+			LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
 			for (int i=0; i<portListView.getChildCount(); i++) {
 				View row = portListView.getChildAt(i);
 				
@@ -150,9 +152,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			}
 		}
     	
-		EditText delayEditTextView = miscFragment.getDelayEdit();
 		int delay = 0;
-		if (delayEditTextView != null) { // could be null if user saves without going to misc tab
+		if (miscFragment != null) { // could be null if user saves without going to misc tab
+			EditText delayEditTextView = miscFragment.getDelayEdit();
 			String delayStr = delayEditTextView.getText().toString();
 			delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
 		}
