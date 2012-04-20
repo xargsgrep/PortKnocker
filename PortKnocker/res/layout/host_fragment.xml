@@ -4,30 +4,34 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:id="@+id/host_fragment">
+    android:id="@+id/host_fragment"
+>
 
 	<TextView
 	    android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/host_label_label" />
-	
+        android:text="@string/host_label_label"
+    />
 	<EditText
 	    android:id="@+id/host_label_edit"
 	    android:inputType="text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true" />
+        android:singleLine="true"
+    />
 	
 	<TextView
 	    android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/host_name_label" />
+        android:text="@string/host_name_label"
+    />
 	
 	<EditText
 	    android:id="@+id/host_name_edit"
 	    android:inputType="text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true" />
+        android:singleLine="true"
+    />
 	
 </LinearLayout>

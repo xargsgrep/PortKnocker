@@ -1,31 +1,30 @@
 package com.xargsgrep.portknocker.model;
 
 public class Port {
-
 	private long id;
 	private long hostId;
 	private int index;
 	private int port;
 	private Protocol protocol = Protocol.TCP;
 	
-	public static enum Protocol { TCP, UDP };
+	public static enum Protocol { TCP, UDP }
 
 	public long getId() {
 		return id;
 	}
-	
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public long getHostId() {
 		return hostId;
 	}
-	
+
 	public void setHostId(long hostId) {
 		this.hostId = hostId;
 	}
-	
+
 	public int getIndex() {
 		return index;
 	}
@@ -48,6 +47,5 @@ public class Port {
 
 	public void setProtocol(Protocol protocol) {
 		this.protocol = protocol;
-	}
-	
+	};
 }

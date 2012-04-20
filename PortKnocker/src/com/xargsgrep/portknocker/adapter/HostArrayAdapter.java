@@ -24,15 +24,21 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		this.context = context;
 		this.hosts = hosts;
 	}
+	
+	@Override
+	public int getCount() {
+		return hosts.size();
+	}
+	
+	@Override
+	public Host getItem(int position) {
+		return hosts.get(position);
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
-		
-		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.host_row, null);
-		}
+		if (view == null) view = LayoutInflater.from(getContext()).inflate(R.layout.host_row, null);
 		
 		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
 		TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);

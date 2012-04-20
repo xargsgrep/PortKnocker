@@ -21,15 +21,21 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		this.context = context;
 		this.ports = ports;
 	}
+	
+	@Override
+	public int getCount() {
+		return ports.size();
+	}
 
+	@Override
+	public Port getItem(int position) {
+		return ports.get(position);
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
-		
-		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.port_row, null);
-		}
+		if (view == null) view = LayoutInflater.from(getContext()).inflate(R.layout.port_row, null);
 		
 		/*
 		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
