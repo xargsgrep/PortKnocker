@@ -7,22 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.listener.PositionOnClickListener;
-import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.model.Port;
 
-public class HostArrayAdapter extends ArrayAdapter<Host> {
+public class PortArrayAdapter extends ArrayAdapter<Port> {
 	
 	Context context;
-	List<Host> hosts;
+	List<Port> ports;
 
-	public HostArrayAdapter(Context context, List<Host> hosts) {
-		super(context, -1, hosts);
+	public PortArrayAdapter(Context context, List<Port> ports) {
+		super(context, -1, ports);
 		this.context = context;
-		this.hosts = hosts;
+		this.ports = ports;
 	}
 
 	@Override
@@ -31,9 +28,10 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.host_row, null);
+			view = inflater.inflate(R.layout.port_row, null);
 		}
 		
+		/*
 		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
 		TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);
 		TextView portsView = (TextView) view.findViewById(R.id.host_row_ports);
@@ -50,6 +48,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 				Toast.makeText(context, "Click ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
 			}
 		});
+		*/
 		
 		return view;
 	}

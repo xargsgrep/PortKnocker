@@ -8,8 +8,6 @@
     android:layout_marginRight="16dip"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:background="?android:attr/selectableItemBackground"
-	android:focusable="true"
 >
     
     <LinearLayout
@@ -40,16 +38,14 @@
 		    android:ems="5"
 		/>
 		
-<!--
 		<TextView
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 	        android:textColor="#FFFFFF"
 	        android:textSize="18sp"
 	        android:singleLine="true"
-		    android:text="Protocol:"
+		    android:text="@string/protocol_label"
 		/>
--->		
 		<Spinner
 		    android:id="@+id/port_row_protocol"
 		    android:layout_width="wrap_content"

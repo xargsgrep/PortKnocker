@@ -25,26 +25,13 @@ public class HostListActivity extends SherlockListActivity {
         
         hostDataManager = new HostDataManager(getApplicationContext());
         
+        getSupportActionBar().setHomeButtonEnabled(false);
         setContentView(R.layout.host_list);
         getListView().setItemsCanFocus(true);
-        getSupportActionBar().setHomeButtonEnabled(false);
         
         List<Host> hosts = hostDataManager.getAllHosts();
-		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, R.layout.host_row, hosts);
-		
-		/*
-		final Intent editHostIntent = new Intent(this, EditHostActivity.class);
-		hostList.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(getApplicationContext(), "Click ListItem Number " + position, Toast.LENGTH_SHORT).show();
-				//editHostIntent.putExtra("hostId", -1L);
-		        //startActivity(editHostIntent);
-			}
-		});
-		*/
-		
-		getListView().setAdapter(hostAdapter);
+		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, hosts);
+		setListAdapter(hostAdapter);
     }
 
 	@Override

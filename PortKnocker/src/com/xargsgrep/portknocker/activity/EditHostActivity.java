@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,12 +26,13 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	
     HostDataManager hostDataManager;
     
-	private static final int MENU_CANCEL_ITEM_ID = 1;
-	private static final int MENU_SAVE_ITEM_ID = 2;
+	public static final int MENU_ITEM_CANCEL = 1;
+	public static final int MENU_ITEM_SAVE = 2;
+	public static final int MENU_ITEM_ADD_PORT = 3;
 	
-	private static final int TAB_HOST_INDEX = 0;
-	private static final int TAB_PORTS_INDEX = 1;
-	private static final int TAB_MISC_INDEX = 2;
+	public static final int TAB_INDEX_HOST = 0;
+	public static final int TAB_INDEX_PORTS = 1;
+	public static final int TAB_INDEX_MISC = 2;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
 		
 		switch (tab.getPosition()) {
-			case TAB_HOST_INDEX:
+			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
 					hostFragment = new HostFragment();
 					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
@@ -76,7 +77,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			if (portsFragment != null) ft.hide(portsFragment);
     			if (miscFragment != null) ft.hide(miscFragment);
     			break;
-			case TAB_PORTS_INDEX:
+			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
 					portsFragment = new PortsFragment();
 					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
@@ -85,7 +86,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			if (hostFragment != null) ft.hide(hostFragment);
     			if (miscFragment != null) ft.hide(miscFragment);
     			break;
-			case TAB_MISC_INDEX:
+			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
 					miscFragment = new MiscFragment();
 					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
@@ -99,8 +100,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_CANCEL_ITEM_ID, 0, null).setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(Menu.NONE, MENU_SAVE_ITEM_ID, 1, null).setIcon(R.drawable.ic_action_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_CANCEL, 1, null).setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, null).setIcon(R.drawable.ic_action_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
 	}
 
@@ -112,14 +113,14 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 				hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(hostListIntent);
 		        return true;
-	    	case MENU_CANCEL_ITEM_ID:
+	    	case MENU_ITEM_CANCEL:
 	    		Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
 	    		return true;
-	    	case MENU_SAVE_ITEM_ID:
+	    	case MENU_ITEM_SAVE:
 	    		saveHost();
 	    		return true;
 		    default:
-		    	return super.onOptionsItemSelected(item);
+		    	return false;
     	}
     }
     
@@ -140,9 +141,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	String hostname = hostFragment.getHostnameEditTextView().getText().toString();
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
-			LinearLayout portListView = portsFragment.getPortListLinearLayoutView();
-			for (int i=0; i<portListView.getChildCount(); i++) {
-				View row = portListView.getChildAt(i);
+			ListView portsListView = portsFragment.getListView();
+			for (int i=0; i<portsListView.getChildCount(); i++) {
+				View row = portsListView.getChildAt(i);
 				
 				EditText portEditText = (EditText) row.findViewById(R.id.port_row_port);
 				Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);

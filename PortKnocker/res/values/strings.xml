@@ -9,5 +9,6 @@
     <string name="host_name_label">Host Name:</string>
     <string name="delay_label">Delay (ms):</string>
     <string name="port_label">Port:</string>
+    <string name="protocol_label">Protocol:</string>
 
 </resources>
