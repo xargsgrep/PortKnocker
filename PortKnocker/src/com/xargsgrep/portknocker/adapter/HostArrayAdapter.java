@@ -13,16 +13,19 @@ import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
+import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 
 public class HostArrayAdapter extends ArrayAdapter<Host> {
 	
+    HostDataManager hostDataManager;
 	Context context;
 	List<Host> hosts;
 
 	public HostArrayAdapter(Context context, List<Host> hosts) {
 		super(context, -1, hosts);
+        hostDataManager = new HostDataManager(context);
 		this.context = context;
 		this.hosts = hosts;
 	}
@@ -71,9 +74,12 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(context, "Delete ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
+				Host host = hosts.get(position);
+				hostDataManager.deleteHost(host);
+				hosts.remove(position);
+				notifyDataSetChanged();
 			}
 		});
-		
 		
 		editButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
