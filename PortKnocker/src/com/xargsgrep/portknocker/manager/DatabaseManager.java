@@ -40,13 +40,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				"	%s string not null," +
 				"	%s string not null," +
 				"	%s integer not null default 0," +
-				"	%s text" +
+				"	%s string" +
 				");";
 		createHostTableSQL = String.format(createHostTableSQL, HOST_TABLE_NAME, HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_APP_COLUMN);
 		
 		String createPortTableSQL =
 				"create table %s (" +
-				"	%s integer not null," +
+				"	%s integer primary key autoincrement," +
 				"	%s integer not null," +
 				"	%s integer not null," +
 				"	%s integer not null," +

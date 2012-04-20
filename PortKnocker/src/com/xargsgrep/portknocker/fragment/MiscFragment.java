@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -58,8 +57,4 @@ public class MiscFragment extends SherlockFragment {
         return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 
-    public EditText getDelayEdit() {
-    	return (EditText) getView().findViewById(R.id.delay_edit);
-    }
-    
 }

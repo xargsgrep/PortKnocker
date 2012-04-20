@@ -8,44 +8,42 @@ public class Port {
 	private Protocol protocol = Protocol.TCP;
 	
 	public static enum Protocol { TCP, UDP }
+	
+	public Port() { }
+	
+	public Port(int port, Protocol protocol) {
+		this.port = port;
+		this.protocol = protocol;
+	}
 
 	public long getId() {
 		return id;
 	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 	public long getHostId() {
 		return hostId;
 	}
-
 	public void setHostId(long hostId) {
 		this.hostId = hostId;
 	}
-
 	public int getIndex() {
 		return index;
 	}
-
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
 	public int getPort() {
 		return port;
 	}
-
 	public void setPort(int port) {
 		this.port = port;
 	}
-
 	public Protocol getProtocol() {
 		return protocol;
 	}
-
 	public void setProtocol(Protocol protocol) {
 		this.protocol = protocol;
-	};
+	}
 }

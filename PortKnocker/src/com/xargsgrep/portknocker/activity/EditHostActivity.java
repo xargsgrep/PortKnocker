@@ -20,7 +20,10 @@ import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.model.Port;
+import com.xargsgrep.portknocker.model.Port.Protocol;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
@@ -137,8 +140,12 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
 		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
     	
-    	String hostLabel = hostFragment.getHostLabelEditTextView().getText().toString();
-    	String hostname = hostFragment.getHostnameEditTextView().getText().toString();
+    	Host host = new Host();
+    	
+    	EditText hostLabelEdit = (EditText) hostFragment.getView().findViewById(R.id.host_label_edit);
+    	EditText hostnameEdit = (EditText) hostFragment.getView().findViewById(R.id.host_name_edit);
+    	host.setLabel(hostLabelEdit.getText().toString());
+    	host.setHostname(hostnameEdit.getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
 			ListView portsListView = portsFragment.getListView();
@@ -148,24 +155,29 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 				EditText portEditText = (EditText) row.findViewById(R.id.port_row_port);
 				Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
 				
-				System.out.println(portEditText.getText().toString());
-				System.out.println(protocolSpinner.getSelectedItem().toString());
+				String portStr = portEditText.getText().toString();
+				if (portStr == null || portStr.length() == 0) continue;
+				
+				int portVal = Integer.parseInt(portStr);
+				Protocol protocol = Protocol.valueOf(protocolSpinner.getSelectedItem().toString());
+				
+				Port port = new Port(portVal, protocol);
+				host.getPorts().add(port);
 			}
 		}
     	
-		int delay = 0;
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
-			EditText delayEditTextView = miscFragment.getDelayEdit();
+			EditText delayEditTextView = (EditText) miscFragment.getView().findViewById(R.id.delay_edit);
 			String delayStr = delayEditTextView.getText().toString();
-			delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
+			int delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
+			host.setDelay(delay);
+			
+			Spinner launchAppSpinner = (Spinner) miscFragment.getView().findViewById(R.id.launch_app);
+			Application application = (Application) launchAppSpinner.getSelectedItem();
+			host.setLaunchApp(application.getIntent());
 		}
     	
-    	Host host = new Host();
-    	host.setLabel(hostLabel);
-    	host.setHostname(hostname);
-    	host.setDelay(delay);
-    	
-    	//hostDataManager.saveHost(host);
+    	hostDataManager.saveHost(host);
     }
 
 	@Override

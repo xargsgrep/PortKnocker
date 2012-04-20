@@ -7,8 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.model.Port;
 
 public class PortArrayAdapter extends ArrayAdapter<Port> {
@@ -37,24 +42,21 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		View view = convertView;
 		if (view == null) view = LayoutInflater.from(getContext()).inflate(R.layout.port_row, null);
 		
-		/*
-		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
-		TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);
-		TextView portsView = (TextView) view.findViewById(R.id.host_row_ports);
+		TextView portView = (TextView) view.findViewById(R.id.port_row_port);
+		Spinner protocolView = (Spinner) view.findViewById(R.id.port_row_protocol);
+		ImageButton deleteButton = (ImageButton) view.findViewById(R.id.port_row_delete);
 		
-		Host host = hosts.get(position);
+		Port port = ports.get(position);
 		
-		labelView.setText(host.getLabel());
-		hostnameView.setText(host.getHostname());
-		portsView.setText("2565:TCP, 2345:UDP");
+		portView.setText(new Integer(port.getPort()).toString());
+		protocolView.setSelection(port.getProtocol().ordinal());
 		
-		view.setOnClickListener(new PositionOnClickListener(position) {
+		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Click ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Delete ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
 			}
 		});
-		*/
 		
 		return view;
 	}

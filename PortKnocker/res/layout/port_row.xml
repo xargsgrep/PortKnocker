@@ -61,6 +61,7 @@
         android:layout_gravity="center_vertical"
     />
     <ImageButton
+        android:id="@+id/port_row_delete"
         android:src="@drawable/ic_action_delete"
         android:layout_width="48dip"
         android:layout_height="match_parent"

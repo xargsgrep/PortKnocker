@@ -56,6 +56,7 @@
         android:layout_gravity="center_vertical"
     />
     <ImageButton
+        android:id="@+id/host_row_delete"
         android:src="@drawable/ic_action_delete"
         android:layout_width="48dip"
         android:layout_height="match_parent"
@@ -73,6 +74,7 @@
         android:layout_gravity="center_vertical"
     />
     <ImageButton
+        android:id="@+id/host_row_edit"
         android:src="@drawable/ic_action_edit"
         android:layout_width="48dip"
         android:layout_height="match_parent"
