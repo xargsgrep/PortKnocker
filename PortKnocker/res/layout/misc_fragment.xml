@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
 	    android:inputType="number"
         android:singleLine="true"
-	    android:maxLength="5"
-	    android:ems="5"
+	    android:maxLength="4"
+	    android:ems="4"
     />
 	
 	<TextView
