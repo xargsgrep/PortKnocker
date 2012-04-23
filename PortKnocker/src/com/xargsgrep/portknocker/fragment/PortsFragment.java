@@ -18,6 +18,11 @@ import com.xargsgrep.portknocker.model.Port;
 
 public class PortsFragment extends SherlockListFragment {
 	
+	public static PortsFragment newInstance() {
+		PortsFragment fragment = new PortsFragment();
+		return fragment;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

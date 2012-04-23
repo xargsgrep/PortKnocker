@@ -73,7 +73,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		switch (tab.getPosition()) {
 			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
-					hostFragment = new HostFragment();
+					hostFragment = HostFragment.newInstance();
 					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
 				}
     			ft.show(hostFragment);
@@ -82,7 +82,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
-					portsFragment = new PortsFragment();
+					portsFragment = PortsFragment.newInstance();
 					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
 				}
     			ft.show(portsFragment);
@@ -91,7 +91,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
-					miscFragment = new MiscFragment();
+					miscFragment = MiscFragment.newInstance();
 					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
 				}
     			ft.show(miscFragment);

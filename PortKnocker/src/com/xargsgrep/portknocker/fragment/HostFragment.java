@@ -10,6 +10,11 @@ import com.xargsgrep.portknocker.R;
 
 public class HostFragment extends SherlockFragment {
 	
+	public static HostFragment newInstance() {
+		HostFragment fragment = new HostFragment();
+		return fragment;
+	}
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);

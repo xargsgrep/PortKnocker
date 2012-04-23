@@ -2,7 +2,9 @@ package com.xargsgrep.portknocker.adapter;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,17 +69,34 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(context, "Click ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
+				// TODO: do knock
 			}
 		});
 		
 		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Delete ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
-				Host host = hosts.get(position);
-				hostDataManager.deleteHost(host);
-				hosts.remove(position);
-				notifyDataSetChanged();
+		        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		        dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
+		        dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
+		        
+		        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
+		            new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int which) {
+							Host host = hosts.get(position);
+							hostDataManager.deleteHost(host);
+							hosts.remove(position);
+							notifyDataSetChanged();
+		                }
+		            }
+		        );
+		        dialogBuilder.setNegativeButton(R.string.confirm_dialog_cancel,
+		    		new DialogInterface.OnClickListener() {
+		    			public void onClick(DialogInterface dialog, int which) { }
+		    		}
+		        );
+		        
+		        dialogBuilder.create().show();
 			}
 		});
 		
@@ -85,10 +104,11 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(context, "Edit ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
+				// TODO: do edit
 			}
 		});
 		
 		return view;
 	}
-
+	
 }

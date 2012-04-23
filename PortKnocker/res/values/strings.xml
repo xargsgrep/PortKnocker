@@ -10,4 +10,7 @@
     <string name="protocol_label">Protocol:</string>
     <string name="delay_label">Delay (ms):</string>
     <string name="launch_app_label">Launch Application:</string>
+    <string name="confirm_dialog_ok">OK</string>
+    <string name="confirm_dialog_cancel">Cancel</string>
+    <string name="confirm_dialog_delete_host_title">Delete host?</string>
 </resources>

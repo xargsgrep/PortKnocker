@@ -21,6 +21,11 @@ import com.xargsgrep.portknocker.model.Application;
 
 public class MiscFragment extends SherlockFragment {
 	
+	public static MiscFragment newInstance() {
+		MiscFragment fragment = new MiscFragment();
+		return fragment;
+	}
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
