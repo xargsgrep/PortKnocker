@@ -50,7 +50,7 @@ public class HostDataManager {
 		return hosts;
 	}
 	
-	public Host getHost(int hostId) {
+	public Host getHost(long hostId) {
 		SQLiteDatabase database = getReadableDatabase();
 		
 		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);

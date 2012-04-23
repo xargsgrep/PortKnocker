@@ -47,8 +47,8 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		ImageButton deleteButton = (ImageButton) view.findViewById(R.id.port_row_delete);
 		
 		Port port = ports.get(position);
-		
-		portView.setText(new Integer(port.getPort()).toString());
+		Integer portVal = new Integer(port.getPort());
+		portView.setText(portVal.toString().equals("0") ? "" : portVal.toString());
 		protocolView.setSelection(port.getProtocol().ordinal());
 		
 		deleteButton.setOnClickListener(new PositionOnClickListener(position) {

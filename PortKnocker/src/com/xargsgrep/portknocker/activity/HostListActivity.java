@@ -16,10 +16,12 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostListActivity extends SherlockListActivity {
 	
-    HostDataManager hostDataManager;
-    
+	public static final String HOST_ID_BUNDLE_KEY = "host_id";
+	
 	private static final int MENU_ADD_ITEM_ID = 1;
 	
+    HostDataManager hostDataManager;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

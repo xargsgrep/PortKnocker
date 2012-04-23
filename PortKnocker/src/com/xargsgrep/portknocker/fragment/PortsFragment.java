@@ -18,8 +18,13 @@ import com.xargsgrep.portknocker.model.Port;
 
 public class PortsFragment extends SherlockListFragment {
 	
-	public static PortsFragment newInstance() {
+	public static PortsFragment newInstance(Long hostId) {
 		PortsFragment fragment = new PortsFragment();
+		if (hostId != null) {
+			Bundle args = new Bundle();
+			args.putLong("hostId", hostId);
+			fragment.setArguments(args);
+		}
 		return fragment;
 	}
 	

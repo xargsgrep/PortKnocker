@@ -24,8 +24,13 @@ import com.xargsgrep.portknocker.model.Application;
 
 public class MiscFragment extends SherlockFragment {
 	
-	public static MiscFragment newInstance() {
+	public static MiscFragment newInstance(Long hostId) {
 		MiscFragment fragment = new MiscFragment();
+		if (hostId != null) {
+			Bundle args = new Bundle();
+			args.putLong("hostId", hostId);
+			fragment.setArguments(args);
+		}
 		return fragment;
 	}
 	

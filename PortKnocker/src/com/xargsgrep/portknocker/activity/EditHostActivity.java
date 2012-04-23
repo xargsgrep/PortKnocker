@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -46,6 +47,12 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         
         hostDataManager = new HostDataManager(getApplicationContext());
         
+		Bundle extras = getIntent().getExtras();
+		Long hostId = null;
+		if (extras != null && extras.containsKey(HostListActivity.HOST_ID_BUNDLE_KEY)) {
+			hostId = extras.getLong(HostListActivity.HOST_ID_BUNDLE_KEY);
+		}
+		
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -75,7 +82,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		switch (tab.getPosition()) {
 			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
-					hostFragment = HostFragment.newInstance();
+					hostFragment = HostFragment.newInstance(null);
 					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
 				}
     			ft.show(hostFragment);
@@ -84,7 +91,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
-					portsFragment = PortsFragment.newInstance();
+					portsFragment = PortsFragment.newInstance(null);
 					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
 				}
     			ft.show(portsFragment);
@@ -93,7 +100,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
-					miscFragment = MiscFragment.newInstance();
+					miscFragment = MiscFragment.newInstance(null);
 					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
 				}
     			ft.show(miscFragment);

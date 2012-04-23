@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.activity.EditHostActivity;
+import com.xargsgrep.portknocker.activity.HostListActivity;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
@@ -81,8 +84,10 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		editButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Edit ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
-				// TODO: do edit
+				Host host = hosts.get(position);
+				Intent editHostIntent = new Intent(context, EditHostActivity.class);
+				editHostIntent.putExtra(HostListActivity.HOST_ID_BUNDLE_KEY, host.getId());
+		        context.startActivity(editHostIntent);
 			}
 		});
 		
