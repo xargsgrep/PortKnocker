@@ -13,4 +13,5 @@
     <string name="confirm_dialog_ok">OK</string>
     <string name="confirm_dialog_cancel">Cancel</string>
     <string name="confirm_dialog_delete_host_title">Delete host?</string>
+    <string name="progress_dialog_retrieving_applications">Retrieving applications...</string>
 </resources>
