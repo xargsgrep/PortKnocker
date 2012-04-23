@@ -76,7 +76,7 @@ public class HostDataManager {
 		return host;
 	}
 	
-	public void saveHost(Host host) {
+	public boolean saveHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
 		database.beginTransaction();
@@ -88,7 +88,7 @@ public class HostDataManager {
 			hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
 			
 			long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
-			if (hostId == -1) return;
+			if (hostId == -1) return false;
 			
 			int i = 0;
 			for (Port port : host.getPorts()) {
@@ -99,19 +99,20 @@ public class HostDataManager {
 				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
 				
 				long portId = database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
-				if (portId == -1) return;
+				if (portId == -1) return false;
 				
 				i++;
 			}
 			
 			database.setTransactionSuccessful();
+			return true;
 		} finally {
 			database.endTransaction();
 			database.close();
 		}
 	}
 	
-	public void updateHost(Host host) {
+	public boolean updateHost(Host host) {
 		SQLiteDatabase database = getWriteableDatabase();
 		
 		database.beginTransaction();
@@ -124,7 +125,7 @@ public class HostDataManager {
 			
 			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
 			int rowsAffected = database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
-			if (rowsAffected == 0) return;
+			if (rowsAffected == 0) return false;
 			
 			int i = 0;
 			for (Port port : host.getPorts()) {
@@ -134,11 +135,14 @@ public class HostDataManager {
 				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
 				
 				String portSelection = String.format("%s = ?", DatabaseManager.PORT_ID_COLUMN);
-				database.update(DatabaseManager.PORT_TABLE_NAME, portValues, portSelection, new String[] { new Long(port.getId()).toString() });
+				rowsAffected = database.update(DatabaseManager.PORT_TABLE_NAME, portValues, portSelection, new String[] { new Long(port.getId()).toString() });
+				if (rowsAffected == 0) return false;
+				
 				i++;
 			}
 			
 			database.setTransactionSuccessful();
+			return true;
 		} finally {
 			database.endTransaction();
 			database.close();

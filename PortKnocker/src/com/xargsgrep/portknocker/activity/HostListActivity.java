@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
@@ -32,6 +33,12 @@ public class HostListActivity extends SherlockListActivity {
         List<Host> hosts = hostDataManager.getAllHosts();
 		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, hosts);
 		setListAdapter(hostAdapter);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null && extras.containsKey(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY)) {
+			Boolean saveResult = extras.getBoolean(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY);
+			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
+		}
     }
 
 	@Override

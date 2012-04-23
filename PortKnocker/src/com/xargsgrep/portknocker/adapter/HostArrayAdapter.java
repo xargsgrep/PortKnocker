@@ -75,29 +75,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		
 		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
-			public void onClick(View v) {
-		        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-		        dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
-		        dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
-		        
-		        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
-		            new DialogInterface.OnClickListener() {
-		                public void onClick(DialogInterface dialog, int which) {
-							Host host = hosts.get(position);
-							hostDataManager.deleteHost(host);
-							hosts.remove(position);
-							notifyDataSetChanged();
-		                }
-		            }
-		        );
-		        dialogBuilder.setNegativeButton(R.string.confirm_dialog_cancel,
-		    		new DialogInterface.OnClickListener() {
-		    			public void onClick(DialogInterface dialog, int which) { }
-		    		}
-		        );
-		        
-		        dialogBuilder.create().show();
-			}
+			public void onClick(View v) { showDeleteDialog(position); }
 		});
 		
 		editButton.setOnClickListener(new PositionOnClickListener(position) {
@@ -109,6 +87,30 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		});
 		
 		return view;
+	}
+	
+	private void showDeleteDialog(final int position) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
+        dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
+        
+        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+					Host host = hosts.get(position);
+					hostDataManager.deleteHost(host);
+					hosts.remove(position);
+					notifyDataSetChanged();
+                }
+            }
+        );
+        dialogBuilder.setNegativeButton(R.string.confirm_dialog_cancel,
+    		new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int which) { }
+    		}
+        );
+        
+        dialogBuilder.create().show();
 	}
 	
 }

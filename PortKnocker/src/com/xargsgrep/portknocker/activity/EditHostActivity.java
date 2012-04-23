@@ -1,5 +1,7 @@
 package com.xargsgrep.portknocker.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,8 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -36,6 +36,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public static final int TAB_INDEX_HOST = 0;
 	public static final int TAB_INDEX_PORTS = 1;
 	public static final int TAB_INDEX_MISC = 2;
+	
+	public static final String SAVE_HOST_RESULT_BUNDLE_KEY = "save_host_result";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +114,10 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 	    	case android.R.id.home: 
-	    		returnToHostListActivity();
+	    		returnToHostListActivity(null);
 		        return true;
 	    	case MENU_ITEM_CANCEL:
-	    		Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
+	    		showCancelDialog();
 	    		return true;
 	    	case MENU_ITEM_SAVE:
 	    		saveHost();
@@ -173,14 +175,36 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			host.setLaunchApp(application.getIntent());
 		}
     	
-    	hostDataManager.saveHost(host);
-    	returnToHostListActivity();
+    	boolean saveResult = hostDataManager.saveHost(host);
+    	returnToHostListActivity(saveResult);
     }
     
-    private void returnToHostListActivity() {
+    private void returnToHostListActivity(Boolean saveResult) {
 		Intent hostListIntent = new Intent(this, HostListActivity.class);
 		hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		if (saveResult != null) hostListIntent.putExtra(SAVE_HOST_RESULT_BUNDLE_KEY, saveResult);
         startActivity(hostListIntent);
+    }
+    
+    private void showCancelDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.confirm_dialog_cancel_edit_title);
+        dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
+        
+        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                	returnToHostListActivity(null);
+                }
+            }
+        );
+        dialogBuilder.setNegativeButton(R.string.confirm_dialog_cancel,
+    		new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int which) { }
+    		}
+        );
+        
+        dialogBuilder.create().show();
     }
 
 	@Override
