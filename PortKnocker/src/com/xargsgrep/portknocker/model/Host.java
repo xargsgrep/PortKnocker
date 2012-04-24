@@ -8,7 +8,7 @@ public class Host {
 	private String label;
 	private String hostname;
 	private int delay = 0;
-	private String launchApp;
+	private String launchIntent;
 	private List<Port> ports = new ArrayList<Port>();
 	
 	public long getId() {
@@ -35,11 +35,11 @@ public class Host {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
-	public String getLaunchApp() {
-		return launchApp;
+	public String getLaunchIntent() {
+		return launchIntent;
 	}
-	public void setLaunchApp(String launchApp) {
-		this.launchApp = launchApp;
+	public void setLaunchIntent(String launchIntent) {
+		this.launchIntent = launchIntent;
 	}
 	public List<Port> getPorts() {
 		return ports;

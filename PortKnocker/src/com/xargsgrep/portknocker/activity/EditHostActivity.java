@@ -30,6 +30,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	
     HostDataManager hostDataManager;
     
+    // null when creating a new host
+    private Long hostId;
+    
 	public static final int MENU_ITEM_CANCEL = 1;
 	public static final int MENU_ITEM_SAVE = 2;
 	public static final int MENU_ITEM_ADD_PORT = 3;
@@ -38,20 +41,18 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public static final int TAB_INDEX_PORTS = 1;
 	public static final int TAB_INDEX_MISC = 2;
 	
-	public static final String SAVE_HOST_RESULT_BUNDLE_KEY = "save_host_result";
+	public static final String HOST_ID_BUNDLE_KEY = "hostId";
+	public static final String SAVE_HOST_RESULT_BUNDLE_KEY = "saveHostResult";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_host);
         
-        hostDataManager = new HostDataManager(getApplicationContext());
+        hostDataManager = new HostDataManager(this);
         
 		Bundle extras = getIntent().getExtras();
-		Long hostId = null;
-		if (extras != null && extras.containsKey(HostListActivity.HOST_ID_BUNDLE_KEY)) {
-			hostId = extras.getLong(HostListActivity.HOST_ID_BUNDLE_KEY);
-		}
+		hostId = (extras != null && extras.containsKey(HOST_ID_BUNDLE_KEY)) ? extras.getLong(HOST_ID_BUNDLE_KEY) : null;
 		
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -82,7 +83,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		switch (tab.getPosition()) {
 			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
-					hostFragment = HostFragment.newInstance(null);
+					hostFragment = HostFragment.newInstance(hostId);
 					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
 				}
     			ft.show(hostFragment);
@@ -91,7 +92,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
-					portsFragment = PortsFragment.newInstance(null);
+					portsFragment = PortsFragment.newInstance(hostId);
 					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
 				}
     			ft.show(portsFragment);
@@ -100,7 +101,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     			break;
 			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
-					miscFragment = MiscFragment.newInstance(null);
+					miscFragment = MiscFragment.newInstance(hostId);
 					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
 				}
     			ft.show(miscFragment);
@@ -145,7 +146,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
 		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
     	
-    	Host host = new Host();
+    	Host host = (hostId == null) ? new Host() : hostDataManager.getHost(hostId);
     	
     	EditText hostLabelEdit = (EditText) hostFragment.getView().findViewById(R.id.host_label_edit);
     	EditText hostnameEdit = (EditText) hostFragment.getView().findViewById(R.id.host_name_edit);
@@ -153,6 +154,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	host.setHostname(hostnameEdit.getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
+			host.getPorts().clear();
+			
 			ListView portsListView = portsFragment.getListView();
 			for (int i=0; i<portsListView.getChildCount(); i++) {
 				View row = portsListView.getChildAt(i);
@@ -179,10 +182,10 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			
 			Spinner launchAppSpinner = (Spinner) miscFragment.getView().findViewById(R.id.launch_app);
 			Application application = (Application) launchAppSpinner.getSelectedItem();
-			host.setLaunchApp(application.getIntent());
+			host.setLaunchIntent(application.getIntent());
 		}
     	
-    	boolean saveResult = hostDataManager.saveHost(host);
+    	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);
     	returnToHostListActivity(saveResult);
     }
     

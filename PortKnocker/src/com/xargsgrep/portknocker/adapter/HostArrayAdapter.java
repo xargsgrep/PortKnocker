@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
-import com.xargsgrep.portknocker.activity.HostListActivity;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
@@ -86,7 +85,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			public void onClick(View v) {
 				Host host = hosts.get(position);
 				Intent editHostIntent = new Intent(context, EditHostActivity.class);
-				editHostIntent.putExtra(HostListActivity.HOST_ID_BUNDLE_KEY, host.getId());
+				editHostIntent.putExtra(EditHostActivity.HOST_ID_BUNDLE_KEY, host.getId());
 		        context.startActivity(editHostIntent);
 			}
 		});

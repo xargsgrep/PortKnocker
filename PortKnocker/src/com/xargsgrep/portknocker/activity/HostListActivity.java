@@ -16,8 +16,6 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostListActivity extends SherlockListActivity {
 	
-	public static final String HOST_ID_BUNDLE_KEY = "host_id";
-	
 	private static final int MENU_ADD_ITEM_ID = 1;
 	
     HostDataManager hostDataManager;
@@ -26,7 +24,7 @@ public class HostListActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        hostDataManager = new HostDataManager(getApplicationContext());
+        hostDataManager = new HostDataManager(this);
         
         getSupportActionBar().setHomeButtonEnabled(false);
         setContentView(R.layout.host_list);

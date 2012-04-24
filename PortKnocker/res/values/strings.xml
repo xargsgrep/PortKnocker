@@ -15,6 +15,6 @@
     <string name="confirm_dialog_delete_host_title">Delete host?</string>
     <string name="confirm_dialog_cancel_edit_title">Cancel without saving?</string>
     <string name="progress_dialog_retrieving_applications">Retrieving applications&#8230;</string>
-    <string name="save_success">Saved successfully!</string>
+    <string name="save_success">Saved</string>
     <string name="save_failure">Save failed</string>
 </resources>

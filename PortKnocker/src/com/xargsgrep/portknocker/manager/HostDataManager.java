@@ -85,7 +85,7 @@ public class HostDataManager {
 			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
 			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
 			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_COLUMN, host.getLaunchIntent());
 			
 			long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
 			if (hostId == -1) return false;
@@ -121,22 +121,25 @@ public class HostDataManager {
 			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
 			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
 			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_APP_COLUMN, host.getLaunchApp());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_COLUMN, host.getLaunchIntent());
 			
 			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
 			int rowsAffected = database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
 			if (rowsAffected == 0) return false;
 			
+			String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
+			database.delete(DatabaseManager.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
+			
 			int i = 0;
 			for (Port port : host.getPorts()) {
 				ContentValues portValues = new ContentValues();
+				portValues.put(DatabaseManager.PORT_HOST_ID_COLUMN, host.getId());
 				portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
 				portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
 				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
 				
-				String portSelection = String.format("%s = ?", DatabaseManager.PORT_ID_COLUMN);
-				rowsAffected = database.update(DatabaseManager.PORT_TABLE_NAME, portValues, portSelection, new String[] { new Long(port.getId()).toString() });
-				if (rowsAffected == 0) return false;
+				long portId = database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
+				if (portId == -1) return false;
 				
 				i++;
 			}
@@ -199,17 +202,16 @@ public class HostDataManager {
 		host.setLabel(cursor.getString(1));
 		host.setHostname(cursor.getString(2));
 		host.setDelay(cursor.getInt(3));
-		host.setLaunchApp(cursor.getString(4));
+		host.setLaunchIntent(cursor.getString(4));
 		return host;
 	}
 	
 	private Port cursorToPort(Cursor cursor) {
 		Port port = new Port();
-		port.setId(cursor.getLong(0));
-		port.setHostId(cursor.getLong(1));
-		port.setIndex(cursor.getInt(2));
-		port.setPort(cursor.getInt(3));
-		port.setProtocol(Protocol.values()[cursor.getInt(4)]);
+		port.setHostId(cursor.getLong(0));
+		port.setIndex(cursor.getInt(1));
+		port.setPort(cursor.getInt(2));
+		port.setProtocol(Protocol.values()[cursor.getInt(3)]);
 		return port;
 	}
 	

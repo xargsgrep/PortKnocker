@@ -16,17 +16,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String HOST_LABEL_COLUMN = "label";
     public static final String HOST_HOSTNAME_COLUMN = "hostname";
     public static final String HOST_DELAY_COLUMN = "delay";
-    public static final String HOST_LAUNCH_APP_COLUMN = "launch_app";
+    public static final String HOST_LAUNCH_INTENT_COLUMN = "launch_intent";
     
     public static final String PORT_TABLE_NAME = "port";
-    public static final String PORT_ID_COLUMN = BaseColumns._ID;
     public static final String PORT_HOST_ID_COLUMN = "host_id";
     public static final String PORT_INDEX_COLUMN = "idx";
     public static final String PORT_PORT_COLUMN = "port";
     public static final String PORT_PROTOCOL_COLUMN = "protocol";
     
-    public static final String[] HOST_TABLE_COLUMNS = new String[] { HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_APP_COLUMN }; 
-    public static final String[] PORT_TABLE_COLUMNS = new String[] { PORT_ID_COLUMN, PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN }; 
+    public static final String[] HOST_TABLE_COLUMNS = new String[] { HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_COLUMN }; 
+    public static final String[] PORT_TABLE_COLUMNS = new String[] { PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN }; 
 
 	public DatabaseManager(Context context) {
 		super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
@@ -42,17 +41,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				"	%s integer not null default 0," +
 				"	%s string" +
 				");";
-		createHostTableSQL = String.format(createHostTableSQL, HOST_TABLE_NAME, HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_APP_COLUMN);
+		createHostTableSQL = String.format(createHostTableSQL, HOST_TABLE_NAME, HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_COLUMN);
 		
 		String createPortTableSQL =
 				"create table %s (" +
-				"	%s integer primary key autoincrement," +
 				"	%s integer not null," +
 				"	%s integer not null," +
 				"	%s integer not null," +
 				"	%s integer not null" +
 				");";
-		createPortTableSQL = String.format(createPortTableSQL, PORT_TABLE_NAME, PORT_ID_COLUMN, PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN);
+		createPortTableSQL = String.format(createPortTableSQL, PORT_TABLE_NAME, PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN);
 		
 		db.execSQL(createHostTableSQL);
 		db.execSQL(createPortTableSQL);

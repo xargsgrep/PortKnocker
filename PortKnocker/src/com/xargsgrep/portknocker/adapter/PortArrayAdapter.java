@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
@@ -54,7 +53,8 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Delete ListItem Number " + this.position, Toast.LENGTH_SHORT).show();
+				ports.remove(position);
+				notifyDataSetChanged();
 			}
 		});
 		

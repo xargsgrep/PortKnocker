@@ -1,6 +1,7 @@
 package com.xargsgrep.portknocker.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,15 +15,19 @@ import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
+import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 
 public class PortsFragment extends SherlockListFragment {
+	
+    HostDataManager hostDataManager;
 	
 	public static PortsFragment newInstance(Long hostId) {
 		PortsFragment fragment = new PortsFragment();
 		if (hostId != null) {
 			Bundle args = new Bundle();
-			args.putLong("hostId", hostId);
+			args.putLong(EditHostActivity.HOST_ID_BUNDLE_KEY, hostId);
 			fragment.setArguments(args);
 		}
 		return fragment;
@@ -31,6 +36,7 @@ public class PortsFragment extends SherlockListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		hostDataManager = new HostDataManager(getActivity());
 		setHasOptionsMenu(true);
 	}
 	
@@ -44,11 +50,17 @@ public class PortsFragment extends SherlockListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	super.onViewCreated(view, savedInstanceState);
     	
-        getListView().setItemsCanFocus(true);
+    	List<Port> ports = new ArrayList<Port>();
+    	
+    	Bundle args = getArguments();
+    	if (args != null) {
+    		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
+    		Host host = hostDataManager.getHost(hostId);
+    		ports = host.getPorts();
+    	} else ports.add(new Port());
         
-		PortArrayAdapter portAdapter = new PortArrayAdapter(getActivity(), new ArrayList<Port>());
+		PortArrayAdapter portAdapter = new PortArrayAdapter(getActivity(), ports);
 		setListAdapter(portAdapter);
-		addPort();
     }
     
     @Override
