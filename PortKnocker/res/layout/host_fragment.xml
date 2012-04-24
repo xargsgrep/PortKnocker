@@ -18,6 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
+        android:hint="@string/host_label_hint"
     />
 	
 	<TextView
@@ -25,13 +26,13 @@
         android:layout_height="wrap_content"
         android:text="@string/host_name_label"
     />
-	
 	<EditText
 	    android:id="@+id/host_name_edit"
 	    android:inputType="text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
+        android:hint="@string/host_name_hint"
     />
 	
 </LinearLayout>

@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
 	    android:inputType="number"
         android:singleLine="true"
+        android:hint="@string/delay_hint"
 	    android:maxLength="4"
 	    android:ems="4"
     />
