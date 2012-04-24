@@ -148,10 +148,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	
     	Host host = (hostId == null) ? new Host() : hostDataManager.getHost(hostId);
     	
-    	EditText hostLabelEdit = (EditText) hostFragment.getView().findViewById(R.id.host_label_edit);
-    	EditText hostnameEdit = (EditText) hostFragment.getView().findViewById(R.id.host_name_edit);
-    	host.setLabel(hostLabelEdit.getText().toString());
-    	host.setHostname(hostnameEdit.getText().toString());
+    	host.setLabel(hostFragment.getHostLabelEditText().getText().toString());
+    	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
 			host.getPorts().clear();
@@ -160,14 +158,10 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			for (int i=0; i<portsListView.getChildCount(); i++) {
 				View row = portsListView.getChildAt(i);
 				
-				EditText portEditText = (EditText) row.findViewById(R.id.port_row_port);
-				Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
-				
-				String portStr = portEditText.getText().toString();
+				String portStr = portsFragment.getPortEditTextFromRowView(row).getText().toString();
 				if (portStr == null || portStr.length() == 0) continue;
-				
 				int portVal = Integer.parseInt(portStr);
-				Protocol protocol = Protocol.valueOf(protocolSpinner.getSelectedItem().toString());
+				Protocol protocol = Protocol.valueOf(portsFragment.getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
 				
 				Port port = new Port(portVal, protocol);
 				host.getPorts().add(port);
@@ -175,13 +169,11 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		}
     	
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
-			EditText delayEditTextView = (EditText) miscFragment.getView().findViewById(R.id.delay_edit);
-			String delayStr = delayEditTextView.getText().toString();
+			String delayStr = miscFragment.getDelayEditText().getText().toString();
 			int delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
 			host.setDelay(delay);
 			
-			Spinner launchAppSpinner = (Spinner) miscFragment.getView().findViewById(R.id.launch_app);
-			Application application = (Application) launchAppSpinner.getSelectedItem();
+			Application application = (Application) miscFragment.getLaunchIntentSpinner().getSelectedItem();
 			host.setLaunchIntent(application.getIntent());
 		}
     	

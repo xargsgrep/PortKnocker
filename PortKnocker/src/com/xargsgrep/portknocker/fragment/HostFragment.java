@@ -16,6 +16,9 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostFragment extends SherlockFragment {
 	
+	private static final String HOST_LABEL_BUNDLE_KEY = "hostLabel";
+	private static final String HOST_NAME_BUNDLE_KEY = "hostname";
+	
     HostDataManager hostDataManager;
 	
 	public static HostFragment newInstance(Long hostId) {
@@ -44,11 +47,15 @@ public class HostFragment extends SherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	super.onViewCreated(view, savedInstanceState);
     	
-    	EditText hostLabelEdit = (EditText) view.findViewById(R.id.host_label_edit);
-    	EditText hostnameEdit = (EditText) view.findViewById(R.id.host_name_edit);
+    	EditText hostLabelEdit = getHostLabelEditText();
+    	EditText hostnameEdit = getHostnameEditText();
     	
     	Bundle args = getArguments();
-    	if (args != null) {
+    	
+    	if (savedInstanceState != null) {
+    		hostLabelEdit.setText(savedInstanceState.getString(HOST_LABEL_BUNDLE_KEY));
+    		hostnameEdit.setText(savedInstanceState.getString(HOST_NAME_BUNDLE_KEY));
+    	} else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		hostLabelEdit.setText(host.getLabel());
@@ -56,6 +63,22 @@ public class HostFragment extends SherlockFragment {
     	}
     	
 		hostnameEdit.setFilters(new InputFilter[] { hostnameCharacterFilter });
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+   
+    	outState.putString(HOST_LABEL_BUNDLE_KEY, getHostLabelEditText().getText().toString());
+    	outState.putString(HOST_NAME_BUNDLE_KEY, getHostnameEditText().getText().toString());
+    }
+    
+    public EditText getHostLabelEditText() {
+    	return (EditText) getView().findViewById(R.id.host_label_edit);
+    }
+    
+    public EditText getHostnameEditText() {
+    	return (EditText) getView().findViewById(R.id.host_name_edit);
     }
     
 	InputFilter hostnameCharacterFilter = new InputFilter() {

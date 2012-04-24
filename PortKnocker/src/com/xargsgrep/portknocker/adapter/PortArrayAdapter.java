@@ -49,8 +49,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		ImageButton deleteButton = (ImageButton) view.findViewById(R.id.port_row_delete);
 		
 		Port port = ports.get(position);
-		Integer portVal = new Integer(port.getPort());
-		portView.setText(portVal.toString().equals("0") ? "" : portVal.toString());
+		portView.setText((port.getPort() > 0) ? new Integer(port.getPort()).toString() : "");
 		protocolView.setSelection(port.getProtocol().ordinal());
 		
 		final ListView listView = (ListView) parent;
@@ -74,9 +73,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 			Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
 			
 			String portStr = portEditText.getText().toString();
-			if (portStr != null && portStr.length() > 0) {
-				ports.get(i).setPort(Integer.parseInt(portStr));
-			}
+			ports.get(i).setPort((portStr != null && portStr.length() > 0) ? Integer.parseInt(portStr) : -1);
 			Protocol protocol = Protocol.valueOf(protocolSpinner.getSelectedItem().toString());
 			ports.get(i).setProtocol(protocol);
 		}

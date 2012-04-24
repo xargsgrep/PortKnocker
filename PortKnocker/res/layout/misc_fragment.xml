@@ -27,7 +27,7 @@
         android:text="@string/launch_app_label"
     />
 	<Spinner
-	    android:id="@+id/launch_app"
+	    android:id="@+id/launch_intent"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	/>

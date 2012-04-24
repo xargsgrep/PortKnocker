@@ -28,6 +28,9 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class MiscFragment extends SherlockFragment {
 	
+	private static final String DELAY_BUNDLE_KEY = "delay";
+	private static final String LAUNCH_INTENT_BUNDLE_KEY = "launchIntent";
+	
     HostDataManager hostDataManager;
 	
 	public static MiscFragment newInstance(Long hostId) {
@@ -56,19 +59,39 @@ public class MiscFragment extends SherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	super.onViewCreated(view, savedInstanceState);
     	
-    	String selectedLaunchIntent = null;
+		EditText delayEditText = getDelayEditText();
     	Bundle args = getArguments();
-    	if (args != null) {
+    	
+    	String selectedLaunchIntent = null;
+    	if (savedInstanceState != null) {
+    		delayEditText.setText(savedInstanceState.getString(DELAY_BUNDLE_KEY));
+			selectedLaunchIntent = savedInstanceState.getString(LAUNCH_INTENT_BUNDLE_KEY);
+    	} else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		
-			EditText delayEditTextView = (EditText) view.findViewById(R.id.delay_edit);
-			delayEditTextView.setText(new Integer(host.getDelay()).toString());
+			delayEditText.setText(new Integer(host.getDelay()).toString());
 			selectedLaunchIntent = host.getLaunchIntent();
     	}
     	
     	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask(getActivity(), selectedLaunchIntent);
     	retrieveAppsTask.execute();
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	
+		outState.putString(DELAY_BUNDLE_KEY, getDelayEditText().getText().toString());
+		outState.putString(LAUNCH_INTENT_BUNDLE_KEY, ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent());
+    }
+    
+    public EditText getDelayEditText() {
+		return (EditText) getView().findViewById(R.id.delay_edit);
+    }
+    
+    public Spinner getLaunchIntentSpinner() {
+		return (Spinner) getView().findViewById(R.id.launch_intent);
     }
     
     private class RetrieveInstalledApplicationsTask extends AsyncTask<Void, Void, List<Application>> {
@@ -114,7 +137,7 @@ public class MiscFragment extends SherlockFragment {
 		@Override
 		protected void onPostExecute(List<Application> applications) {
 	        ArrayAdapter<Application> adapter = new ApplicationArrayAdapter(getActivity(), applications);
-	        Spinner launchAppSpinner = (Spinner) getView().findViewById(R.id.launch_app);
+	        Spinner launchAppSpinner = getLaunchIntentSpinner();
 	        launchAppSpinner.setAdapter(adapter);
 	        
 	        if (selectedLaunchIntent != null) {
