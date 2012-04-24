@@ -85,6 +85,7 @@ public class MiscFragment extends SherlockFragment {
     	@Override
     	protected void onPreExecute() {
     		dialog.setMessage(context.getResources().getString(R.string.progress_dialog_retrieving_applications));
+    		dialog.setCancelable(false);
     		dialog.show();
     	}
     	

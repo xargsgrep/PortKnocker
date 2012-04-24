@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.model.Port;
+import com.xargsgrep.portknocker.model.Port.Protocol;
 
 public class PortArrayAdapter extends ArrayAdapter<Port> {
 	
@@ -50,9 +53,11 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		portView.setText(portVal.toString().equals("0") ? "" : portVal.toString());
 		protocolView.setSelection(port.getProtocol().ordinal());
 		
+		final ListView listView = (ListView) parent;
 		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
+				refreshArrayFromListView(listView);
 				ports.remove(position);
 				notifyDataSetChanged();
 			}
@@ -61,4 +66,19 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		return view;
 	}
 
+	public void refreshArrayFromListView(ListView view) {
+		for (int i=0; i<view.getChildCount(); i++) {
+			View row = view.getChildAt(i);
+			
+			EditText portEditText = (EditText) row.findViewById(R.id.port_row_port);
+			Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
+			
+			String portStr = portEditText.getText().toString();
+			if (portStr != null && portStr.length() > 0) {
+				ports.get(i).setPort(Integer.parseInt(portStr));
+			}
+			Protocol protocol = Protocol.valueOf(protocolSpinner.getSelectedItem().toString());
+			ports.get(i).setProtocol(protocol);
+		}
+	}
 }
