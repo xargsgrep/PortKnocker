@@ -71,7 +71,7 @@ public class MiscFragment extends SherlockFragment {
     		Host host = hostDataManager.getHost(hostId);
     		
 			delayEditText.setText(new Integer(host.getDelay()).toString());
-			selectedLaunchIntent = host.getLaunchIntent();
+			selectedLaunchIntent = host.getLaunchIntentPackage();
     	}
     	
     	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask(getActivity(), selectedLaunchIntent);

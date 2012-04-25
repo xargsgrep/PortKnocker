@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -174,7 +172,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			host.setDelay(delay);
 			
 			Application application = (Application) miscFragment.getLaunchIntentSpinner().getSelectedItem();
-			host.setLaunchIntent(application.getIntent());
+			host.setLaunchIntentPackage(application.getIntent());
 		}
     	
     	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);

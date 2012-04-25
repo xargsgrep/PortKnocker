@@ -85,7 +85,7 @@ public class HostDataManager {
 			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
 			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
 			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_COLUMN, host.getLaunchIntent());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
 			
 			long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
 			if (hostId == -1) return false;
@@ -121,7 +121,7 @@ public class HostDataManager {
 			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
 			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
 			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_COLUMN, host.getLaunchIntent());
+			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
 			
 			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
 			int rowsAffected = database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
@@ -202,7 +202,7 @@ public class HostDataManager {
 		host.setLabel(cursor.getString(1));
 		host.setHostname(cursor.getString(2));
 		host.setDelay(cursor.getInt(3));
-		host.setLaunchIntent(cursor.getString(4));
+		host.setLaunchIntentPackage(cursor.getString(4));
 		return host;
 	}
 	

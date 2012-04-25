@@ -16,7 +16,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String HOST_LABEL_COLUMN = "label";
     public static final String HOST_HOSTNAME_COLUMN = "hostname";
     public static final String HOST_DELAY_COLUMN = "delay";
-    public static final String HOST_LAUNCH_INTENT_COLUMN = "launch_intent";
+    public static final String HOST_LAUNCH_INTENT_PACKAGE_COLUMN = "launch_intent_package";
     
     public static final String PORT_TABLE_NAME = "port";
     public static final String PORT_HOST_ID_COLUMN = "host_id";
@@ -24,7 +24,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String PORT_PORT_COLUMN = "port";
     public static final String PORT_PROTOCOL_COLUMN = "protocol";
     
-    public static final String[] HOST_TABLE_COLUMNS = new String[] { HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_COLUMN }; 
+    public static final String[] HOST_TABLE_COLUMNS = new String[] { HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_PACKAGE_COLUMN }; 
     public static final String[] PORT_TABLE_COLUMNS = new String[] { PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN }; 
 
 	public DatabaseManager(Context context) {
@@ -41,7 +41,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 				"	%s integer not null default 0," +
 				"	%s string" +
 				");";
-		createHostTableSQL = String.format(createHostTableSQL, HOST_TABLE_NAME, HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_COLUMN);
+		createHostTableSQL = String.format(createHostTableSQL, HOST_TABLE_NAME, HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_PACKAGE_COLUMN);
 		
 		String createPortTableSQL =
 				"create table %s (" +
