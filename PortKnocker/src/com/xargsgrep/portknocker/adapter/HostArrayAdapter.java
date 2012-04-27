@@ -61,11 +61,14 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		labelView.setText(host.getLabel());
 		hostnameView.setText(host.getHostname());
 		
-		String ports = "";
+		StringBuilder ports = new StringBuilder();
 		for (Port port : host.getPorts()) {
-			ports += port.getPort()+":"+port.getProtocol().toString()+", ";
+			ports.append(port.getPort());
+			ports.append(":");
+			ports.append(port.getProtocol());
+			ports.append(", ");
 		}
-		if (ports.length() > 0) ports = ports.substring(0, ports.length()-2);
+		if (ports.length() > 0) ports.replace(ports.length()-2, ports.length(), "");
 		portsView.setText(ports);
 		
 		view.setOnClickListener(new PositionOnClickListener(position) {
