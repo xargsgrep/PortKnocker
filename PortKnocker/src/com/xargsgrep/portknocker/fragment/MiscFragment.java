@@ -31,6 +31,7 @@ public class MiscFragment extends SherlockFragment {
     
     String delayStr;
     String launchIntent;
+    List<Application> applications;
 	
 	public static MiscFragment newInstance(Long hostId) {
 		MiscFragment fragment = new MiscFragment();
@@ -70,8 +71,12 @@ public class MiscFragment extends SherlockFragment {
 			launchIntent = host.getLaunchIntentPackage();
     	}
     	
-    	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask();
-    	retrieveAppsTask.execute();
+    	if (applications == null) {
+	    	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask();
+	    	retrieveAppsTask.execute();
+    	} else {
+    		initializeApplicationAdapter(applications);
+    	}
     }
     
     @Override
@@ -81,6 +86,22 @@ public class MiscFragment extends SherlockFragment {
     	delayStr = getDelayEditText().getText().toString();
     	if (getLaunchIntentSpinner().getSelectedItem() != null)
 	    	launchIntent = ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent();
+    }
+    
+    private void initializeApplicationAdapter(List<Application> applications) {
+        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), applications);
+        Spinner launchAppSpinner = getLaunchIntentSpinner();
+        launchAppSpinner.setAdapter(applicationsAdapter);
+        
+        if (launchIntent != null && launchIntent.length() > 0) {
+	        for (int i=0; i<applicationsAdapter.getCount(); i++) {
+	        	Application application = applicationsAdapter.getItem(i);
+	        	if (application.getIntent().equals(launchIntent)) {
+	        		launchAppSpinner.setSelection(i);
+	        		break;
+	        	}
+	        }
+        }
     }
     
     public EditText getDelayEditText() {
@@ -122,26 +143,14 @@ public class MiscFragment extends SherlockFragment {
 				}
 			});
 	        applications.add(0, new Application("None", null, ""));
-        
-			return applications;
+	        
+	        return applications;
 		}
 		
 		@Override
-		protected void onPostExecute(List<Application> applications) {
-	        ApplicationArrayAdapter adapter = new ApplicationArrayAdapter(getActivity(), applications);
-	        Spinner launchAppSpinner = getLaunchIntentSpinner();
-	        launchAppSpinner.setAdapter(adapter);
-	        
-	        if (launchIntent != null && launchIntent.length() > 0) {
-		        for (int i=0; i<adapter.getCount(); i++) {
-		        	Application application = adapter.getItem(i);
-		        	if (application.getIntent().equals(launchIntent)) {
-		        		launchAppSpinner.setSelection(i);
-		        		break;
-		        	}
-		        }
-	        }
-	        
+		protected void onPostExecute(List<Application> apps) {
+			applications = apps;
+			initializeApplicationAdapter(apps);
 	    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 	    	if (prev != null) ((ProgressDialogFragment) prev).dismiss();
 		}
