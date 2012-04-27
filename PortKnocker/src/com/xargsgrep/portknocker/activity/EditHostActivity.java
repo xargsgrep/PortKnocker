@@ -55,7 +55,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         
 		Bundle extras = getIntent().getExtras();
 		hostId = (extras != null && extras.containsKey(HOST_ID_BUNDLE_KEY)) ? extras.getLong(HOST_ID_BUNDLE_KEY) : null;
+    	Host host = (hostId == null) ? null : hostDataManager.getHost(hostId);
 		
+    	if (host != null) getSupportActionBar().setSubtitle(host.getLabel());
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
