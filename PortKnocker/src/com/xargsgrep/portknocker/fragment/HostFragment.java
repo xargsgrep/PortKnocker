@@ -16,10 +16,11 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostFragment extends SherlockFragment {
 	
-	private static final String HOST_LABEL_BUNDLE_KEY = "hostLabel";
-	private static final String HOST_NAME_BUNDLE_KEY = "hostname";
-	
     HostDataManager hostDataManager;
+    
+    boolean savedInstanceState = false;
+    String hostLabel;
+    String hostname;
 	
 	public static HostFragment newInstance(Long hostId) {
 		HostFragment fragment = new HostFragment();
@@ -34,6 +35,7 @@ public class HostFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		hostDataManager = new HostDataManager(getActivity());
 	}
 	
@@ -52,9 +54,9 @@ public class HostFragment extends SherlockFragment {
     	
     	Bundle args = getArguments();
     	
-    	if (savedInstanceState != null) {
-    		hostLabelEdit.setText(savedInstanceState.getString(HOST_LABEL_BUNDLE_KEY));
-    		hostnameEdit.setText(savedInstanceState.getString(HOST_NAME_BUNDLE_KEY));
+    	if (this.savedInstanceState) {
+    		hostLabelEdit.setText(hostLabel);
+    		hostnameEdit.setText(hostname);
     	} else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
@@ -69,8 +71,10 @@ public class HostFragment extends SherlockFragment {
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
    
-    	outState.putString(HOST_LABEL_BUNDLE_KEY, getHostLabelEditText().getText().toString());
-    	outState.putString(HOST_NAME_BUNDLE_KEY, getHostnameEditText().getText().toString());
+    	hostLabel = getHostLabelEditText().getText().toString();
+    	hostname = getHostnameEditText().getText().toString();
+    	
+    	savedInstanceState = true;
     }
     
     public EditText getHostLabelEditText() {

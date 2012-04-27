@@ -29,6 +29,7 @@ public class MiscFragment extends SherlockFragment {
 	
     HostDataManager hostDataManager;
     
+    boolean savedInstanceState = false;
     String delayStr;
     String launchIntent;
     List<Application> applications;
@@ -63,7 +64,9 @@ public class MiscFragment extends SherlockFragment {
 		EditText delayEditText = getDelayEditText();
     	Bundle args = getArguments();
     	
-    	if (args != null) {
+    	if (this.savedInstanceState) {
+			delayEditText.setText(delayStr);
+    	} else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		
@@ -86,10 +89,12 @@ public class MiscFragment extends SherlockFragment {
     	delayStr = getDelayEditText().getText().toString();
     	if (getLaunchIntentSpinner().getSelectedItem() != null)
 	    	launchIntent = ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent();
+    	
+    	savedInstanceState = true;
     }
     
-    private void initializeApplicationAdapter(List<Application> applications) {
-        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), applications);
+    private void initializeApplicationAdapter(List<Application> apps) {
+        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), apps);
         Spinner launchAppSpinner = getLaunchIntentSpinner();
         launchAppSpinner.setAdapter(applicationsAdapter);
         

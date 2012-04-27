@@ -3,6 +3,7 @@ package com.xargsgrep.portknocker.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,10 @@ import com.xargsgrep.portknocker.model.Port.Protocol;
 
 public class PortsFragment extends SherlockListFragment {
 	
-	private static final String PORTS_BUNDLE_KEY = "ports";
-	private static final String PROTOCOLS_BUNDLE_KEY = "protocols";
-	
     HostDataManager hostDataManager;
+    
+    boolean savedInstanceState = false;
+    List<Port> ports = new ArrayList<Port>();
 	
 	public static PortsFragment newInstance(Long hostId) {
 		PortsFragment fragment = new PortsFragment();
@@ -43,8 +44,9 @@ public class PortsFragment extends SherlockListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		hostDataManager = new HostDataManager(getActivity());
+		setRetainInstance(true);
 		setHasOptionsMenu(true);
+		hostDataManager = new HostDataManager(getActivity());
 	}
 	
     @Override
@@ -57,18 +59,10 @@ public class PortsFragment extends SherlockListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	super.onViewCreated(view, savedInstanceState);
     	
-    	List<Port> ports = new ArrayList<Port>();
     	Bundle args = getArguments();
     	
-    	if (savedInstanceState != null) {
-    		String[] portsStrArray = savedInstanceState.getStringArray(PORTS_BUNDLE_KEY);
-    		String[] protocolsStrArray = savedInstanceState.getStringArray(PROTOCOLS_BUNDLE_KEY);
-    		
-    		for (int i=0; i<portsStrArray.length; i++) {
-    			int port = (portsStrArray[i] == null || portsStrArray[i].length() == 0) ? -1 : Integer.parseInt(portsStrArray[i]);
-    			Protocol protocol = Protocol.valueOf(protocolsStrArray[i]);
-    			ports.add(new Port(port, protocol));
-    		}
+    	if (this.savedInstanceState) {
+    		// do nothing
     	} else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
@@ -99,20 +93,14 @@ public class PortsFragment extends SherlockListFragment {
     }
     
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
+    }
+    
+    @Override
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
-    	
-    	ListView listView = getListView();
-    	String[] ports = new String[listView.getChildCount()];
-    	String[] protocols = new String[listView.getChildCount()];
-		for (int i=0; i<listView.getChildCount(); i++) {
-			View row = listView.getChildAt(i);
-			ports[i] = getPortEditTextFromRowView(row).getText().toString();
-			protocols[i] = getProtocolSpinnerFromRowView(row).getSelectedItem().toString();
-		}
-		
-		outState.putStringArray(PORTS_BUNDLE_KEY, ports);
-		outState.putStringArray(PROTOCOLS_BUNDLE_KEY, protocols);
+		savedInstanceState = true;
     }
     
     public EditText getPortEditTextFromRowView(View row) {
@@ -125,8 +113,27 @@ public class PortsFragment extends SherlockListFragment {
     
     private void addPort() {
     	PortArrayAdapter adapter = (PortArrayAdapter) getListAdapter();
-    	adapter.refreshArrayFromListView(getListView());
     	adapter.add(new Port());
+    	adapter.refreshArrayFromListView(getListView());
     	adapter.notifyDataSetChanged();
+    }
+    
+    public List<Port> getPortsFromView() {
+		List<Port> ports = new ArrayList<Port>();
+		
+		ListView portsListView = getListView();
+		for (int i=0; i<portsListView.getChildCount(); i++) {
+			View row = portsListView.getChildAt(i);
+			
+			String portStr = getPortEditTextFromRowView(row).getText().toString();
+			if (portStr == null || portStr.length() == 0) continue;
+			int portVal = Integer.parseInt(portStr);
+			Protocol protocol = Protocol.valueOf(getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
+			
+			Port port = new Port(portVal, protocol);
+			ports.add(port);
+		}
+		
+		return ports;
     }
 }

@@ -114,7 +114,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
         dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
         dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
         
-        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
+        dialogBuilder.setPositiveButton(R.string.confirm_dialog_confirm,
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 					Host host = hosts.get(position);

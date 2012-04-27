@@ -1,13 +1,17 @@
 package com.xargsgrep.portknocker.activity;
 
+import java.util.regex.Pattern;
+
+import org.apache.http.conn.util.InetAddressUtils;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.ListView;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -21,8 +25,6 @@ import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
-import com.xargsgrep.portknocker.model.Port;
-import com.xargsgrep.portknocker.model.Port.Protocol;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
@@ -41,6 +43,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	
 	public static final String HOST_ID_BUNDLE_KEY = "hostId";
 	public static final String SAVE_HOST_RESULT_BUNDLE_KEY = "saveHostResult";
+	
+	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,20 +154,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
-			host.getPorts().clear();
-			
-			ListView portsListView = portsFragment.getListView();
-			for (int i=0; i<portsListView.getChildCount(); i++) {
-				View row = portsListView.getChildAt(i);
-				
-				String portStr = portsFragment.getPortEditTextFromRowView(row).getText().toString();
-				if (portStr == null || portStr.length() == 0) continue;
-				int portVal = Integer.parseInt(portStr);
-				Protocol protocol = Protocol.valueOf(portsFragment.getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
-				
-				Port port = new Port(portVal, protocol);
-				host.getPorts().add(port);
-			}
+			host.setPorts(portsFragment.getPortsFromView());
 		}
     	
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
@@ -173,6 +164,25 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			
 			Application application = (Application) miscFragment.getLaunchIntentSpinner().getSelectedItem();
 			host.setLaunchIntentPackage(application.getIntent());
+		}
+		
+		boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
+		boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
+		Toast toast = null;
+		if (host.getLabel() == null || host.getLabel().length() == 0) {
+			toast = Toast.makeText(this, "Please enter a label", Toast.LENGTH_SHORT);
+		} else if (host.getHostname() == null || host.getHostname().length() == 0) {
+			toast = Toast.makeText(this, "Please enter a hostname", Toast.LENGTH_SHORT);
+		} else if (!validHostname && !validIP) {
+			toast = Toast.makeText(this, "Invalid hostname/IP", Toast.LENGTH_SHORT);
+		} else if (host.getPorts() == null || host.getPorts().size() == 0) {
+			toast = Toast.makeText(this, "Please enter at least one port", Toast.LENGTH_SHORT);
+		}
+		
+		if (toast != null) {
+			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
+			toast.show();
+			return;
 		}
     	
     	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);
@@ -191,7 +201,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         dialogBuilder.setTitle(R.string.confirm_dialog_cancel_edit_title);
         dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
         
-        dialogBuilder.setPositiveButton(R.string.confirm_dialog_ok,
+        dialogBuilder.setPositiveButton(R.string.confirm_dialog_confirm,
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                 	returnToHostListActivity(null);

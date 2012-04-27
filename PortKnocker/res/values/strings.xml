@@ -5,20 +5,20 @@
     <string name="ports_tab_name">Ports</string>
     <string name="misc_tab_name">Other</string>
     <string name="host_label_label">Label:</string>
-    <string name="host_label_hint">Host Label</string>
-    <string name="host_name_label">Host Name:</string>
-    <string name="host_name_hint">domain.com</string>
+    <string name="host_label_hint">Label</string>
+    <string name="host_name_label">Hostname or IP:</string>
+    <string name="host_name_hint">domain.com/192.168.10.1</string>
     <string name="port_label">Port:</string>
     <string name="port_hint">1234</string>
     <string name="protocol_label">Protocol:</string>
     <string name="delay_label">Delay (ms):</string>
     <string name="delay_hint">0</string>
     <string name="launch_app_label">Launch Application:</string>
-    <string name="confirm_dialog_ok">OK</string>
-    <string name="confirm_dialog_cancel">Cancel</string>
+    <string name="confirm_dialog_confirm">Yes</string>
+    <string name="confirm_dialog_cancel">No</string>
     <string name="confirm_dialog_delete_host_title">Delete host?</string>
     <string name="confirm_dialog_cancel_edit_title">Cancel without saving?</string>
     <string name="progress_dialog_retrieving_applications">Retrieving applications&#8230;</string>
-    <string name="save_success">Saved</string>
+    <string name="save_success">Saved!</string>
     <string name="save_failure">Save failed</string>
 </resources>
