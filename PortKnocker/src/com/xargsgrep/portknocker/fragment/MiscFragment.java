@@ -31,7 +31,6 @@ public class MiscFragment extends SherlockFragment {
 	private static final String LAUNCH_INTENT_BUNDLE_KEY = "launchIntent";
 	
     HostDataManager hostDataManager;
-    ProgressDialogFragment dialogFragment;
 	
 	public static MiscFragment newInstance(Long hostId) {
 		MiscFragment fragment = new MiscFragment();
@@ -75,15 +74,6 @@ public class MiscFragment extends SherlockFragment {
 			selectedLaunchIntent = host.getLaunchIntentPackage();
     	}
     	
-    	
-    	FragmentTransaction ft = getFragmentManager().beginTransaction();
-    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-    	if (prev != null) ft.remove(prev);
-    	ft.addToBackStack(null);
-    	
-		dialogFragment = ProgressDialogFragment.newInstance(getString(R.string.progress_dialog_retrieving_applications));
-		dialogFragment.show(ft, "dialog");
-		
     	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask(selectedLaunchIntent);
     	retrieveAppsTask.execute();
     }
@@ -114,6 +104,13 @@ public class MiscFragment extends SherlockFragment {
     	
     	@Override
     	protected void onPreExecute() {
+	    	FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+	    	if (prev != null) ft.remove(prev);
+	    	ft.addToBackStack(null);
+	    	
+			ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(getString(R.string.progress_dialog_retrieving_applications));
+			dialogFragment.show(ft, "dialog");
     	}
     	
 		@Override
@@ -154,8 +151,8 @@ public class MiscFragment extends SherlockFragment {
 		        }
 	        }
 	        
-	        if (dialogFragment.isAdded())
-		        dialogFragment.dismiss();
+	    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+	    	if (prev != null) ((ProgressDialogFragment) prev).dismiss();
 		}
 
 	    private boolean isSystemPackage(ApplicationInfo applicationInfo) {
