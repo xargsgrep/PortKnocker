@@ -5,16 +5,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -32,6 +31,7 @@ public class MiscFragment extends SherlockFragment {
 	private static final String LAUNCH_INTENT_BUNDLE_KEY = "launchIntent";
 	
     HostDataManager hostDataManager;
+    ProgressDialogFragment dialogFragment;
 	
 	public static MiscFragment newInstance(Long hostId) {
 		MiscFragment fragment = new MiscFragment();
@@ -46,6 +46,7 @@ public class MiscFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		hostDataManager = new HostDataManager(getActivity());
 	}
 	
@@ -74,7 +75,16 @@ public class MiscFragment extends SherlockFragment {
 			selectedLaunchIntent = host.getLaunchIntentPackage();
     	}
     	
-    	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask(getActivity(), selectedLaunchIntent);
+    	
+    	FragmentTransaction ft = getFragmentManager().beginTransaction();
+    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+    	if (prev != null) ft.remove(prev);
+    	ft.addToBackStack(null);
+    	
+		dialogFragment = ProgressDialogFragment.newInstance(getString(R.string.progress_dialog_retrieving_applications));
+		dialogFragment.show(ft, "dialog");
+		
+    	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask(selectedLaunchIntent);
     	retrieveAppsTask.execute();
     }
     
@@ -83,7 +93,8 @@ public class MiscFragment extends SherlockFragment {
     	super.onSaveInstanceState(outState);
     	
 		outState.putString(DELAY_BUNDLE_KEY, getDelayEditText().getText().toString());
-		outState.putString(LAUNCH_INTENT_BUNDLE_KEY, ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent());
+		if (getLaunchIntentSpinner().getSelectedItem() != null)
+			outState.putString(LAUNCH_INTENT_BUNDLE_KEY, ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent());
     }
     
     public EditText getDelayEditText() {
@@ -95,21 +106,14 @@ public class MiscFragment extends SherlockFragment {
     }
     
     private class RetrieveInstalledApplicationsTask extends AsyncTask<Void, Void, List<Application>> {
-    	Context context;
-    	ProgressDialog dialog;
     	String selectedLaunchIntent;
     	
-    	public RetrieveInstalledApplicationsTask(Context context, String selectedLaunchIntent) {
-    		this.context = context;
-    		this.dialog = new ProgressDialog(context);
+    	public RetrieveInstalledApplicationsTask(String selectedLaunchIntent) {
     		this.selectedLaunchIntent = selectedLaunchIntent;
 		}
     	
     	@Override
     	protected void onPreExecute() {
-    		dialog.setMessage(context.getResources().getString(R.string.progress_dialog_retrieving_applications));
-    		dialog.setCancelable(false);
-    		dialog.show();
     	}
     	
 		@Override
@@ -136,7 +140,7 @@ public class MiscFragment extends SherlockFragment {
 		
 		@Override
 		protected void onPostExecute(List<Application> applications) {
-	        ArrayAdapter<Application> adapter = new ApplicationArrayAdapter(getActivity(), applications);
+	        ApplicationArrayAdapter adapter = new ApplicationArrayAdapter(getActivity(), applications);
 	        Spinner launchAppSpinner = getLaunchIntentSpinner();
 	        launchAppSpinner.setAdapter(adapter);
 	        
@@ -150,7 +154,8 @@ public class MiscFragment extends SherlockFragment {
 		        }
 	        }
 	        
-	        if (dialog.isShowing()) dialog.dismiss();
+	        if (dialogFragment.isAdded())
+		        dialogFragment.dismiss();
 		}
 
 	    private boolean isSystemPackage(ApplicationInfo applicationInfo) {
