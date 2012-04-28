@@ -42,7 +42,12 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public static final int TAB_INDEX_MISC = 2;
 	
 	public static final String HOST_ID_BUNDLE_KEY = "hostId";
+	public static final String SELECTED_TAB_INDEX_BUNDLE_KEY = "selectedTabIndex";
 	public static final String SAVE_HOST_RESULT_BUNDLE_KEY = "saveHostResult";
+	
+	private static final String HOST_TAB_FRAGMENT_TAG = "host_tab";
+	private static final String PORTS_TAB_FRAGMENT_TAG = "ports_tab";
+	private static final String MISC_TAB_FRAGMENT_TAG = "misc_tab";
 	
 	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 	
@@ -67,7 +72,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         addTab(getString(R.string.misc_tab_name));
         
         if (savedInstanceState != null) {
-        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("selectedTabIndex"));
+        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_TAB_INDEX_BUNDLE_KEY));
         }
     }
     
@@ -80,15 +85,15 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.host_tab_name));
-		Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
-		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
+		Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(HOST_TAB_FRAGMENT_TAG);
+		Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(PORTS_TAB_FRAGMENT_TAG);
+		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(MISC_TAB_FRAGMENT_TAG);
 		
 		switch (tab.getPosition()) {
 			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
 					hostFragment = HostFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, hostFragment, getString(R.string.host_tab_name));
+					ft.add(R.id.fragment_content, hostFragment, HOST_TAB_FRAGMENT_TAG);
 				}
     			ft.show(hostFragment);
     			if (portsFragment != null) ft.hide(portsFragment);
@@ -97,7 +102,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
 					portsFragment = PortsFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, portsFragment, getString(R.string.ports_tab_name));
+					ft.add(R.id.fragment_content, portsFragment, PORTS_TAB_FRAGMENT_TAG);
 				}
     			ft.show(portsFragment);
     			if (hostFragment != null) ft.hide(hostFragment);
@@ -106,7 +111,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
 					miscFragment = MiscFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, miscFragment, getString(R.string.misc_tab_name));
+					ft.add(R.id.fragment_content, miscFragment, MISC_TAB_FRAGMENT_TAG);
 				}
     			ft.show(miscFragment);
     			if (hostFragment != null) ft.hide(hostFragment);
@@ -147,13 +152,13 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
-    	outState.putInt("selectedTabIndex", getSupportActionBar().getSelectedNavigationIndex());
+    	outState.putInt(SELECTED_TAB_INDEX_BUNDLE_KEY, getSupportActionBar().getSelectedNavigationIndex());
     }
     
     private void saveHost() {
-		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.host_tab_name));
-		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.ports_tab_name));
-		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.misc_tab_name));
+		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(HOST_TAB_FRAGMENT_TAG);
+		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PORTS_TAB_FRAGMENT_TAG);
+		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MISC_TAB_FRAGMENT_TAG);
     	
     	Host host = (hostId == null) ? new Host() : hostDataManager.getHost(hostId);
     	

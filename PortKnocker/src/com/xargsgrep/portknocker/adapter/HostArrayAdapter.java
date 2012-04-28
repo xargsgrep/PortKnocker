@@ -6,17 +6,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.xargsgrep.portknocker.Knocker;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
+import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
@@ -26,12 +26,14 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 	
     HostDataManager hostDataManager;
 	Context context;
+	Fragment fragment;
 	List<Host> hosts;
 
-	public HostArrayAdapter(Context context, List<Host> hosts) {
+	public HostArrayAdapter(Context context, Fragment fragment, List<Host> hosts) {
 		super(context, -1, hosts);
         hostDataManager = new HostDataManager(context);
 		this.context = context;
+		this.fragment = fragment;
 		this.hosts = hosts;
 	}
 	
@@ -74,28 +76,9 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		view.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Knocking...", Toast.LENGTH_SHORT).show();
-				Thread thread = new Thread(
-					new Runnable() {
-						@Override
-						public void run() {
-							Host host = getItem(position);
-							boolean success = Knocker.doKnock(host);
-							if (success) {
-								if (host.getLaunchIntentPackage() != null && host.getLaunchIntentPackage().length() > 0) {
-									Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(host.getLaunchIntentPackage());
-									context.startActivity(launchIntent);
-								}
-							}
-						}
-					}
-				);
-				thread.start();
-				/*
 				Host host = getItem(position);
-				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask((FragmentActivity) context);
+				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(fragment, host.getLaunchIntentPackage());
 				knockerAsyncTask.execute(host);
-				*/
 			}
 		});
 		

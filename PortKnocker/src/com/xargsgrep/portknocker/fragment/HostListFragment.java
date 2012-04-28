@@ -24,6 +24,7 @@ public class HostListFragment extends SherlockListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		hostDataManager = new HostDataManager(getActivity());
 	}
 	
@@ -38,7 +39,7 @@ public class HostListFragment extends SherlockListFragment {
     	super.onViewCreated(view, savedInstanceState);
     	
         List<Host> hosts = hostDataManager.getAllHosts();
-		HostArrayAdapter hostAdapter = new HostArrayAdapter(getActivity(), hosts);
+		HostArrayAdapter hostAdapter = new HostArrayAdapter(getActivity(), this, hosts);
 		setListAdapter(hostAdapter);
     }
     
