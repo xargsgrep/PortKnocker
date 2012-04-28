@@ -25,10 +25,11 @@ import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.model.Port;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
-    HostDataManager hostDataManager;
+	HostDataManager hostDataManager;
     
     // null when creating a new host
     private Long hostId;
@@ -49,6 +50,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	private static final String PORTS_TAB_FRAGMENT_TAG = "ports_tab";
 	private static final String MISC_TAB_FRAGMENT_TAG = "misc_tab";
 	
+    private static final int MAX_PORT_VALUE = 65535;
+
 	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 	
     @Override
@@ -189,6 +192,13 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			toast = Toast.makeText(this, "Invalid hostname/IP", Toast.LENGTH_SHORT);
 		} else if (host.getPorts() == null || host.getPorts().size() == 0) {
 			toast = Toast.makeText(this, "Please enter at least one port", Toast.LENGTH_SHORT);
+		} else {
+			for (Port port : host.getPorts()) {
+				if (port.getPort() > MAX_PORT_VALUE) {
+					toast = Toast.makeText(this, "Port is outside valid range", Toast.LENGTH_SHORT);
+					break;
+				}
+			}
 		}
 		
 		if (toast != null) {
