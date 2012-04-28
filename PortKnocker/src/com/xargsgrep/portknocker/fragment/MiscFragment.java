@@ -1,16 +1,8 @@
 package com.xargsgrep.portknocker.fragment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +13,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.adapter.ApplicationArrayAdapter;
+import com.xargsgrep.portknocker.asynctask.RetrieveApplicationsAsyncTask;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
@@ -75,7 +68,7 @@ public class MiscFragment extends SherlockFragment {
     	}
     	
     	if (applications == null) {
-	    	RetrieveInstalledApplicationsTask retrieveAppsTask = new RetrieveInstalledApplicationsTask();
+	    	RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(this);
 	    	retrieveAppsTask.execute();
     	} else {
     		initializeApplicationAdapter(applications);
@@ -93,8 +86,10 @@ public class MiscFragment extends SherlockFragment {
     	savedInstanceState = true;
     }
     
-    private void initializeApplicationAdapter(List<Application> apps) {
-        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), apps);
+    public void initializeApplicationAdapter(List<Application> applications) {
+    	this.applications = applications;
+    	
+        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), applications);
         Spinner launchAppSpinner = getLaunchIntentSpinner();
         launchAppSpinner.setAdapter(applicationsAdapter);
         
@@ -117,52 +112,4 @@ public class MiscFragment extends SherlockFragment {
 		return (Spinner) getView().findViewById(R.id.launch_intent);
     }
     
-    private class RetrieveInstalledApplicationsTask extends AsyncTask<Void, Void, List<Application>> {
-    	
-    	@Override
-    	protected void onPreExecute() {
-	    	FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-	    	if (prev != null) ft.remove(prev);
-	    	ft.addToBackStack(null);
-	    	
-			ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(getString(R.string.progress_dialog_retrieving_applications));
-			dialogFragment.show(ft, "dialog");
-    	}
-    	
-		@Override
-		protected List<Application> doInBackground(Void... params) {
-			PackageManager packageManager = getActivity().getPackageManager();
-			List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-			
-	        List<Application> applications = new ArrayList<Application>();
-	        for (ApplicationInfo applicationInfo : installedApplications) {
-	        	if (isSystemPackage(applicationInfo) || packageManager.getLaunchIntentForPackage(applicationInfo.packageName) == null) continue;
-	        	applications.add(new Application(packageManager.getApplicationLabel(applicationInfo).toString(), applicationInfo.loadIcon(packageManager), applicationInfo.packageName));
-	        }
-	        
-	        Collections.sort(applications, new Comparator<Application>() {
-				@Override
-				public int compare(Application app1, Application app2) {
-					return app1.getLabel().compareTo(app2.getLabel());
-				}
-			});
-	        applications.add(0, new Application("None", null, ""));
-	        
-	        return applications;
-		}
-		
-		@Override
-		protected void onPostExecute(List<Application> apps) {
-			applications = apps;
-			initializeApplicationAdapter(apps);
-	    	Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-	    	if (prev != null) ((ProgressDialogFragment) prev).dismiss();
-		}
-
-	    private boolean isSystemPackage(ApplicationInfo applicationInfo) {
-	        return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
-	    }
-    }
-
 }

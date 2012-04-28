@@ -14,9 +14,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xargsgrep.portknocker.Knocker;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
-import com.xargsgrep.portknocker.knocker.Knocker;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
@@ -91,6 +91,11 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 					}
 				);
 				thread.start();
+				/*
+				Host host = getItem(position);
+				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask((FragmentActivity) context);
+				knockerAsyncTask.execute(host);
+				*/
 			}
 		});
 		

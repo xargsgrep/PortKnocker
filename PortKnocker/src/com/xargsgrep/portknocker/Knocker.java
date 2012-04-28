@@ -1,4 +1,4 @@
-package com.xargsgrep.portknocker.knocker;
+package com.xargsgrep.portknocker;
 
 import java.io.IOException;
 import java.net.ConnectException;
