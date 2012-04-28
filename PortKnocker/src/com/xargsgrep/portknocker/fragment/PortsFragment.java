@@ -3,7 +3,6 @@ package com.xargsgrep.portknocker.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,11 +89,6 @@ public class PortsFragment extends SherlockListFragment {
 	    	default:
 	    		return false;
     	}
-    }
-    
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-    	super.onConfigurationChanged(newConfig);
     }
     
     @Override

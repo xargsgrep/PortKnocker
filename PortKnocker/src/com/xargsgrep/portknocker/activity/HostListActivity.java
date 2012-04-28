@@ -1,39 +1,39 @@
 package com.xargsgrep.portknocker.activity;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
-import com.xargsgrep.portknocker.manager.HostDataManager;
-import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.fragment.HostListFragment;
 
-public class HostListActivity extends SherlockListActivity {
+public class HostListActivity extends SherlockFragmentActivity {
 	
 	private static final int MENU_ADD_ITEM_ID = 1;
 	private static final int MENU_SETTINGS_ITEM_ID = 2;
 	
-    HostDataManager hostDataManager;
-    
+	private static final String HOST_LIST_FRAGMENT_TAG = "host_list";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        hostDataManager = new HostDataManager(this);
+        setContentView(R.layout.host_list);
         
         getSupportActionBar().setHomeButtonEnabled(false);
-        setContentView(R.layout.host_list);
-        getListView().setItemsCanFocus(true);
         
-        List<Host> hosts = hostDataManager.getAllHosts();
-		HostArrayAdapter hostAdapter = new HostArrayAdapter(this, hosts);
-		setListAdapter(hostAdapter);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HOST_LIST_FRAGMENT_TAG);
+		if (hostListFragment == null) {
+			hostListFragment = HostListFragment.newInstance();
+			ft.add(R.id.fragment_content, hostListFragment, HOST_LIST_FRAGMENT_TAG);
+		}
+		ft.show(hostListFragment);
+		ft.commit();
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null && extras.containsKey(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY)) {
