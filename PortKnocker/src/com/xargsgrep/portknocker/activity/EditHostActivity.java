@@ -33,7 +33,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     // null when creating a new host
     private Long hostId;
     
-	public static final int MENU_ITEM_CANCEL = 1;
+	//public static final int MENU_ITEM_CANCEL = 1;
 	public static final int MENU_ITEM_SAVE = 2;
 	public static final int MENU_ITEM_ADD_PORT = 3;
 	
@@ -117,7 +117,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_ITEM_CANCEL, 1, "Cancel").setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		//menu.add(Menu.NONE, MENU_ITEM_CANCEL, 1, "Cancel").setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_action_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
 	}
@@ -126,11 +126,11 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 	    	case android.R.id.home: 
-	    		returnToHostListActivity(null);
-		        return true;
-	    	case MENU_ITEM_CANCEL:
 	    		showCancelDialog();
-	    		return true;
+		        return true;
+	    	//case MENU_ITEM_CANCEL:
+	    		//showCancelDialog();
+	    		//return true;
 	    	case MENU_ITEM_SAVE:
 	    		saveHost();
 	    		return true;
