@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_marginLeft="16dip"
-    android:layout_marginRight="16dip"
     android:orientation="horizontal"
     android:gravity="center_vertical"
 >
@@ -23,7 +21,6 @@
 		<TextView
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-	        android:textColor="#FFFFFF"
 	        android:textSize="18sp"
 	        android:singleLine="true"
 		    android:text="@string/port_label"
@@ -42,7 +39,6 @@
 		<TextView
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-	        android:textColor="#FFFFFF"
 	        android:textSize="18sp"
 	        android:singleLine="true"
 		    android:text="@string/protocol_label"
