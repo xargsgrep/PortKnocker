@@ -17,6 +17,7 @@ import com.xargsgrep.portknocker.model.Host;
 public class HostListActivity extends SherlockListActivity {
 	
 	private static final int MENU_ADD_ITEM_ID = 1;
+	private static final int MENU_SETTINGS_ITEM_ID = 2;
 	
     HostDataManager hostDataManager;
     
@@ -44,6 +45,7 @@ public class HostListActivity extends SherlockListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_ADD_ITEM_ID, 0, "Add Host").setIcon(R.drawable.ic_action_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_SETTINGS_ITEM_ID, 0, "Settings").setIcon(R.drawable.ic_action_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
 	}
     
@@ -53,6 +55,8 @@ public class HostListActivity extends SherlockListActivity {
 	    	case MENU_ADD_ITEM_ID: 
 				Intent editHostIntent = new Intent(this, EditHostActivity.class);
 		        startActivity(editHostIntent);
+		        return true;
+	    	case MENU_SETTINGS_ITEM_ID: 
 		        return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);
