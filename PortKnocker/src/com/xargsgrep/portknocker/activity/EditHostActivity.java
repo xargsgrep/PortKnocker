@@ -151,6 +151,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    		saveHost();
 	    		return true;
 		    default:
+		    	// so fragment onOptionsItemSelected methods get called
 		    	return false;
     	}
     }

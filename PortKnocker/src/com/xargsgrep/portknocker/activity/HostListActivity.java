@@ -57,7 +57,9 @@ public class HostListActivity extends SherlockFragmentActivity {
 				Intent editHostIntent = new Intent(this, EditHostActivity.class);
 		        startActivity(editHostIntent);
 		        return true;
-	    	case MENU_SETTINGS_ITEM_ID: 
+	    	case MENU_SETTINGS_ITEM_ID:
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+		        startActivity(settingsIntent);
 		        return true;
 		    default:
 		    	return super.onOptionsItemSelected(item);

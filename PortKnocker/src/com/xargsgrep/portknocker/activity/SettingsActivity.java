@@ -1,0 +1,35 @@
+package com.xargsgrep.portknocker.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.xargsgrep.portknocker.R;
+
+public class SettingsActivity extends SherlockFragmentActivity {
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings);
+        
+    	getSupportActionBar().setSubtitle("Settings");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+	    	case android.R.id.home: 
+				Intent hostListIntent = new Intent(this, HostListActivity.class);
+				hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivity(hostListIntent);
+		        return true;
+		    default:
+		    	return super.onOptionsItemSelected(item);
+    	}
+    }
+    
+}
