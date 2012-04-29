@@ -12,6 +12,7 @@ import com.xargsgrep.portknocker.Knocker.KnockResult;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.ProgressDialogFragment;
 import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
 	
@@ -47,7 +48,7 @@ public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
     	if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
     	
 		if (result.isSuccess()) {
-			if (launchIntentPackage != null && launchIntentPackage.length() > 0) {
+			if (StringUtils.isNotBlank(launchIntentPackage)) {
 				Intent launchIntent = fragment.getActivity().getPackageManager().getLaunchIntentForPackage(launchIntentPackage);
 				fragment.getActivity().startActivity(launchIntent);
 			}

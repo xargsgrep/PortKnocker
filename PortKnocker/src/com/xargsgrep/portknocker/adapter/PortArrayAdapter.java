@@ -19,6 +19,7 @@ import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class PortArrayAdapter extends ArrayAdapter<Port> {
 	
@@ -83,7 +84,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 			Spinner protocolSpinner = (Spinner) row.findViewById(R.id.port_row_protocol);
 			
 			String portStr = portEditText.getText().toString();
-			ports.get(i).setPort((portStr != null && portStr.length() > 0) ? Integer.parseInt(portStr) : -1);
+			ports.get(i).setPort((StringUtils.isNotBlank(portStr)) ? Integer.parseInt(portStr) : -1);
 			Protocol protocol = Protocol.valueOf(protocolSpinner.getSelectedItem().toString());
 			ports.get(i).setProtocol(protocol);
 		}

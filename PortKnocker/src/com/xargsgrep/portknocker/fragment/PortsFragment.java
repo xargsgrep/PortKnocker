@@ -22,6 +22,7 @@ import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class PortsFragment extends SherlockListFragment {
 	
@@ -120,8 +121,9 @@ public class PortsFragment extends SherlockListFragment {
 			View row = portsListView.getChildAt(i);
 			
 			String portStr = getPortEditTextFromRowView(row).getText().toString();
-			if (portStr == null || portStr.length() == 0) continue;
+			if (StringUtils.isBlank(portStr)) continue;
 			int portVal = Integer.parseInt(portStr);
+			
 			Protocol protocol = Protocol.valueOf(getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
 			
 			Port port = new Port(portVal, protocol);

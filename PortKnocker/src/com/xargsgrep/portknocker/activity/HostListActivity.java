@@ -11,6 +11,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
+import com.xargsgrep.portknocker.utils.BundleUtils;
 
 public class HostListActivity extends SherlockFragmentActivity {
 	
@@ -36,7 +37,7 @@ public class HostListActivity extends SherlockFragmentActivity {
 		ft.commit();
 		
 		Bundle extras = getIntent().getExtras();
-		if (extras != null && extras.containsKey(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY)) {
+		if (BundleUtils.contains(extras, EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY)) {
 			Boolean saveResult = extras.getBoolean(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY);
 			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
 		}

@@ -26,6 +26,8 @@ import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
+import com.xargsgrep.portknocker.utils.BundleUtils;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
@@ -62,7 +64,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         hostDataManager = new HostDataManager(this);
         
 		Bundle extras = getIntent().getExtras();
-		hostId = (extras != null && extras.containsKey(HOST_ID_BUNDLE_KEY)) ? extras.getLong(HOST_ID_BUNDLE_KEY) : null;
+		hostId = (BundleUtils.contains(extras, HOST_ID_BUNDLE_KEY)) ? extras.getLong(HOST_ID_BUNDLE_KEY) : null;
     	Host host = (hostId == null) ? null : hostDataManager.getHost(hostId);
 		
     	if (host != null) getSupportActionBar().setSubtitle(host.getLabel());
@@ -174,7 +176,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
 			String delayStr = miscFragment.getDelayEditText().getText().toString();
-			int delay = (delayStr != null && delayStr.length() > 0) ? Integer.parseInt(delayStr) : 0;
+			int delay = (StringUtils.isNotBlank(delayStr)) ? Integer.parseInt(delayStr) : 0;
 			host.setDelay(delay);
 			
 			Application application = (Application) miscFragment.getLaunchIntentSpinner().getSelectedItem();
@@ -183,10 +185,11 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		
 		boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
 		boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
+		
 		Toast toast = null;
-		if (host.getLabel() == null || host.getLabel().length() == 0) {
+		if (StringUtils.isBlank(host.getLabel())) {
 			toast = Toast.makeText(this, "Please enter a label", Toast.LENGTH_SHORT);
-		} else if (host.getHostname() == null || host.getHostname().length() == 0) {
+		} else if (StringUtils.isBlank(host.getHostname())) {
 			toast = Toast.makeText(this, "Please enter a hostname", Toast.LENGTH_SHORT);
 		} else if (!validHostname && !validIP) {
 			toast = Toast.makeText(this, "Invalid hostname/IP", Toast.LENGTH_SHORT);

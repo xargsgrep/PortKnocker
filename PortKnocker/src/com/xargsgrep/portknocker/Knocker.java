@@ -14,6 +14,8 @@ import java.net.UnknownHostException;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
+import com.xargsgrep.portknocker.utils.SocketUtils;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class Knocker {
 
@@ -58,7 +60,7 @@ public class Knocker {
 				// this is ok since we don't expect the remote socket to be open
 			}
 			catch (ConnectException e) { 
-				if (e.getMessage() != null && e.getMessage().contains(ENETUNREACH)) {
+				if (StringUtils.contains(e.getMessage(), ENETUNREACH)) {
 					// TCP: host unreachable
 					return new KnockResult(e.getMessage()); 
 				}
@@ -80,25 +82,14 @@ public class Knocker {
 				return new KnockResult(e.getMessage());
 			}
 			finally {
-				closeQuietly(socket);
-				closeQuietly(datagramSocket);
+				SocketUtils.closeQuietly(socket);
+				SocketUtils.closeQuietly(datagramSocket);
 			}
 
 			try { Thread.sleep(host.getDelay()); } catch (InterruptedException e) { }
 		}
 
 		return new KnockResult(null);
-	}
-
-	private static void closeQuietly(Socket socket) {
-		try {
-			if (socket != null && socket.isConnected()) socket.close();
-		}
-		catch (IOException e) { }
-	}
-
-	private static void closeQuietly(DatagramSocket socket) {
-		if (socket != null && socket.isConnected()) socket.close();
 	}
 
 	public static class KnockResult {
