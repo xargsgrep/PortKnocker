@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Host {
 	
-	public static final int DEFAULT_DELAY = 500;
+	public static final int DEFAULT_DELAY = 1000;
 	
 	private long id;
 	private String label;

@@ -68,7 +68,7 @@ public class MiscFragment extends SherlockFragment {
 			launchIntent = host.getLaunchIntentPackage();
     	}
     	else {
-			delayEditText.setText(Host.DEFAULT_DELAY);
+			delayEditText.setText(new Integer(Host.DEFAULT_DELAY).toString());
     	}
     	
     	if (applications == null) {
