@@ -62,24 +62,24 @@ public class Knocker {
 			catch (ConnectException e) { 
 				if (StringUtils.contains(e.getMessage(), ENETUNREACH)) {
 					// TCP: host unreachable
-					return new KnockResult(e.getMessage()); 
+					return new KnockResult(false, e.getMessage()); 
 				}
 				// ok otherwise
 			}
 			catch (UnknownHostException e) {
 				// TCP: unable to resolve hostname
-				return new KnockResult(e.getMessage()); 
+				return new KnockResult(false, e.getMessage()); 
 			}
 			catch (IllegalArgumentException e) {
 				// UDP: unable to resolve hostname
-				return new KnockResult(e.getMessage()); 
+				return new KnockResult(false, e.getMessage()); 
 			}
 			catch (SocketException e) {
 				// UDP: host unreachable
-				return new KnockResult(e.getMessage());
+				return new KnockResult(false, e.getMessage());
 			}
 			catch (IOException e) {
-				return new KnockResult(e.getMessage());
+				return new KnockResult(false, e.getMessage());
 			}
 			finally {
 				SocketUtils.closeQuietly(socket);
@@ -89,19 +89,19 @@ public class Knocker {
 			try { Thread.sleep(host.getDelay()); } catch (InterruptedException e) { }
 		}
 
-		return new KnockResult(null);
+		return new KnockResult(true, null);
 	}
 
 	public static class KnockResult {
+		private final boolean success;
 		private final String error;
 		
-		public KnockResult(String error) {
+		public KnockResult(boolean success, String error) {
+			this.success = success;
 			this.error = error;
 		}
 		
-		public boolean isSuccess() {
-			return (error == null || error.length() == 0);
-		}
+		public boolean isSuccess() { return success; }
 		public String getError() { return error; }
 	}
 	

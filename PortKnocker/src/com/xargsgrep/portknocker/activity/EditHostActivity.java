@@ -183,35 +183,43 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			host.setLaunchIntentPackage(application.getIntent());
 		}
 		
+		boolean isValid = validateAndDisplayErrors(host);
+		if (isValid) {
+	    	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);
+	    	returnToHostListActivity(saveResult);
+		}
+    }
+    
+    private boolean validateAndDisplayErrors(Host host) {
 		boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
 		boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
 		
-		Toast toast = null;
+		String errorText = "";
 		if (StringUtils.isBlank(host.getLabel())) {
-			toast = Toast.makeText(this, "Please enter a label", Toast.LENGTH_SHORT);
+			errorText = "Please enter a label";
 		} else if (StringUtils.isBlank(host.getHostname())) {
-			toast = Toast.makeText(this, "Please enter a hostname", Toast.LENGTH_SHORT);
+			errorText = "Please enter a hostname";
 		} else if (!validHostname && !validIP) {
-			toast = Toast.makeText(this, "Invalid hostname/IP", Toast.LENGTH_SHORT);
+			errorText = "Invalid hostname/IP";
 		} else if (host.getPorts() == null || host.getPorts().size() == 0) {
-			toast = Toast.makeText(this, "Please enter at least one port", Toast.LENGTH_SHORT);
+			errorText = "Please enter at least one port";
 		} else {
 			for (Port port : host.getPorts()) {
 				if (port.getPort() > MAX_PORT_VALUE) {
-					toast = Toast.makeText(this, "Port is outside valid range", Toast.LENGTH_SHORT);
+					errorText = "Invalid port: " + port.getPort();
 					break;
 				}
 			}
 		}
 		
-		if (toast != null) {
+		if (StringUtils.isNotBlank(errorText)) {
+			Toast toast = Toast.makeText(this, errorText, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
 			toast.show();
-			return;
+			return false;
 		}
-    	
-    	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);
-    	returnToHostListActivity(saveResult);
+		
+		return true;
     }
     
     private void returnToHostListActivity(Boolean saveResult) {
