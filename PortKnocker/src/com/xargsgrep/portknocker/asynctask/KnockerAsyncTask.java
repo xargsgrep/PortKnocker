@@ -8,11 +8,12 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.xargsgrep.portknocker.Knocker;
+import com.xargsgrep.portknocker.Knocker.KnockResult;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.ProgressDialogFragment;
 import com.xargsgrep.portknocker.model.Host;
 
-public class KnockerAsyncTask extends AsyncTask<Host, Void, Boolean> {
+public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
 	
 	private static final String DIALOG_FRAGMENT_TAG = "dialog";
 	
@@ -36,31 +37,31 @@ public class KnockerAsyncTask extends AsyncTask<Host, Void, Boolean> {
 	}
 	
 	@Override
-	protected Boolean doInBackground(Host... params) {
+	protected KnockResult doInBackground(Host... params) {
 		return Knocker.doKnock(params[0]);
 	}
 	
 	@Override
-	protected void onPostExecute(Boolean success) {
+	protected void onPostExecute(KnockResult result) {
     	Fragment dialog = fragment.getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG);
     	if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
     	
-		if (success) {
+		if (result.isSuccess()) {
 			if (launchIntentPackage != null && launchIntentPackage.length() > 0) {
 				Intent launchIntent = fragment.getActivity().getPackageManager().getLaunchIntentForPackage(launchIntentPackage);
 				fragment.getActivity().startActivity(launchIntent);
 			}
 			else {
-				showToast("Knocking succeeded!");
+				showToast("Knocking complete");
 			}
 		}
 		else {
-			showToast("Knocking failed");
+			showToast("Knocking failed: " + result.getError());
 		}
 	}
 	
 	private void showToast(String text) {
-		Toast toast = Toast.makeText(fragment.getActivity(), text, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(fragment.getActivity(), text, Toast.LENGTH_LONG);
 		toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
 		toast.show();
 	}

@@ -8,60 +8,110 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
-
-import android.util.Log;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
 
 public class Knocker {
-	
-	private static final int TCP_SOCKET_TIMEOUT = 1000;
 
-	public static boolean doKnock(Host host) {
+	private static final String ENETUNREACH = "ENETUNREACH";
+	private static final int TCP_SOCKET_TIMEOUT = 3000;
+
+	/*
+	 * no network/TCP --> java.net.ConnectException: failed to connect to /123.123.123.123 (port 1234) after 3000ms: connect failed: ENETUNREACH (Network is unreachable)
+	 * no network/UDP --> java.net.SocketException: sendto failed: ENETUNREACH (Network is unreachable)
+	 * 
+	 * unable to resolve host/TCP --> java.net.UnknownHostException: Host is unresolved: foobar.com
+	 * unable to resolve host/UDP --> java.lang.IllegalArgumentException: Socket address unresolved: foobar.com:12345
+	 * 
+	 * TCP:
+	 * router/firewall port closed --> java.net.SocketTimeoutException: failed to connect to fakedomain.com/1.1.1.1 (port 1234) after 3000ms
+	 * router/firewall port open, socket closed & REJECT packet --> java.net.ConnectException: failed to connect to fakedomain.com/1.1.1.1 (port 1234) after 3000ms: isConnected failed: ECONNREFUSED (Connection refused)
+	 * router/firewall port open, socket closed & DROP packet --> java.net.SocketTimeoutException: failed to connect to fakedomain.com/1.1.1.1 (port 1234) after 3000ms
+	 *
+	 * UDP:
+	 * router/firewall port closed --> no exception
+	 * router/firewall port open, socket closed & REJECT packet --> no exception
+	 * router/firewall port open, socket closed & DROP packet --> no exception
+	 *
+	 */
+	public static KnockResult doKnock(Host host) {
 		for (Port port : host.getPorts()) {
 			SocketAddress socketAddress = new InetSocketAddress(host.getHostname(), port.getPort());
-		
+
 			Socket socket = null;
 			DatagramSocket datagramSocket = null;
 			try {
 				if (port.getProtocol() == Protocol.TCP) {
-					Log.d(Knocker.class.toString(), "TCP "+host.getHostname()+":"+port.getPort());
 					socket = new Socket();
 					socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
 				} else { // PROTOCOL.UDP
-					Log.d(Knocker.class.toString(), "UDP "+host.getHostname()+":"+port.getPort());
 					datagramSocket = new DatagramSocket();
-					datagramSocket.connect(socketAddress);
 					byte[] data = new byte[] { 0 };
-					datagramSocket.send(new DatagramPacket(data, data.length));
+					datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
 				}
-			} catch (ConnectException e) {
-				// do nothing
-			} catch (SocketException e) {
-				return false;
-			} catch (IOException e) {
-				// do nothing
-			} finally {
+			}
+			catch (SocketTimeoutException e) { 
+				// this is ok since we don't expect the remote socket to be open
+			}
+			catch (ConnectException e) { 
+				if (e.getMessage() != null && e.getMessage().contains(ENETUNREACH)) {
+					// TCP: host unreachable
+					return new KnockResult(e.getMessage()); 
+				}
+				// ok otherwise
+			}
+			catch (UnknownHostException e) {
+				// TCP: unable to resolve hostname
+				return new KnockResult(e.getMessage()); 
+			}
+			catch (IllegalArgumentException e) {
+				// UDP: unable to resolve hostname
+				return new KnockResult(e.getMessage()); 
+			}
+			catch (SocketException e) {
+				// UDP: host unreachable
+				return new KnockResult(e.getMessage());
+			}
+			catch (IOException e) {
+				return new KnockResult(e.getMessage());
+			}
+			finally {
 				closeQuietly(socket);
 				closeQuietly(datagramSocket);
 			}
-			
+
 			try { Thread.sleep(host.getDelay()); } catch (InterruptedException e) { }
 		}
-		
-		return true;
+
+		return new KnockResult(null);
 	}
-	
+
 	private static void closeQuietly(Socket socket) {
 		try {
 			if (socket != null && socket.isConnected()) socket.close();
-		} catch (IOException e) {}
+		}
+		catch (IOException e) { }
 	}
-	
+
 	private static void closeQuietly(DatagramSocket socket) {
 		if (socket != null && socket.isConnected()) socket.close();
+	}
+
+	public static class KnockResult {
+		private final String error;
+		
+		public KnockResult(String error) {
+			this.error = error;
+		}
+		
+		public boolean isSuccess() {
+			return (error == null || error.length() == 0);
+		}
+		public String getError() { return error; }
 	}
 	
 }

@@ -16,7 +16,6 @@ import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.ProgressDialogFragment;
 import com.xargsgrep.portknocker.model.Application;
 
-
 public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Application>> {
 	
 	private static final String DIALOG_FRAGMENT_TAG = "dialog";
