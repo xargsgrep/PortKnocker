@@ -20,14 +20,14 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 public class Knocker {
 
 	private static final String ENETUNREACH = "ENETUNREACH";
-	private static final int TCP_SOCKET_TIMEOUT = 3000;
+	private static final int TCP_SOCKET_TIMEOUT = 1000;
 
 	/*
-	 * no network/TCP --> java.net.ConnectException: failed to connect to /123.123.123.123 (port 1234) after 3000ms: connect failed: ENETUNREACH (Network is unreachable)
+	 * no network/TCP --> java.net.ConnectException: failed to connect to /1.1.1.1 (port 1234) after 3000ms: connect failed: ENETUNREACH (Network is unreachable)
 	 * no network/UDP --> java.net.SocketException: sendto failed: ENETUNREACH (Network is unreachable)
 	 * 
-	 * unable to resolve host/TCP --> java.net.UnknownHostException: Host is unresolved: foobar.com
-	 * unable to resolve host/UDP --> java.lang.IllegalArgumentException: Socket address unresolved: foobar.com:12345
+	 * unable to resolve host/TCP --> java.net.UnknownHostException: Host is unresolved: fakedomain.com
+	 * unable to resolve host/UDP --> java.lang.IllegalArgumentException: Socket address unresolved: fakedomain.com:1234
 	 * 
 	 * TCP:
 	 * router/firewall port closed --> java.net.SocketTimeoutException: failed to connect to fakedomain.com/1.1.1.1 (port 1234) after 3000ms
