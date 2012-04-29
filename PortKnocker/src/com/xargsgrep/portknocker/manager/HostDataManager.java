@@ -106,7 +106,8 @@ public class HostDataManager {
 			
 			database.setTransactionSuccessful();
 			return true;
-		} finally {
+		}
+		finally {
 			database.endTransaction();
 			database.close();
 		}
@@ -146,7 +147,8 @@ public class HostDataManager {
 			
 			database.setTransactionSuccessful();
 			return true;
-		} finally {
+		}
+		finally {
 			database.endTransaction();
 			database.close();
 		}
@@ -164,7 +166,8 @@ public class HostDataManager {
 			database.delete(DatabaseManager.HOST_TABLE_NAME, hostSelection, new String[] { new Long(host.getId()).toString() });
 			
 			database.setTransactionSuccessful();
-		} finally {
+		}
+		finally {
 			database.endTransaction();
 			database.close();
 		}

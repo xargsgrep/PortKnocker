@@ -59,18 +59,23 @@ public class MiscFragment extends SherlockFragment {
     	
     	if (this.savedInstanceState) {
 			delayEditText.setText(delayStr);
-    	} else if (args != null) {
+    	}
+    	else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		
 			delayEditText.setText(new Integer(host.getDelay()).toString());
 			launchIntent = host.getLaunchIntentPackage();
     	}
+    	else {
+			delayEditText.setText(Host.DEFAULT_DELAY);
+    	}
     	
     	if (applications == null) {
 	    	RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(this);
 	    	retrieveAppsTask.execute();
-    	} else {
+    	}
+    	else {
     		initializeApplicationAdapter(applications);
     	}
     }

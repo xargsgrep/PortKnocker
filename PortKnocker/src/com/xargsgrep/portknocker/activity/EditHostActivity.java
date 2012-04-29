@@ -53,6 +53,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	private static final String MISC_TAB_FRAGMENT_TAG = "misc_tab";
 	
     private static final int MAX_PORT_VALUE = 65535;
+    private static final int MAX_DELAY_VALUE = 10000;
 
 	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 	
@@ -197,13 +198,20 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		String errorText = "";
 		if (StringUtils.isBlank(host.getLabel())) {
 			errorText = "Please enter a label";
-		} else if (StringUtils.isBlank(host.getHostname())) {
+		}
+		else if (StringUtils.isBlank(host.getHostname())) {
 			errorText = "Please enter a hostname";
-		} else if (!validHostname && !validIP) {
+		}
+		else if (!validHostname && !validIP) {
 			errorText = "Invalid hostname/IP";
-		} else if (host.getPorts() == null || host.getPorts().size() == 0) {
+		}
+		else if (host.getPorts() == null || host.getPorts().size() == 0) {
 			errorText = "Please enter at least one port";
-		} else {
+		}
+		else if (host.getDelay() > MAX_DELAY_VALUE) {
+			errorText = "Delay can't be more than " + MAX_DELAY_VALUE;
+		}
+		else {
 			for (Port port : host.getPorts()) {
 				if (port.getPort() > MAX_PORT_VALUE) {
 					errorText = "Invalid port: " + port.getPort();

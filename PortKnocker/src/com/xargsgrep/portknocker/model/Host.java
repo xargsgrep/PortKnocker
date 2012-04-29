@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Host {
+	
+	public static final int DEFAULT_DELAY = 500;
+	
 	private long id;
 	private String label;
 	private String hostname;
-	private int delay = 0;
+	private int delay = DEFAULT_DELAY;
 	private String launchIntentPackage;
 	private List<Port> ports = new ArrayList<Port>();
 	
@@ -47,4 +50,5 @@ public class Host {
 	public void setPorts(List<Port> ports) {
 		this.ports = ports;
 	}
+	
 }

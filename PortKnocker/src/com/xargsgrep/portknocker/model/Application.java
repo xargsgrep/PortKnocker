@@ -3,6 +3,7 @@ package com.xargsgrep.portknocker.model;
 import android.graphics.drawable.Drawable;
 
 public class Application {
+	
 	private String label;
 	private Drawable icon;
 	private String intent;
@@ -31,4 +32,5 @@ public class Application {
 	public void setIntent(String intent) {
 		this.intent = intent;
 	}
+	
 }

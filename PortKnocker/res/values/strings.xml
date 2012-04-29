@@ -12,7 +12,7 @@
     <string name="port_hint">1234</string>
     <string name="protocol_label">Protocol:</string>
     <string name="delay_label">Delay (ms):</string>
-    <string name="delay_hint">0</string>
+    <string name="delay_hint">500</string>
     <string name="launch_app_label">Launch Application:</string>
     <string name="confirm_dialog_confirm">Yes</string>
     <string name="confirm_dialog_cancel">No</string>

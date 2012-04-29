@@ -20,7 +20,7 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 public class Knocker {
 
 	private static final String ENETUNREACH = "ENETUNREACH";
-	private static final int TCP_SOCKET_TIMEOUT = 1000;
+	private static final int TCP_SOCKET_TIMEOUT = 1;
 
 	/*
 	 * no network/TCP --> java.net.ConnectException: failed to connect to /1.1.1.1 (port 1234) after 3000ms: connect failed: ENETUNREACH (Network is unreachable)
@@ -49,15 +49,18 @@ public class Knocker {
 			try {
 				if (port.getProtocol() == Protocol.TCP) {
 					socket = new Socket();
+					// set timeout to the lowest possible value since we just want to transmit a packet, we don't care about receiving a syn-ack.
+					// this also prevents multiple syn packets being sent (invalidating knock sequence) while waiting for the timeout (if it's high enough)
 					socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
-				} else { // PROTOCOL.UDP
+				}
+				else { // PROTOCOL.UDP
 					datagramSocket = new DatagramSocket();
 					byte[] data = new byte[] { 0 };
 					datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
 				}
 			}
 			catch (SocketTimeoutException e) { 
-				// this is ok since we don't expect the remote socket to be open
+				// this is ok since the timeout is as low as can be and the remote socket isn't expected to be open anyway
 			}
 			catch (ConnectException e) { 
 				if (StringUtils.contains(e.getMessage(), ENETUNREACH)) {
@@ -86,7 +89,8 @@ public class Knocker {
 				SocketUtils.closeQuietly(datagramSocket);
 			}
 
-			try { Thread.sleep(host.getDelay()); } catch (InterruptedException e) { }
+			try { Thread.sleep(host.getDelay()); }
+			catch (InterruptedException e) { }
 		}
 
 		return new KnockResult(true, null);

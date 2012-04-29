@@ -57,7 +57,8 @@ public class HostFragment extends SherlockFragment {
     	if (this.savedInstanceState) {
     		hostLabelEdit.setText(hostLabel);
     		hostnameEdit.setText(hostname);
-    	} else if (args != null) {
+    	}
+    	else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		hostLabelEdit.setText(host.getLabel());

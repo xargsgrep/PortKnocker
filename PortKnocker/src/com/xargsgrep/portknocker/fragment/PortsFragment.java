@@ -63,7 +63,8 @@ public class PortsFragment extends SherlockListFragment {
     	
     	if (this.savedInstanceState) {
     		// do nothing
-    	} else if (args != null) {
+    	}
+    	else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
     		Host host = hostDataManager.getHost(hostId);
     		ports = host.getPorts();
