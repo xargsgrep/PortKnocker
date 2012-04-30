@@ -4,8 +4,8 @@
         <CheckBoxPreference
             android:key="@string/pref_key_hide_ports"
             android:defaultValue="false"
-            android:title="Hide Ports"
-            android:summary="Hides ports on the main screen"
+            android:title="@string/pref_key_hide_ports_title"
+            android:summary="@string/pref_key_hide_ports_summary"
         />
     </PreferenceCategory>
 

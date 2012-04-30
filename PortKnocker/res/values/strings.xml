@@ -23,4 +23,6 @@
     <string name="save_success">Saved!</string>
     <string name="save_failure">Save failed</string>
     <string name="pref_key_hide_ports">hide_ports</string>
+    <string name="pref_key_hide_ports_title">Hide Ports</string>
+    <string name="pref_key_hide_ports_summary">Hides ports on the main screen</string>
 </resources>
