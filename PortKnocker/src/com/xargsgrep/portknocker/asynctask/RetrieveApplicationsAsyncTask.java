@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -33,7 +34,7 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
-		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_retrieving_applications));
+		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
 		dialogFragment.show(ft, DIALOG_FRAGMENT_TAG);
 	}
     	

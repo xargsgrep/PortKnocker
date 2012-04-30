@@ -1,4 +1,4 @@
-package com.xargsgrep.portknocker;
+package com.xargsgrep.portknocker.asynctask;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -22,6 +22,29 @@ public class Knocker {
 	private static final String ENETUNREACH = "ENETUNREACH";
 	private static final int TCP_SOCKET_TIMEOUT = 1;
 
+	public static KnockResult doKnock(Host host, KnockerAsyncTask asyncTask) {
+		KnockResult result = null;
+		for (int i=0; i<host.getPorts().size(); i++) {
+			Port port = host.getPorts().get(i);
+			result = doKnock(host.getHostname(), port);
+			
+			if (result.isSuccess()) {
+				asyncTask.doPublishProgress(i+1);
+				
+				if (i < host.getPorts().size()-1) {
+					// no need to sleep after last knock
+					try { Thread.sleep(host.getDelay()); }
+					catch (InterruptedException e) { }
+				}
+			}
+			else {
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
 	/*
 	 * no network/TCP --> java.net.ConnectException: failed to connect to /1.1.1.1 (port 1234) after 3000ms: connect failed: ENETUNREACH (Network is unreachable)
 	 * no network/UDP --> java.net.SocketException: sendto failed: ENETUNREACH (Network is unreachable)
@@ -40,57 +63,52 @@ public class Knocker {
 	 * router/firewall port open, socket closed & DROP packet --> no exception
 	 *
 	 */
-	public static KnockResult doKnock(Host host) {
-		for (Port port : host.getPorts()) {
-			SocketAddress socketAddress = new InetSocketAddress(host.getHostname(), port.getPort());
+	private static KnockResult doKnock(String hostname, Port port) {
+		SocketAddress socketAddress = new InetSocketAddress(hostname, port.getPort());
 
-			Socket socket = null;
-			DatagramSocket datagramSocket = null;
-			try {
-				if (port.getProtocol() == Protocol.TCP) {
-					socket = new Socket();
-					// set timeout to the lowest possible value since we just want to transmit a packet, we don't care about receiving a syn-ack.
-					// this also prevents multiple syn packets being sent (invalidating knock sequence) while waiting for the timeout (if it's high enough)
-					socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
-				}
-				else { // PROTOCOL.UDP
-					datagramSocket = new DatagramSocket();
-					byte[] data = new byte[] { 0 };
-					datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
-				}
+		Socket socket = null;
+		DatagramSocket datagramSocket = null;
+		try {
+			if (port.getProtocol() == Protocol.TCP) {
+				socket = new Socket();
+				// set timeout to the lowest possible value since we just want to transmit a packet, we don't care about receiving a syn-ack.
+				// this also prevents multiple syn packets being sent (invalidating knock sequence) while waiting for the timeout (if it's high enough)
+				socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
 			}
-			catch (SocketTimeoutException e) { 
-				// this is ok since the timeout is as low as can be and the remote socket isn't expected to be open anyway
+			else { // PROTOCOL.UDP
+				datagramSocket = new DatagramSocket();
+				byte[] data = new byte[] { 0 };
+				datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
 			}
-			catch (ConnectException e) { 
-				if (StringUtils.contains(e.getMessage(), ENETUNREACH)) {
-					// TCP: host unreachable
-					return new KnockResult(false, e.getMessage()); 
-				}
-				// ok otherwise
-			}
-			catch (UnknownHostException e) {
-				// TCP: unable to resolve hostname
+		}
+		catch (SocketTimeoutException e) { 
+			// this is ok since the timeout is as low as can be and the remote socket isn't expected to be open anyway
+		}
+		catch (ConnectException e) { 
+			if (StringUtils.contains(e.getMessage(), ENETUNREACH)) {
+				// TCP: host unreachable
 				return new KnockResult(false, e.getMessage()); 
 			}
-			catch (IllegalArgumentException e) {
-				// UDP: unable to resolve hostname
-				return new KnockResult(false, e.getMessage()); 
-			}
-			catch (SocketException e) {
-				// UDP: host unreachable
-				return new KnockResult(false, e.getMessage());
-			}
-			catch (IOException e) {
-				return new KnockResult(false, e.getMessage());
-			}
-			finally {
-				SocketUtils.closeQuietly(socket);
-				SocketUtils.closeQuietly(datagramSocket);
-			}
-
-			try { Thread.sleep(host.getDelay()); }
-			catch (InterruptedException e) { }
+			// ok otherwise
+		}
+		catch (UnknownHostException e) {
+			// TCP: unable to resolve hostname
+			return new KnockResult(false, e.getMessage()); 
+		}
+		catch (IllegalArgumentException e) {
+			// UDP: unable to resolve hostname
+			return new KnockResult(false, e.getMessage()); 
+		}
+		catch (SocketException e) {
+			// UDP: host unreachable
+			return new KnockResult(false, e.getMessage());
+		}
+		catch (IOException e) {
+			return new KnockResult(false, e.getMessage());
+		}
+		finally {
+			SocketUtils.closeQuietly(socket);
+			SocketUtils.closeQuietly(datagramSocket);
 		}
 
 		return new KnockResult(true, null);

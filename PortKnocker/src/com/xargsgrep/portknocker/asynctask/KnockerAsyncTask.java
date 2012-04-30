@@ -1,5 +1,6 @@
 package com.xargsgrep.portknocker.asynctask;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -7,19 +8,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.xargsgrep.portknocker.Knocker;
-import com.xargsgrep.portknocker.Knocker.KnockResult;
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.asynctask.Knocker.KnockResult;
 import com.xargsgrep.portknocker.fragment.ProgressDialogFragment;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.StringUtils;
 
-public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
+public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 	
 	private static final String DIALOG_FRAGMENT_TAG = "dialog";
 	
 	Fragment fragment;
 	String launchIntentPackage;
+	ProgressDialogFragment dialogFragment;
 	
 	public KnockerAsyncTask(Fragment fragment, String launchIntentPackage) {
 		this.fragment = fragment;
@@ -33,13 +34,24 @@ public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
-		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_sending_packets));
+		dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL);
 		dialogFragment.show(ft, DIALOG_FRAGMENT_TAG);
 	}
 	
 	@Override
 	protected KnockResult doInBackground(Host... params) {
-		return Knocker.doKnock(params[0]);
+		Host host = params[0];
+		
+		while (true) {
+			// sometimes the ui thread has not instantiated the dialog when it reaches this point, so wait until it has been
+			if (dialogFragment.getDialog() != null) {
+				((ProgressDialog) dialogFragment.getDialog()).setMax(host.getPorts().size());
+				break;
+			}
+		}
+		
+		// pass in 'this' so we can update the progress dialog
+		return Knocker.doKnock(host, this);
 	}
 	
 	@Override
@@ -53,12 +65,21 @@ public class KnockerAsyncTask extends AsyncTask<Host, Void, KnockResult> {
 				fragment.getActivity().startActivity(launchIntent);
 			}
 			else {
-				showToast("Knocking complete");
+				showToast("Knocking complete!");
 			}
 		}
 		else {
 			showToast("Knocking failed: " + result.getError());
 		}
+	}
+	
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		((ProgressDialog) dialogFragment.getDialog()).setProgress(values[0]);
+	}
+	
+	public void doPublishProgress(Integer value) {
+		publishProgress(value);
 	}
 	
 	private void showToast(String text) {
