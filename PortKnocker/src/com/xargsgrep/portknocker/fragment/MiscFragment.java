@@ -31,7 +31,7 @@ public class MiscFragment extends SherlockFragment {
 		MiscFragment fragment = new MiscFragment();
 		if (hostId != null) {
 			Bundle args = new Bundle();
-			args.putLong(EditHostActivity.HOST_ID_BUNDLE_KEY, hostId);
+			args.putLong(EditHostActivity.KEY_HOST_ID, hostId);
 			fragment.setArguments(args);
 		}
 		return fragment;
@@ -61,7 +61,7 @@ public class MiscFragment extends SherlockFragment {
 			delayEditText.setText(delayStr);
     	}
     	else if (args != null) {
-    		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
+    		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
     		
 			delayEditText.setText(new Integer(host.getDelay()).toString());

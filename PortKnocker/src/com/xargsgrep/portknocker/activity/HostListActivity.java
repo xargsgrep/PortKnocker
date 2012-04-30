@@ -15,10 +15,10 @@ import com.xargsgrep.portknocker.utils.BundleUtils;
 
 public class HostListActivity extends SherlockFragmentActivity {
 	
-	private static final int MENU_ADD_ITEM_ID = 1;
-	private static final int MENU_SETTINGS_ITEM_ID = 2;
+	private static final int MENU_ITEM_ID_ADD = 1;
+	private static final int MENU_ITEM_ID_SETTINGS = 2;
 	
-	private static final String HOST_LIST_FRAGMENT_TAG = "host_list";
+	private static final String FRAGMENT_TAG_HOST_LIST = "host_list";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,36 +28,36 @@ public class HostListActivity extends SherlockFragmentActivity {
         getSupportActionBar().setHomeButtonEnabled(false);
         
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HOST_LIST_FRAGMENT_TAG);
+		Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_HOST_LIST);
 		if (hostListFragment == null) {
 			hostListFragment = HostListFragment.newInstance();
-			ft.add(R.id.fragment_content, hostListFragment, HOST_LIST_FRAGMENT_TAG);
+			ft.add(R.id.fragment_content, hostListFragment, FRAGMENT_TAG_HOST_LIST);
 		}
 		ft.show(hostListFragment);
 		ft.commit();
 		
 		Bundle extras = getIntent().getExtras();
-		if (BundleUtils.contains(extras, EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY)) {
-			Boolean saveResult = extras.getBoolean(EditHostActivity.SAVE_HOST_RESULT_BUNDLE_KEY);
+		if (BundleUtils.contains(extras, EditHostActivity.KEY_SAVE_HOST_RESULT)) {
+			Boolean saveResult = extras.getBoolean(EditHostActivity.KEY_SAVE_HOST_RESULT);
 			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
 		}
     }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_ADD_ITEM_ID, 0, "Add Host").setIcon(R.drawable.ic_action_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(Menu.NONE, MENU_SETTINGS_ITEM_ID, 0, "Settings").setIcon(R.drawable.ic_action_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_action_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_action_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
 	}
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
-	    	case MENU_ADD_ITEM_ID: 
+	    	case MENU_ITEM_ID_ADD: 
 				Intent editHostIntent = new Intent(this, EditHostActivity.class);
 		        startActivity(editHostIntent);
 		        return true;
-	    	case MENU_SETTINGS_ITEM_ID:
+	    	case MENU_ITEM_ID_SETTINGS:
 				Intent settingsIntent = new Intent(this, SettingsActivity.class);
 		        startActivity(settingsIntent);
 		        return true;

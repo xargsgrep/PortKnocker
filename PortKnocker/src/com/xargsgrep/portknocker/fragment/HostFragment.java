@@ -26,7 +26,7 @@ public class HostFragment extends SherlockFragment {
 		HostFragment fragment = new HostFragment();
 		if (hostId != null) {
 			Bundle args = new Bundle();
-			args.putLong(EditHostActivity.HOST_ID_BUNDLE_KEY, hostId);
+			args.putLong(EditHostActivity.KEY_HOST_ID, hostId);
 			fragment.setArguments(args);
 		}
 		return fragment;
@@ -59,7 +59,7 @@ public class HostFragment extends SherlockFragment {
     		hostnameEdit.setText(hostname);
     	}
     	else if (args != null) {
-    		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
+    		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
     		hostLabelEdit.setText(host.getLabel());
     		hostnameEdit.setText(host.getHostname());

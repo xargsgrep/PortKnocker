@@ -35,7 +35,7 @@ public class PortsFragment extends SherlockListFragment {
 		PortsFragment fragment = new PortsFragment();
 		if (hostId != null) {
 			Bundle args = new Bundle();
-			args.putLong(EditHostActivity.HOST_ID_BUNDLE_KEY, hostId);
+			args.putLong(EditHostActivity.KEY_HOST_ID, hostId);
 			fragment.setArguments(args);
 		}
 		return fragment;
@@ -65,7 +65,7 @@ public class PortsFragment extends SherlockListFragment {
     		// do nothing
     	}
     	else if (args != null) {
-    		Long hostId = args.getLong(EditHostActivity.HOST_ID_BUNDLE_KEY);
+    		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
     		ports = host.getPorts();
     	}

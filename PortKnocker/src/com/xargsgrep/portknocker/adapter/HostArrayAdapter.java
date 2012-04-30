@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
+import com.xargsgrep.portknocker.activity.SettingsActivity;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
@@ -73,6 +76,11 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		if (ports.length() > 0) ports.replace(ports.length()-2, ports.length(), "");
 		portsView.setText(ports);
 		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		if (sharedPreferences.getBoolean(context.getString(R.string.pref_key_hide_ports), false)) {
+			portsView.setVisibility(View.GONE);
+		}
+		
 		view.setOnClickListener(new PositionOnClickListener(position) {
 			@Override
 			public void onClick(View v) {
@@ -92,7 +100,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			public void onClick(View v) {
 				Host host = hosts.get(position);
 				Intent editHostIntent = new Intent(context, EditHostActivity.class);
-				editHostIntent.putExtra(EditHostActivity.HOST_ID_BUNDLE_KEY, host.getId());
+				editHostIntent.putExtra(EditHostActivity.KEY_HOST_ID, host.getId());
 		        context.startActivity(editHostIntent);
 			}
 		});

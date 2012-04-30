@@ -1,22 +1,29 @@
 package com.xargsgrep.portknocker.activity;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 
-public class SettingsActivity extends SherlockFragmentActivity {
+public class SettingsActivity extends SherlockPreferenceActivity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
         
-    	getSupportActionBar().setSubtitle("Settings");
+    	getSupportActionBar().setSubtitle("Preferences");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+    	loadHeadersFromResource(R.xml.preference_headers, target);
     }
 
     @Override
@@ -30,6 +37,21 @@ public class SettingsActivity extends SherlockFragmentActivity {
 		    default:
 		    	return super.onOptionsItemSelected(item);
     	}
+    }
+
+    public static class PreferencesFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            // Make sure default values are applied.  In a real app, you would
+            // want this in a shared function that is used to retrieve the
+            // SharedPreferences wherever they are needed.
+            //PreferenceManager.setDefaultValues(getActivity(), R.layout.preferences_fragment, false);
+
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.preferences);
+        }
     }
     
 }
