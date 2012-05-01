@@ -96,6 +96,7 @@ public class PortsFragment extends SherlockListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
+    	ports = getPortsFromView(true);
 		savedInstanceState = true;
     }
     
@@ -114,7 +115,7 @@ public class PortsFragment extends SherlockListFragment {
     	adapter.notifyDataSetChanged();
     }
     
-    public List<Port> getPortsFromView() {
+    public List<Port> getPortsFromView(boolean includeBlank) {
 		List<Port> ports = new ArrayList<Port>();
 		
 		ListView portsListView = getListView();
@@ -122,8 +123,8 @@ public class PortsFragment extends SherlockListFragment {
 			View row = portsListView.getChildAt(i);
 			
 			String portStr = getPortEditTextFromRowView(row).getText().toString();
-			if (StringUtils.isBlank(portStr)) continue;
-			int portVal = Integer.parseInt(portStr);
+			if (StringUtils.isBlank(portStr) && !includeBlank) continue;
+			int portVal = StringUtils.isNotBlank(portStr) ? Integer.parseInt(portStr) : 0;
 			
 			Protocol protocol = Protocol.valueOf(getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
 			

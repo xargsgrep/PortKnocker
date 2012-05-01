@@ -173,7 +173,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
-			host.setPorts(portsFragment.getPortsFromView());
+			host.setPorts(portsFragment.getPortsFromView(false));
 		}
     	
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
