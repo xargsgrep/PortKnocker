@@ -112,7 +112,6 @@ public class PortsFragment extends SherlockListFragment {
     	PortArrayAdapter adapter = (PortArrayAdapter) getListAdapter();
     	adapter.add(new Port());
     	adapter.refreshArrayFromListView(getListView());
-    	adapter.notifyDataSetChanged();
     }
     
     public List<Port> getPortsFromView(boolean includeBlank) {

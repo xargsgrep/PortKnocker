@@ -68,8 +68,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 					return;
 				}
 				refreshArrayFromListView(listView);
-				ports.remove(position);
-				notifyDataSetChanged();
+				remove(getItem(position));
 			}
 		});
 		
