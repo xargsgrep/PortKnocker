@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
-import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
@@ -80,24 +80,25 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			portsView.setVisibility(View.GONE);
 		}
 		
-		view.setOnClickListener(new PositionOnClickListener(position) {
+		final int fPosition = position;
+		view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Host host = getItem(position);
+				Host host = getItem(fPosition);
 				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(fragment, host.getLaunchIntentPackage());
 				knockerAsyncTask.execute(host);
 			}
 		});
 		
-		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
+		deleteButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) { showDeleteDialog(position); }
+			public void onClick(View v) { showDeleteDialog(fPosition); }
 		});
 		
-		editButton.setOnClickListener(new PositionOnClickListener(position) {
+		editButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Host host = hosts.get(position);
+				Host host = hosts.get(fPosition);
 				Intent editHostIntent = new Intent(context, EditHostActivity.class);
 				editHostIntent.putExtra(EditHostActivity.KEY_HOST_ID, host.getId());
 		        context.startActivity(editHostIntent);

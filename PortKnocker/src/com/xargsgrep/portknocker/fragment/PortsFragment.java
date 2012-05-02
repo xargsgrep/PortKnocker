@@ -1,5 +1,6 @@
 package com.xargsgrep.portknocker.fragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,6 +64,12 @@ public class PortsFragment extends SherlockListFragment {
     		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
     		List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : Arrays.asList(new Port());
+			portAdapter = new PortArrayAdapter(getActivity(), ports);
+			setListAdapter(portAdapter);
+    	}
+    	else if (portAdapter == null) {
+    		List<Port> ports = new ArrayList<Port>();
+    		ports.add(new Port());
 			portAdapter = new PortArrayAdapter(getActivity(), ports);
 			setListAdapter(portAdapter);
     	}

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.listener.PositionOnClickListener;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
 import com.xargsgrep.portknocker.utils.StringUtils;
@@ -83,7 +83,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 			public void onNothingSelected(AdapterView<?> parent) { }
 		});
 		
-		deleteButton.setOnClickListener(new PositionOnClickListener(position) {
+		deleteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (getCount() == 1) {
@@ -92,7 +92,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 					toast.show();
 				}
 				else {
-					remove(getItem(position));
+					remove(getItem(fPosition));
 				}
 			}
 		});
