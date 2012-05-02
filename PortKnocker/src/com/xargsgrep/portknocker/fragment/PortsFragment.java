@@ -1,6 +1,6 @@
 package com.xargsgrep.portknocker.fragment;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -21,15 +20,13 @@ import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
-import com.xargsgrep.portknocker.model.Port.Protocol;
-import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class PortsFragment extends SherlockListFragment {
 	
     HostDataManager hostDataManager;
     
+    PortArrayAdapter portAdapter;
     boolean savedInstanceState = false;
-    List<Port> ports = new ArrayList<Port>();
 	
 	public static PortsFragment newInstance(Long hostId) {
 		PortsFragment fragment = new PortsFragment();
@@ -61,19 +58,14 @@ public class PortsFragment extends SherlockListFragment {
     	
     	Bundle args = getArguments();
     	
-    	if (this.savedInstanceState) {
-    		// do nothing
-    	}
-    	else if (args != null) {
+    	if (args != null && !this.savedInstanceState) {
+    		// only restore state from args if onSaveInstanceState hasn't been invoked
     		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
-    		ports = host.getPorts();
+    		List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : Arrays.asList(new Port());
+			portAdapter = new PortArrayAdapter(getActivity(), ports);
+			setListAdapter(portAdapter);
     	}
-    	
-    	if (ports.size() == 0) ports.add(new Port());
-        
-		PortArrayAdapter portAdapter = new PortArrayAdapter(getActivity(), ports);
-		setListAdapter(portAdapter);
     }
     
     @Override
@@ -96,7 +88,6 @@ public class PortsFragment extends SherlockListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
-    	ports = getPortsFromView(true);
 		savedInstanceState = true;
     }
     
@@ -111,26 +102,6 @@ public class PortsFragment extends SherlockListFragment {
     private void addPort() {
     	PortArrayAdapter adapter = (PortArrayAdapter) getListAdapter();
     	adapter.add(new Port());
-    	adapter.refreshArrayFromListView(getListView());
     }
     
-    public List<Port> getPortsFromView(boolean includeBlank) {
-		List<Port> ports = new ArrayList<Port>();
-		
-		ListView portsListView = getListView();
-		for (int i=0; i<portsListView.getChildCount(); i++) {
-			View row = portsListView.getChildAt(i);
-			
-			String portStr = getPortEditTextFromRowView(row).getText().toString();
-			if (StringUtils.isBlank(portStr) && !includeBlank) continue;
-			int portVal = StringUtils.isNotBlank(portStr) ? Integer.parseInt(portStr) : 0;
-			
-			Protocol protocol = Protocol.valueOf(getProtocolSpinnerFromRowView(row).getSelectedItem().toString());
-			
-			Port port = new Port(portVal, protocol);
-			ports.add(port);
-		}
-		
-		return ports;
-    }
 }

@@ -1,5 +1,6 @@
 package com.xargsgrep.portknocker.activity;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.http.conn.util.InetAddressUtils;
@@ -19,6 +20,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
 import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
@@ -173,7 +175,12 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
-			host.setPorts(portsFragment.getPortsFromView(false));
+			host.getPorts().clear();
+			
+			List<Port> ports = ((PortArrayAdapter) portsFragment.getListAdapter()).getPorts();
+			for (Port port : ports) {
+				if (port.getPort() > 0) host.getPorts().add(port);
+			}
 		}
     	
 		if (miscFragment != null) { // could be null if user saves without going to misc tab
