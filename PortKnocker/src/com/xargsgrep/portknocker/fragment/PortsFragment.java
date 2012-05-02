@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -96,14 +94,6 @@ public class PortsFragment extends SherlockListFragment {
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
 		savedInstanceState = true;
-    }
-    
-    public EditText getPortEditTextFromRowView(View row) {
-		return (EditText) row.findViewById(R.id.port_row_port);
-    }
-    
-    public Spinner getProtocolSpinnerFromRowView(View row) {
-		return (Spinner) row.findViewById(R.id.port_row_protocol);
     }
     
     private void addPort() {

@@ -52,7 +52,8 @@ public class ApplicationArrayAdapter extends ArrayAdapter<Application> {
 		TextView textView = (TextView) view.findViewById(R.id.text);
 		
 		Application application = applications.get(position);
-        imageView.setImageDrawable(application.getIcon() == null ? context.getResources().getDrawable(R.drawable.ic_launcher) : application.getIcon());
+        //imageView.setImageDrawable(application.getIcon() == null ? context.getResources().getDrawable(R.drawable.ic_launcher) : application.getIcon());
+        imageView.setImageDrawable(application.getIcon() == null ? null : application.getIcon());
 		textView.setText(application.getLabel());
 		
 		return view;

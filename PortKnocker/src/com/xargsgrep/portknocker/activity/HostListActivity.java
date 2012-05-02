@@ -45,8 +45,8 @@ public class HostListActivity extends SherlockFragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_action_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_action_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_menu_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
 	}
     

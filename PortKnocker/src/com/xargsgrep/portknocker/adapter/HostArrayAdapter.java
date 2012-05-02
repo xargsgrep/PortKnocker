@@ -111,7 +111,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 	private void showDeleteDialog(final int position) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
-        dialogBuilder.setIcon(R.drawable.confirm_dialog_icon);
+        dialogBuilder.setIcon(R.drawable.ic_dialog_confirm);
         
         dialogBuilder.setPositiveButton(R.string.confirm_dialog_confirm,
             new DialogInterface.OnClickListener() {
