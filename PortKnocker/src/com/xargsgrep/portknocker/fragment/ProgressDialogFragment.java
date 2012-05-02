@@ -15,7 +15,6 @@ public class ProgressDialogFragment extends DialogFragment {
 	
     public static ProgressDialogFragment newInstance(String message, boolean indeterminate, int style) {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
-        fragment.setCancelable(false);
         Bundle args = new Bundle();
         args.putString(KEY_MESSAGE, message);
         args.putBoolean(KEY_INDETERMINATE, indeterminate);

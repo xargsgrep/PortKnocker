@@ -35,6 +35,7 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
     	ft.addToBackStack(null);
     	
 		dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL);
+		dialogFragment.setCancelable(true);
 		dialogFragment.show(ft, DIALOG_FRAGMENT_TAG);
 	}
 	
