@@ -19,11 +19,9 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 	private static final String DIALOG_FRAGMENT_TAG = "dialog";
 	
 	Fragment fragment;
-	String launchIntentPackage;
 	
-	public KnockerAsyncTask(Fragment fragment, String launchIntentPackage) {
+	public KnockerAsyncTask(Fragment fragment) {
 		this.fragment = fragment;
-		this.launchIntentPackage = launchIntentPackage;
 	}
 
 	@Override
@@ -61,8 +59,8 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
     	if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
     	
 		if (result.isSuccess()) {
-			if (StringUtils.isNotBlank(launchIntentPackage)) {
-				Intent launchIntent = fragment.getActivity().getPackageManager().getLaunchIntentForPackage(launchIntentPackage);
+			if (StringUtils.isNotBlank(result.getLaunchIntentPackage())) {
+				Intent launchIntent = fragment.getActivity().getPackageManager().getLaunchIntentForPackage(result.getLaunchIntentPackage());
 				fragment.getActivity().startActivity(launchIntent);
 			}
 			else {

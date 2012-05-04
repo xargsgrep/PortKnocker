@@ -17,7 +17,7 @@
     <string name="confirm_dialog_confirm">Yes</string>
     <string name="confirm_dialog_cancel">No</string>
     <string name="confirm_dialog_delete_host_title">Delete host?</string>
-    <string name="confirm_dialog_cancel_edit_title">Cancel without saving?</string>
+    <string name="confirm_dialog_cancel_edit_title">Discard changes?</string>
     <string name="progress_dialog_retrieving_applications">Retrieving applications&#8230;</string>
     <string name="progress_dialog_sending_packets">Sending packets&#8230;</string>
     <string name="save_success">Saved!</string>

@@ -29,6 +29,7 @@ public class Knocker {
 			result = doKnock(host.getHostname(), port);
 			
 			if (result.isSuccess()) {
+				result.setLaunchIntentPackage(host.getLaunchIntentPackage());
 				asyncTask.doPublishProgress(i+1);
 				
 				if (i < host.getPorts().size()-1) {
@@ -121,6 +122,7 @@ public class Knocker {
 	public static class KnockResult {
 		private final boolean success;
 		private final String error;
+		private String launchIntentPackage;
 		
 		public KnockResult(boolean success, String error) {
 			this.success = success;
@@ -129,6 +131,9 @@ public class Knocker {
 		
 		public boolean isSuccess() { return success; }
 		public String getError() { return error; }
+
+		public String getLaunchIntentPackage() { return launchIntentPackage; }
+		public void setLaunchIntentPackage(String launchIntentPackage) { this.launchIntentPackage = launchIntentPackage; }
 	}
 	
 }
