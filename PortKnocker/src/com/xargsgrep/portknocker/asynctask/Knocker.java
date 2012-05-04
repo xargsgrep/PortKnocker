@@ -23,7 +23,7 @@ public class Knocker {
 	private static final int TCP_SOCKET_TIMEOUT = 1;
 
 	public static KnockResult doKnock(Host host, KnockerAsyncTask asyncTask) {
-		KnockResult result = null;
+		KnockResult result = new KnockResult(false, null); 
 		for (int i=0; i<host.getPorts().size(); i++) {
 			Port port = host.getPorts().get(i);
 			result = doKnock(host.getHostname(), port);
@@ -33,8 +33,12 @@ public class Knocker {
 				
 				if (i < host.getPorts().size()-1) {
 					// no need to sleep after last knock
-					try { Thread.sleep(host.getDelay()); }
-					catch (InterruptedException e) { }
+					try {
+						Thread.sleep(host.getDelay());
+					}
+					catch (InterruptedException e) {
+						if (asyncTask.isCancelled()) break;
+					}
 				}
 			}
 			else {

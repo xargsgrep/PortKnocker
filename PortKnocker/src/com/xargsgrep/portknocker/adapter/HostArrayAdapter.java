@@ -118,8 +118,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
                 public void onClick(DialogInterface dialog, int which) {
 					Host host = hosts.get(position);
 					hostDataManager.deleteHost(host);
-					hosts.remove(position);
-					notifyDataSetChanged();
+                	remove(host);
                 }
             }
         );

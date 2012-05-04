@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -17,15 +19,16 @@ import com.xargsgrep.portknocker.asynctask.RetrieveApplicationsAsyncTask;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class MiscFragment extends SherlockFragment {
 	
     HostDataManager hostDataManager;
     
-    boolean savedInstanceState = false;
     String delayStr;
-    String launchIntent;
-    List<Application> applications;
+    String selectedLaunchIntent;
+    ApplicationArrayAdapter applicationAdapter;
+    boolean savedInstanceState = false;
 	
 	public static MiscFragment newInstance(Long hostId) {
 		MiscFragment fragment = new MiscFragment();
@@ -55,65 +58,77 @@ public class MiscFragment extends SherlockFragment {
     	super.onViewCreated(view, savedInstanceState);
     	
 		EditText delayEditText = getDelayEditText();
+        Spinner launchIntentSpinner = getLaunchIntentSpinner();
+        
+        launchIntentSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				selectedLaunchIntent = ((ApplicationArrayAdapter) parent.getAdapter()).getItem(position).getIntent();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    	
     	Bundle args = getArguments();
     	
     	if (this.savedInstanceState) {
 			delayEditText.setText(delayStr);
+        	launchIntentSpinner.setAdapter(applicationAdapter);
+        	setSelectedLaunchIntent();
     	}
     	else if (args != null) {
     		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = hostDataManager.getHost(hostId);
     		
 			delayEditText.setText(new Integer(host.getDelay()).toString());
-			launchIntent = host.getLaunchIntentPackage();
+			selectedLaunchIntent = host.getLaunchIntentPackage();
     	}
     	else {
+    		// editing a new host
 			delayEditText.setText(new Integer(Host.DEFAULT_DELAY).toString());
     	}
     	
-    	if (applications == null) {
+    	if (applicationAdapter == null) {
 	    	RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(this);
 	    	retrieveAppsTask.execute();
-    	}
-    	else {
-    		initializeApplicationAdapter(applications);
     	}
     }
     
     @Override
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
-    	
     	delayStr = getDelayEditText().getText().toString();
-    	if (getLaunchIntentSpinner().getSelectedItem() != null)
-	    	launchIntent = ((Application) getLaunchIntentSpinner().getSelectedItem()).getIntent();
-    	
     	savedInstanceState = true;
     }
     
     public void initializeApplicationAdapter(List<Application> applications) {
-    	this.applications = applications;
-    	
-        ApplicationArrayAdapter applicationsAdapter = new ApplicationArrayAdapter(getActivity(), applications);
-        Spinner launchAppSpinner = getLaunchIntentSpinner();
-        launchAppSpinner.setAdapter(applicationsAdapter);
-        
-        if (launchIntent != null && launchIntent.length() > 0) {
-	        for (int i=0; i<applicationsAdapter.getCount(); i++) {
-	        	Application application = applicationsAdapter.getItem(i);
-	        	if (application.getIntent().equals(launchIntent)) {
-	        		launchAppSpinner.setSelection(i);
+        applicationAdapter = new ApplicationArrayAdapter(getActivity(), applications);
+        getLaunchIntentSpinner().setAdapter(applicationAdapter);
+        setSelectedLaunchIntent();
+    }
+    
+    private void setSelectedLaunchIntent() {
+        if (applicationAdapter != null && StringUtils.isNotBlank(selectedLaunchIntent)) {
+	        for (int i=0; i<applicationAdapter.getCount(); i++) {
+	        	Application application = applicationAdapter.getItem(i);
+	        	if (application.getIntent().equals(selectedLaunchIntent)) {
+	        		getLaunchIntentSpinner().setSelection(i);
 	        		break;
 	        	}
 	        }
         }
     }
     
+    public String getSelectedLaunchIntent() {
+    	return selectedLaunchIntent;
+    }
+    
     public EditText getDelayEditText() {
 		return (EditText) getView().findViewById(R.id.delay_edit);
     }
     
-    public Spinner getLaunchIntentSpinner() {
+    private Spinner getLaunchIntentSpinner() {
 		return (Spinner) getView().findViewById(R.id.launch_intent);
     }
     

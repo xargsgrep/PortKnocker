@@ -25,7 +25,6 @@ import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
 import com.xargsgrep.portknocker.manager.HostDataManager;
-import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.utils.BundleUtils;
@@ -188,8 +187,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			int delay = (StringUtils.isNotBlank(delayStr)) ? Integer.parseInt(delayStr) : 0;
 			host.setDelay(delay);
 			
-			Application application = (Application) miscFragment.getLaunchIntentSpinner().getSelectedItem();
-			host.setLaunchIntentPackage(application.getIntent());
+			String launchIntent = miscFragment.getSelectedLaunchIntent();
+			host.setLaunchIntentPackage(launchIntent);
 		}
 		
 		boolean isValid = validateAndDisplayErrors(host);

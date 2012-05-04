@@ -20,7 +20,6 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 	
 	Fragment fragment;
 	String launchIntentPackage;
-	ProgressDialogFragment dialogFragment;
 	
 	public KnockerAsyncTask(Fragment fragment, String launchIntentPackage) {
 		this.fragment = fragment;
@@ -34,7 +33,7 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
-		dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL);
+		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(this, fragment.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL);
 		dialogFragment.setCancelable(true);
 		dialogFragment.show(ft, DIALOG_FRAGMENT_TAG);
 	}
@@ -45,13 +44,14 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 		
 		while (true) {
 			// sometimes the ui thread has not instantiated the dialog when it reaches this point, so wait until it has been
-			if (dialogFragment.getDialog() != null) {
+			ProgressDialogFragment dialogFragment = (ProgressDialogFragment) fragment.getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG);
+			if (dialogFragment != null && dialogFragment.getDialog() != null) {
 				((ProgressDialog) dialogFragment.getDialog()).setMax(host.getPorts().size());
 				break;
 			}
 		}
 		
-		// pass in 'this' so we can update the progress dialog
+		// pass in 'this' so the progress dialog can be updated
 		return Knocker.doKnock(host, this);
 	}
 	
@@ -76,7 +76,8 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 	
 	@Override
 	protected void onProgressUpdate(Integer... values) {
-		((ProgressDialog) dialogFragment.getDialog()).setProgress(values[0]);
+    	Fragment dialogFragment = fragment.getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG);
+    	if (dialogFragment!= null) ((ProgressDialogFragment) dialogFragment).setProgress(values[0]);
 	}
 	
 	public void doPublishProgress(Integer value) {
