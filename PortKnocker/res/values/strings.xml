@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PortKnocker</string>
+    <string name="app_name">Port Knocker</string>
     <string name="host_tab_name">Host</string>
     <string name="ports_tab_name">Ports</string>
     <string name="misc_tab_name">Other</string>
@@ -25,4 +25,5 @@
     <string name="pref_key_hide_ports">hide_ports</string>
     <string name="pref_key_hide_ports_title">Hide Ports</string>
     <string name="pref_key_hide_ports_summary">Hides ports on the main screen</string>
+    <string name="settings_subtitle">Settings</string>
 </resources>

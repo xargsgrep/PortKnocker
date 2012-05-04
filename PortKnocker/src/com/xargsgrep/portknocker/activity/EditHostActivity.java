@@ -49,10 +49,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public static final String KEY_SELECTED_TAB_INDEX = "selectedTabIndex";
 	public static final String KEY_SAVE_HOST_RESULT = "saveHostResult";
 	
-	private static final String FRAGMENT_TAG_HOST_TAB = "host_tab";
-	private static final String FRAGMENT_TAG_PORTS_TAB = "ports_tab";
-	private static final String FRAGMENT_TAG_MISC_TAB = "misc_tab";
-	
     private static final int MAX_PORT_VALUE = 65535;
     private static final int MAX_DELAY_VALUE = 10000;
 
@@ -92,15 +88,15 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_HOST_TAB);
-		Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_PORTS_TAB);
-		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MISC_TAB);
+		Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
+		Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
+		Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
 		
 		switch (tab.getPosition()) {
 			case TAB_INDEX_HOST:
 				if (hostFragment == null) {
 					hostFragment = HostFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, hostFragment, FRAGMENT_TAG_HOST_TAB);
+					ft.add(R.id.fragment_content, hostFragment, HostFragment.TAG);
 				}
     			ft.show(hostFragment);
     			if (portsFragment != null) ft.hide(portsFragment);
@@ -109,7 +105,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			case TAB_INDEX_PORTS:
 				if (portsFragment == null) {
 					portsFragment = PortsFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, portsFragment, FRAGMENT_TAG_PORTS_TAB);
+					ft.add(R.id.fragment_content, portsFragment, PortsFragment.TAG);
 				}
     			ft.show(portsFragment);
     			if (hostFragment != null) ft.hide(hostFragment);
@@ -118,7 +114,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			case TAB_INDEX_MISC:
 				if (miscFragment == null) {
 					miscFragment = MiscFragment.newInstance(hostId);
-					ft.add(R.id.fragment_content, miscFragment, FRAGMENT_TAG_MISC_TAB);
+					ft.add(R.id.fragment_content, miscFragment, MiscFragment.TAG);
 				}
     			ft.show(miscFragment);
     			if (hostFragment != null) ft.hide(hostFragment);
@@ -164,9 +160,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     }
     
     private void saveHost() {
-		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_HOST_TAB);
-		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_PORTS_TAB);
-		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_MISC_TAB);
+		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
+		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
+		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
     	
     	Host host = (hostId == null) ? new Host() : hostDataManager.getHost(hostId);
     	

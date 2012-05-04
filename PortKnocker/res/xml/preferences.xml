@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:title="Miscellaneous">
         <CheckBoxPreference
             android:key="@string/pref_key_hide_ports"
             android:defaultValue="false"

@@ -16,6 +16,8 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostFragment extends SherlockFragment {
 	
+	public static final String TAG = "HostFragment";
+	
     HostDataManager hostDataManager;
     
     boolean savedInstanceState = false;

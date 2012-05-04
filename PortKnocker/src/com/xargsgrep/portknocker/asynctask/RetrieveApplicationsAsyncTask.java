@@ -19,8 +19,6 @@ import com.xargsgrep.portknocker.model.Application;
 
 public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Application>> {
 	
-	private static final String DIALOG_FRAGMENT_TAG = "dialog";
-	
 	Fragment fragment;
 	
 	public RetrieveApplicationsAsyncTask(Fragment fragment) {
@@ -30,13 +28,13 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
 	@Override
 	protected void onPreExecute() {
     	FragmentTransaction ft = fragment.getFragmentManager().beginTransaction();
-    	Fragment prev = fragment.getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG);
+    	Fragment prev = fragment.getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
 		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
 		dialogFragment.setCancelable(false);
-		dialogFragment.show(ft, DIALOG_FRAGMENT_TAG);
+		dialogFragment.show(ft, ProgressDialogFragment.TAG);
 	}
     	
 	@Override
@@ -64,7 +62,7 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
 	@Override
 	protected void onPostExecute(List<Application> applications) {
 		((MiscFragment) fragment).initializeApplicationAdapter(applications);
-    	Fragment dialog = fragment.getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG);
+    	Fragment dialog = fragment.getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
     	if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
 	}
 

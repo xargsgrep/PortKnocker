@@ -2,6 +2,7 @@ package com.xargsgrep.portknocker.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
@@ -11,14 +12,13 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
+import com.xargsgrep.portknocker.fragment.PreferencesFragment;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
 public class HostListActivity extends SherlockFragmentActivity {
 	
 	private static final int MENU_ITEM_ID_ADD = 1;
 	private static final int MENU_ITEM_ID_SETTINGS = 2;
-	
-	private static final String FRAGMENT_TAG_HOST_LIST = "host_list";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,10 @@ public class HostListActivity extends SherlockFragmentActivity {
         getSupportActionBar().setHomeButtonEnabled(false);
         
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_HOST_LIST);
+		Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
 		if (hostListFragment == null) {
 			hostListFragment = HostListFragment.newInstance();
-			ft.add(R.id.fragment_content, hostListFragment, FRAGMENT_TAG_HOST_LIST);
+			ft.add(R.id.fragment_content, hostListFragment, HostListFragment.TAG);
 		}
 		ft.show(hostListFragment);
 		ft.commit();
@@ -59,6 +59,8 @@ public class HostListActivity extends SherlockFragmentActivity {
 		        return true;
 	    	case MENU_ITEM_ID_SETTINGS:
 				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				settingsIntent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
+				settingsIntent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, PreferencesFragment.class.getName());
 		        startActivity(settingsIntent);
 		        return true;
 		    default:

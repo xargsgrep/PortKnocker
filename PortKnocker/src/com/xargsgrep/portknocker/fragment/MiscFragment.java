@@ -23,6 +23,8 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class MiscFragment extends SherlockFragment {
 	
+	public static final String TAG = "MiscFragment";
+	
     HostDataManager hostDataManager;
     
     String delayStr;

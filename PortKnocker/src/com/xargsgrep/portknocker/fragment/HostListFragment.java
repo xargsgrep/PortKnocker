@@ -15,6 +15,8 @@ import com.xargsgrep.portknocker.model.Host;
 
 public class HostListFragment extends SherlockListFragment {
 	
+	public static final String TAG = "HostListFragment";
+	
     HostDataManager hostDataManager;
     
 	public static HostListFragment newInstance() {

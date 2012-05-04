@@ -22,6 +22,8 @@ import com.xargsgrep.portknocker.model.Port;
 
 public class PortsFragment extends SherlockListFragment {
 	
+	public static final String TAG = "PortsFragment";
+	
     HostDataManager hostDataManager;
     
     PortArrayAdapter portAdapter;

@@ -1,5 +1,7 @@
 package com.xargsgrep.portknocker.activity;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,11 +15,14 @@ public class SettingsActivity extends SherlockPreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-    	getSupportActionBar().setSubtitle("Preferences");
+    	getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        addPreferencesFromResource(R.xml.preferences);
+    }
+    
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        loadHeadersFromResource(R.xml.preference_headers, target);
     }
     
     @Override
