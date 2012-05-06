@@ -39,6 +39,9 @@ public class HostWidget extends AppWidgetProvider {
 		// workaround for phantom widgets
         boolean configured = ConfigureWidgetActivity.getConfiguredPreference(context, appWidgetId);
         if (!configured) return;
+        
+        long widgetHostId = ConfigureWidgetActivity.getHostIdPreference(context, appWidgetId);
+        if (widgetHostId != hostId) return;
     	
     	HostDataManager hostDataManager = new HostDataManager(context);
     	Host host = hostDataManager.getHost(hostId);
