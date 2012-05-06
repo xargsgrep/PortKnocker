@@ -49,9 +49,9 @@ public class HostWidget extends AppWidgetProvider {
         
 		Intent intent = new Intent(context, HostListActivity.class);
 		intent.putExtra("hostId", hostId);
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
 		views.setOnClickPendingIntent(R.id.widget, pendingIntent);
-        
+		
         views.setTextViewText(R.id.widget_host_label, host.getLabel());
         views.setTextViewText(R.id.widget_host_hostname, host.getHostname());
         views.setTextViewText(R.id.widget_host_ports, host.getPortsString());
