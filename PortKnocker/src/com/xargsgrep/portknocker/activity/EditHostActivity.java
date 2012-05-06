@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.AlertDialog;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -199,10 +197,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    	}
 	    	else {
 	    		saveResult  = hostDataManager.updateHost(host);
-	    		
-		    	AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-		    	int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, HostWidget.class));
-		    	HostWidget.updateAppWidgets(this, appWidgetManager, appWidgetIds, hostId);
+		    	HostWidget.updateAllAppWidgets(this, hostId);
 	    	}
 	    	
 	    	returnToHostListActivity(saveResult);

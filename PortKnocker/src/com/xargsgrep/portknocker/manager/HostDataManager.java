@@ -173,6 +173,27 @@ public class HostDataManager {
 		}
 	}
 	
+	public boolean hostExists(long hostId) {
+		SQLiteDatabase database = getReadableDatabase();
+		
+		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
+		Cursor hostCursor = database.query(
+			DatabaseManager.HOST_TABLE_NAME,
+			DatabaseManager.HOST_TABLE_COLUMNS,
+			hostSelection,
+			new String[] { new Long(hostId).toString() },
+			null,
+			null,
+			DatabaseManager.HOST_ID_COLUMN
+		);
+		int rowCount = hostCursor.getCount();
+		
+		hostCursor.close();
+		database.close();
+		
+		return rowCount > 0;
+	}
+	
 	private List<Port> getPortsForHost(SQLiteDatabase database, long hostId) {
 		List<Port> ports = new ArrayList<Port>();
 				

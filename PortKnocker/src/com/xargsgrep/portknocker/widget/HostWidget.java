@@ -3,8 +3,10 @@ package com.xargsgrep.portknocker.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.xargsgrep.portknocker.R;
@@ -29,11 +31,13 @@ public class HostWidget extends AppWidgetProvider {
 		}
 	}
 	
-    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, long hostId) {
+	public static void updateAllAppWidgets(Context context, long hostId) {
+    	AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+    	int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, HostWidget.class));
     	for (int appWidgetId : appWidgetIds) {
     		updateAppWidget(context, appWidgetManager, appWidgetId, hostId);
     	}
-    }
+	}
 	
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, long hostId) {
 		// workaround for phantom widgets
@@ -44,17 +48,26 @@ public class HostWidget extends AppWidgetProvider {
         if (widgetHostId != hostId) return;
     	
     	HostDataManager hostDataManager = new HostDataManager(context);
-    	Host host = hostDataManager.getHost(hostId);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+    	RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+    	
+    	boolean hostExists = hostDataManager.hostExists(hostId);
+    	if (hostExists) {
+	    	Host host = hostDataManager.getHost(hostId);
         
-		Intent intent = new Intent(context, HostListActivity.class);
-		intent.putExtra("hostId", hostId);
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
-		views.setOnClickPendingIntent(R.id.widget, pendingIntent);
+			Intent intent = new Intent(context, HostListActivity.class);
+			intent.putExtra("hostId", hostId);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
+			views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 		
-        views.setTextViewText(R.id.widget_host_label, host.getLabel());
-        views.setTextViewText(R.id.widget_host_hostname, host.getHostname());
-        views.setTextViewText(R.id.widget_host_ports, host.getPortsString());
+	        views.setTextViewText(R.id.widget_host_label, host.getLabel());
+	        views.setTextViewText(R.id.widget_host_hostname, host.getHostname());
+	        views.setTextViewText(R.id.widget_host_ports, host.getPortsString());
+    	}
+    	else {
+    		views.setTextViewText(R.id.widget_host_label, "Invalid Host");
+    		views.setViewVisibility(R.id.widget_host_hostname, View.GONE);
+    		views.setViewVisibility(R.id.widget_host_ports, View.GONE);
+    	}
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

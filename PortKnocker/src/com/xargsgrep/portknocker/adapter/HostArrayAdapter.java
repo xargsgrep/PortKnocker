@@ -21,6 +21,7 @@ import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.widget.HostWidget;
 
 public class HostArrayAdapter extends ArrayAdapter<Host> {
 	
@@ -106,6 +107,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 					Host host = hosts.get(position);
 					hostDataManager.deleteHost(host);
                 	remove(host);
+			    	HostWidget.updateAllAppWidgets(activity, host.getId());
                 }
             }
         );
