@@ -23,7 +23,6 @@ public class ConfigureWidgetActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setResult(RESULT_CANCELED);
 		setContentView(R.layout.list_view);
 		

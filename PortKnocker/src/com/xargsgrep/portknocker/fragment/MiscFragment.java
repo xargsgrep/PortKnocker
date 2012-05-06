@@ -92,7 +92,7 @@ public class MiscFragment extends SherlockFragment {
     	}
     	
     	if (applicationAdapter == null) {
-	    	RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(this);
+	    	RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(getActivity(), this);
 	    	retrieveAppsTask.execute();
     	}
     }

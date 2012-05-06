@@ -3,12 +3,11 @@ package com.xargsgrep.portknocker.adapter;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,15 +25,13 @@ import com.xargsgrep.portknocker.model.Host;
 public class HostArrayAdapter extends ArrayAdapter<Host> {
 	
     HostDataManager hostDataManager;
-	Context context;
-	Fragment fragment;
+	FragmentActivity activity;
 	List<Host> hosts;
 
-	public HostArrayAdapter(Context context, Fragment fragment, List<Host> hosts) {
-		super(context, -1, hosts);
-        hostDataManager = new HostDataManager(context);
-		this.context = context;
-		this.fragment = fragment;
+	public HostArrayAdapter(FragmentActivity activity, List<Host> hosts) {
+		super(activity, -1, hosts);
+        hostDataManager = new HostDataManager(activity);
+		this.activity = activity;
 		this.hosts = hosts;
 	}
 	
@@ -63,8 +60,8 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		hostnameView.setText(host.getHostname());
 		portsView.setText(host.getPortsString());
 		
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		if (sharedPreferences.getBoolean(context.getString(R.string.pref_key_hide_ports), false)) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+		if (sharedPreferences.getBoolean(activity.getString(R.string.pref_key_hide_ports), false)) {
 			portsView.setVisibility(View.GONE);
 		}
 		
@@ -73,7 +70,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Host host = getItem(fPosition);
-				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(fragment);
+				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(activity);
 				knockerAsyncTask.execute(host);
 			}
 		});
@@ -89,9 +86,9 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Host host = hosts.get(fPosition);
-				Intent editHostIntent = new Intent(context, EditHostActivity.class);
+				Intent editHostIntent = new Intent(activity, EditHostActivity.class);
 				editHostIntent.putExtra(EditHostActivity.KEY_HOST_ID, host.getId());
-		        context.startActivity(editHostIntent);
+		        activity.startActivity(editHostIntent);
 			}
 		});
 		
@@ -99,7 +96,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 	}
 	
 	private void showDeleteDialog(final int position) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
         dialogBuilder.setIcon(R.drawable.ic_dialog_confirm);
         

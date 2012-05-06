@@ -41,7 +41,7 @@ public class HostListFragment extends SherlockListFragment {
     	super.onViewCreated(view, savedInstanceState);
     	
         List<Host> hosts = hostDataManager.getAllHosts();
-		HostArrayAdapter hostAdapter = new HostArrayAdapter(getActivity(), this, hosts);
+		HostArrayAdapter hostAdapter = new HostArrayAdapter(getActivity(), hosts);
 		setListAdapter(hostAdapter);
     }
     

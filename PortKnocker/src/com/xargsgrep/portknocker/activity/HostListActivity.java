@@ -11,8 +11,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
 import com.xargsgrep.portknocker.fragment.PreferencesFragment;
+import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
 public class HostListActivity extends SherlockFragmentActivity {
@@ -20,11 +23,12 @@ public class HostListActivity extends SherlockFragmentActivity {
 	private static final int MENU_ITEM_ID_ADD = 1;
 	private static final int MENU_ITEM_ID_SETTINGS = 2;
 	
+	HostDataManager hostDataManager;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_list);
-        
         getSupportActionBar().setHomeButtonEnabled(false);
         
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -42,10 +46,14 @@ public class HostListActivity extends SherlockFragmentActivity {
 			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
 		}
 		
-		if (BundleUtils.contains(extras, "hostId")) {
+		if (BundleUtils.contains(extras, "hostId") && savedInstanceState == null) {
 			// clicked on widget
-			long hostId = extras.getLong("hostId");
-			Toast.makeText(this, "Clicked on widget for host " + hostId, Toast.LENGTH_SHORT).show();
+			hostDataManager = new HostDataManager(this);
+			Long hostId = extras.getLong("hostId");
+			Host host = hostDataManager.getHost(hostId);
+			
+			KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(this);
+			knockerAsyncTask.execute(host);
 		}
     }
     

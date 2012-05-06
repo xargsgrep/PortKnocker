@@ -10,6 +10,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.xargsgrep.portknocker.R;
@@ -19,27 +21,31 @@ import com.xargsgrep.portknocker.model.Application;
 
 public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Application>> {
 	
+	FragmentActivity activity;
 	Fragment fragment;
 	
-	public RetrieveApplicationsAsyncTask(Fragment fragment) {
+	public RetrieveApplicationsAsyncTask(FragmentActivity activity, Fragment fragment) {
+		this.activity = activity;
 		this.fragment = fragment;
 	}
     	
 	@Override
 	protected void onPreExecute() {
-    	FragmentTransaction ft = fragment.getFragmentManager().beginTransaction();
-    	Fragment prev = fragment.getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+		FragmentManager fragmentManager = activity.getSupportFragmentManager();
+		
+    	FragmentTransaction ft = fragmentManager.beginTransaction();
+    	Fragment prev = fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
-		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(fragment.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
+		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(activity.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
 		dialogFragment.setCancelable(false);
 		dialogFragment.show(ft, ProgressDialogFragment.TAG);
 	}
     	
 	@Override
 	protected List<Application> doInBackground(Void... params) {
-		PackageManager packageManager = fragment.getActivity().getPackageManager();
+		PackageManager packageManager = activity.getPackageManager();
 		List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 		
         List<Application> applications = new ArrayList<Application>();
@@ -61,12 +67,15 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
 	
 	@Override
 	protected void onPostExecute(List<Application> applications) {
+		FragmentManager fragmentManager = activity.getSupportFragmentManager();
+		
 		((MiscFragment) fragment).initializeApplicationAdapter(applications);
-    	Fragment dialog = fragment.getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+    	Fragment dialog = fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
     	if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
 	}
 
     private boolean isSystemPackage(ApplicationInfo applicationInfo) {
         return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
+    
 }
