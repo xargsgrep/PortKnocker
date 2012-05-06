@@ -51,4 +51,19 @@ public class Host {
 		this.ports = ports;
 	}
 	
+	public String getPortsString() {
+		StringBuilder portsString = new StringBuilder();
+		
+		if (ports.size() > 0) {
+			for (Port port : ports) {
+				portsString.append(port.getPort());
+				portsString.append(":");
+				portsString.append(port.getProtocol());
+				portsString.append(", ");
+			}
+			portsString.replace(portsString.length()-2, portsString.length(), "");
+		}
+		
+		return portsString.toString();
+	}
 }

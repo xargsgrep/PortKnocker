@@ -22,7 +22,6 @@ import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
-import com.xargsgrep.portknocker.model.Port;
 
 public class HostArrayAdapter extends ArrayAdapter<Host> {
 	
@@ -57,23 +56,12 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 		TextView labelView = (TextView) view.findViewById(R.id.host_row_label);
 		TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);
 		TextView portsView = (TextView) view.findViewById(R.id.host_row_ports);
-		ImageButton deleteButton = (ImageButton) view.findViewById(R.id.host_row_delete);
-		ImageButton editButton = (ImageButton) view.findViewById(R.id.host_row_edit);
 		
 		Host host = hosts.get(position);
 		
 		labelView.setText(host.getLabel());
 		hostnameView.setText(host.getHostname());
-		
-		StringBuilder ports = new StringBuilder();
-		for (Port port : host.getPorts()) {
-			ports.append(port.getPort());
-			ports.append(":");
-			ports.append(port.getProtocol());
-			ports.append(", ");
-		}
-		if (ports.length() > 0) ports.replace(ports.length()-2, ports.length(), "");
-		portsView.setText(ports);
+		portsView.setText(host.getPortsString());
 		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		if (sharedPreferences.getBoolean(context.getString(R.string.pref_key_hide_ports), false)) {
@@ -90,11 +78,13 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			}
 		});
 		
+		ImageButton deleteButton = (ImageButton) view.findViewById(R.id.host_row_delete);
 		deleteButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) { showDeleteDialog(fPosition); }
 		});
 		
+		ImageButton editButton = (ImageButton) view.findViewById(R.id.host_row_edit);
 		editButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

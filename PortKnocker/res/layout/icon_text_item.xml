@@ -6,13 +6,13 @@
 >
 
     <ImageView android:id="@+id/icon"
-        android:layout_width="32dip"
-        android:layout_height="32dip"
-        android:layout_marginRight="5dip"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginRight="5dp"
     />
     <TextView android:id="@+id/text"
         android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
+        android:layout_width="0dp"
         android:layout_weight="1.0"
         android:layout_height="wrap_content"
     />

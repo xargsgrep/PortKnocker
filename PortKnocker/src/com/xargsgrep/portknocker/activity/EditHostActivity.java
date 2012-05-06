@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 import com.xargsgrep.portknocker.utils.StringUtils;
+import com.xargsgrep.portknocker.widget.HostWidget;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
@@ -57,7 +60,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_host);
+        setContentView(R.layout.host_edit);
         
         hostDataManager = new HostDataManager(this);
         
@@ -189,7 +192,19 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		
 		boolean isValid = validateAndDisplayErrors(host);
 		if (isValid) {
-	    	boolean saveResult = (hostId == null) ? hostDataManager.saveHost(host) : hostDataManager.updateHost(host);
+	    	boolean saveResult = false;
+	    	
+	    	if (hostId == null) {
+	    		saveResult  = hostDataManager.saveHost(host);
+	    	}
+	    	else {
+	    		saveResult  = hostDataManager.updateHost(host);
+	    		
+		    	AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+		    	int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, HostWidget.class));
+		    	HostWidget.updateAppWidgets(this, appWidgetManager, appWidgetIds, hostId);
+	    	}
+	    	
 	    	returnToHostListActivity(saveResult);
 		}
     }

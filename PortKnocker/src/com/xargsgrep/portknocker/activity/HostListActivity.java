@@ -41,8 +41,14 @@ public class HostListActivity extends SherlockFragmentActivity {
 			Boolean saveResult = extras.getBoolean(EditHostActivity.KEY_SAVE_HOST_RESULT);
 			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
 		}
+		
+		if (BundleUtils.contains(extras, "hostId")) {
+			// clicked on widget
+			long hostId = extras.getLong("hostId");
+			Toast.makeText(this, "Clicked on widget for host " + hostId, Toast.LENGTH_SHORT).show();
+		}
     }
-
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
