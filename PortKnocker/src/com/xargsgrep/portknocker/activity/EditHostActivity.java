@@ -197,7 +197,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    	}
 	    	else {
 	    		saveResult  = hostDataManager.updateHost(host);
-		    	HostWidget.updateAllAppWidgets(this, hostId);
+		    	HostWidget.updateAllAppWidgetsForHost(this, hostId);
 	    	}
 	    	
 	    	returnToHostListActivity(saveResult);

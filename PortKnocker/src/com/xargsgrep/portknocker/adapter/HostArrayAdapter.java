@@ -107,7 +107,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 					Host host = hosts.get(position);
 					hostDataManager.deleteHost(host);
                 	remove(host);
-			    	HostWidget.updateAllAppWidgets(activity, host.getId());
+			    	HostWidget.updateAllAppWidgetsForHost(activity, host.getId());
                 }
             }
         );
