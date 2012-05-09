@@ -17,7 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
-import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 
@@ -25,7 +25,7 @@ public class PortsFragment extends SherlockListFragment {
 	
 	public static final String TAG = "PortsFragment";
 	
-    HostDataManager hostDataManager;
+    DatabaseManager databaseManager;
     
     PortArrayAdapter portAdapter;
     boolean savedInstanceState = false;
@@ -45,7 +45,7 @@ public class PortsFragment extends SherlockListFragment {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
-		hostDataManager = new HostDataManager(getActivity());
+		databaseManager = new DatabaseManager(getActivity());
 	}
 	
     @Override
@@ -66,7 +66,7 @@ public class PortsFragment extends SherlockListFragment {
     	if (args != null && !this.savedInstanceState) {
     		// only restore state from args if onSaveInstanceState hasn't been invoked
     		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
-    		Host host = hostDataManager.getHost(hostId);
+    		Host host = databaseManager.getHost(hostId);
     		List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : Arrays.asList(new Port());
 			portAdapter = new PortArrayAdapter(getActivity(), ports);
 			setListAdapter(portAdapter);

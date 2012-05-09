@@ -1,4 +1,4 @@
-package com.xargsgrep.portknocker.manager;
+package com.xargsgrep.portknocker.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,12 @@ import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.model.Port.Protocol;
 
-public class HostDataManager {
+public class DatabaseManager {
 
-	private DatabaseManager databaseManager;
+	private DatabaseHelper databaseHelper;
 
-	public HostDataManager(Context context) {
-		databaseManager = new DatabaseManager(context);
+	public DatabaseManager(Context context) {
+		databaseHelper = new DatabaseHelper(context);
 	}
 	
 	public List<Host> getAllHosts() {
@@ -26,13 +26,13 @@ public class HostDataManager {
 		SQLiteDatabase database = getReadableDatabase();
 		
 		Cursor hostsCursor = database.query(
-			DatabaseManager.HOST_TABLE_NAME,
-			DatabaseManager.HOST_TABLE_COLUMNS,
+			DatabaseHelper.HOST_TABLE_NAME,
+			DatabaseHelper.HOST_TABLE_COLUMNS,
 			null,
 			null,
 			null,
 			null,
-			DatabaseManager.HOST_ID_COLUMN
+			DatabaseHelper.HOST_ID_COLUMN
 		);
 		hostsCursor.moveToFirst();
 		
@@ -53,15 +53,15 @@ public class HostDataManager {
 	public Host getHost(long hostId) {
 		SQLiteDatabase database = getReadableDatabase();
 		
-		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
+		String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
 		Cursor hostCursor = database.query(
-			DatabaseManager.HOST_TABLE_NAME,
-			DatabaseManager.HOST_TABLE_COLUMNS,
+			DatabaseHelper.HOST_TABLE_NAME,
+			DatabaseHelper.HOST_TABLE_COLUMNS,
 			hostSelection,
 			new String[] { new Long(hostId).toString() },
 			null,
 			null,
-			DatabaseManager.HOST_ID_COLUMN
+			DatabaseHelper.HOST_ID_COLUMN
 		);
 		hostCursor.moveToFirst();
 		
@@ -82,23 +82,23 @@ public class HostDataManager {
 		database.beginTransaction();
 		try {
 			ContentValues hostValues = new ContentValues();
-			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
-			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
-			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
+			hostValues.put(DatabaseHelper.HOST_LABEL_COLUMN, host.getLabel());
+			hostValues.put(DatabaseHelper.HOST_HOSTNAME_COLUMN, host.getHostname());
+			hostValues.put(DatabaseHelper.HOST_DELAY_COLUMN, host.getDelay());
+			hostValues.put(DatabaseHelper.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
 			
-			long hostId = database.insert(DatabaseManager.HOST_TABLE_NAME, null, hostValues);
+			long hostId = database.insert(DatabaseHelper.HOST_TABLE_NAME, null, hostValues);
 			if (hostId == -1) return false;
 			
 			int i = 0;
 			for (Port port : host.getPorts()) {
 				ContentValues portValues = new ContentValues();
-				portValues.put(DatabaseManager.PORT_HOST_ID_COLUMN, hostId);
-				portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
-				portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
-				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+				portValues.put(DatabaseHelper.PORT_HOST_ID_COLUMN, hostId);
+				portValues.put(DatabaseHelper.PORT_INDEX_COLUMN, i);
+				portValues.put(DatabaseHelper.PORT_PORT_COLUMN, port.getPort());
+				portValues.put(DatabaseHelper.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
 				
-				long portId = database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
+				long portId = database.insert(DatabaseHelper.PORT_TABLE_NAME, null, portValues);
 				if (portId == -1) return false;
 				
 				i++;
@@ -119,27 +119,27 @@ public class HostDataManager {
 		database.beginTransaction();
 		try {
 			ContentValues hostValues = new ContentValues();
-			hostValues.put(DatabaseManager.HOST_LABEL_COLUMN, host.getLabel());
-			hostValues.put(DatabaseManager.HOST_HOSTNAME_COLUMN, host.getHostname());
-			hostValues.put(DatabaseManager.HOST_DELAY_COLUMN, host.getDelay());
-			hostValues.put(DatabaseManager.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
+			hostValues.put(DatabaseHelper.HOST_LABEL_COLUMN, host.getLabel());
+			hostValues.put(DatabaseHelper.HOST_HOSTNAME_COLUMN, host.getHostname());
+			hostValues.put(DatabaseHelper.HOST_DELAY_COLUMN, host.getDelay());
+			hostValues.put(DatabaseHelper.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
 			
-			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
-			int rowsAffected = database.update(DatabaseManager.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
+			String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
+			int rowsAffected = database.update(DatabaseHelper.HOST_TABLE_NAME, hostValues, hostSelection, new String[] { new Long(host.getId()).toString() });
 			if (rowsAffected == 0) return false;
 			
-			String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
-			database.delete(DatabaseManager.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
+			String portsSelection = String.format("%s = ?", DatabaseHelper.PORT_HOST_ID_COLUMN);
+			database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
 			
 			int i = 0;
 			for (Port port : host.getPorts()) {
 				ContentValues portValues = new ContentValues();
-				portValues.put(DatabaseManager.PORT_HOST_ID_COLUMN, host.getId());
-				portValues.put(DatabaseManager.PORT_INDEX_COLUMN, i);
-				portValues.put(DatabaseManager.PORT_PORT_COLUMN, port.getPort());
-				portValues.put(DatabaseManager.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
+				portValues.put(DatabaseHelper.PORT_HOST_ID_COLUMN, host.getId());
+				portValues.put(DatabaseHelper.PORT_INDEX_COLUMN, i);
+				portValues.put(DatabaseHelper.PORT_PORT_COLUMN, port.getPort());
+				portValues.put(DatabaseHelper.PORT_PROTOCOL_COLUMN, port.getProtocol().ordinal());
 				
-				long portId = database.insert(DatabaseManager.PORT_TABLE_NAME, null, portValues);
+				long portId = database.insert(DatabaseHelper.PORT_TABLE_NAME, null, portValues);
 				if (portId == -1) return false;
 				
 				i++;
@@ -159,11 +159,11 @@ public class HostDataManager {
 		
 		database.beginTransaction();
 		try {
-			String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
-			database.delete(DatabaseManager.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
+			String portsSelection = String.format("%s = ?", DatabaseHelper.PORT_HOST_ID_COLUMN);
+			database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] { new Long(host.getId()).toString() });
 			
-			String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
-			database.delete(DatabaseManager.HOST_TABLE_NAME, hostSelection, new String[] { new Long(host.getId()).toString() });
+			String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
+			database.delete(DatabaseHelper.HOST_TABLE_NAME, hostSelection, new String[] { new Long(host.getId()).toString() });
 			
 			database.setTransactionSuccessful();
 		}
@@ -176,15 +176,15 @@ public class HostDataManager {
 	public boolean hostExists(long hostId) {
 		SQLiteDatabase database = getReadableDatabase();
 		
-		String hostSelection = String.format("%s = ?", DatabaseManager.HOST_ID_COLUMN);
+		String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
 		Cursor hostCursor = database.query(
-			DatabaseManager.HOST_TABLE_NAME,
-			DatabaseManager.HOST_TABLE_COLUMNS,
+			DatabaseHelper.HOST_TABLE_NAME,
+			DatabaseHelper.HOST_TABLE_COLUMNS,
 			hostSelection,
 			new String[] { new Long(hostId).toString() },
 			null,
 			null,
-			DatabaseManager.HOST_ID_COLUMN
+			DatabaseHelper.HOST_ID_COLUMN
 		);
 		int rowCount = hostCursor.getCount();
 		
@@ -197,15 +197,15 @@ public class HostDataManager {
 	private List<Port> getPortsForHost(SQLiteDatabase database, long hostId) {
 		List<Port> ports = new ArrayList<Port>();
 				
-		String portsSelection = String.format("%s = ?", DatabaseManager.PORT_HOST_ID_COLUMN);
+		String portsSelection = String.format("%s = ?", DatabaseHelper.PORT_HOST_ID_COLUMN);
 		Cursor portsCursor = database.query(
-			DatabaseManager.PORT_TABLE_NAME,
-			DatabaseManager.PORT_TABLE_COLUMNS,
+			DatabaseHelper.PORT_TABLE_NAME,
+			DatabaseHelper.PORT_TABLE_COLUMNS,
 			portsSelection,
 			new String[] { new Long(hostId).toString() },
 			null,
 			null,
-			DatabaseManager.PORT_INDEX_COLUMN
+			DatabaseHelper.PORT_INDEX_COLUMN
 		);
 		portsCursor.moveToFirst();
 		
@@ -240,11 +240,11 @@ public class HostDataManager {
 	}
 	
 	private SQLiteDatabase getReadableDatabase() {
-		return databaseManager.getReadableDatabase();
+		return databaseHelper.getReadableDatabase();
 	}
 	
 	private SQLiteDatabase getWriteableDatabase() {
-		return databaseManager.getWritableDatabase();
+		return databaseHelper.getWritableDatabase();
 	}
 	
 }

@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
-import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 
 public class HostListFragment extends SherlockListFragment {
 	
 	public static final String TAG = "HostListFragment";
 	
-    HostDataManager hostDataManager;
+    DatabaseManager databaseManager;
     
 	public static HostListFragment newInstance() {
 		return new HostListFragment();
@@ -27,7 +27,7 @@ public class HostListFragment extends SherlockListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		hostDataManager = new HostDataManager(getActivity());
+		databaseManager = new DatabaseManager(getActivity());
 	}
 	
     @Override
@@ -40,7 +40,7 @@ public class HostListFragment extends SherlockListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
     	super.onViewCreated(view, savedInstanceState);
     	
-        List<Host> hosts = hostDataManager.getAllHosts();
+        List<Host> hosts = databaseManager.getAllHosts();
 		HostArrayAdapter hostAdapter = new HostArrayAdapter(getActivity(), hosts);
 		setListAdapter(hostAdapter);
     }

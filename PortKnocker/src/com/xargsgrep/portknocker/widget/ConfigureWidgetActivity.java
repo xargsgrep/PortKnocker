@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 
 public class ConfigureWidgetActivity extends ListActivity {
@@ -18,7 +18,7 @@ public class ConfigureWidgetActivity extends ListActivity {
 	private static final String PREF_HOST_ID_KEY = "hostid_";
 	private static final String PREF_CONFIGURED_KEY = "configured_";
 	
-    HostDataManager hostDataManager;
+    DatabaseManager databaseManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class ConfigureWidgetActivity extends ListActivity {
 		int appWidgetId = (extras == null) ? AppWidgetManager.INVALID_APPWIDGET_ID : extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 		if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish();
 		
-		hostDataManager = new HostDataManager(this);
-        List<Host> hosts = hostDataManager.getAllHosts();
+		databaseManager = new DatabaseManager(this);
+        List<Host> hosts = databaseManager.getAllHosts();
 		ConfigureWidgetHostArrayAdapter hostAdapter = new ConfigureWidgetHostArrayAdapter(this, hosts, appWidgetId);
 		setListAdapter(hostAdapter);
 	}

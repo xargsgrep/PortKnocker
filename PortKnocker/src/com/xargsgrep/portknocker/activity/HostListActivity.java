@@ -12,9 +12,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
 import com.xargsgrep.portknocker.fragment.PreferencesFragment;
-import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
@@ -23,7 +23,7 @@ public class HostListActivity extends SherlockFragmentActivity {
 	private static final int MENU_ITEM_ID_ADD = 1;
 	private static final int MENU_ITEM_ID_SETTINGS = 2;
 	
-	HostDataManager hostDataManager;
+	DatabaseManager databaseManager;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public class HostListActivity extends SherlockFragmentActivity {
 		
 		if (BundleUtils.contains(extras, "hostId") && savedInstanceState == null) {
 			// clicked on widget
-			hostDataManager = new HostDataManager(this);
+			databaseManager = new DatabaseManager(this);
 			Long hostId = extras.getLong("hostId");
-			Host host = hostDataManager.getHost(hostId);
+			Host host = databaseManager.getHost(hostId);
 			
 			KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(this, host.getPorts().size());
 			knockerAsyncTask.execute(host);

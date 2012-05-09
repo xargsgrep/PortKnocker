@@ -13,7 +13,7 @@ import android.widget.RemoteViews;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.HostListActivity;
-import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 
 public class HostWidget extends AppWidgetProvider {
@@ -57,7 +57,7 @@ public class HostWidget extends AppWidgetProvider {
         Long widgetHostId = ConfigureWidgetActivity.getHostIdPreference(context, appWidgetId);
         if (hostId != null && !hostId.equals(widgetHostId)) return;
     	
-    	HostDataManager hostDataManager = new HostDataManager(context);
+    	DatabaseManager hostDataManager = new DatabaseManager(context);
     	RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
     	
     	boolean hostExists = hostDataManager.hostExists(widgetHostId);

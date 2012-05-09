@@ -21,10 +21,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.fragment.HostFragment;
 import com.xargsgrep.portknocker.fragment.MiscFragment;
 import com.xargsgrep.portknocker.fragment.PortsFragment;
-import com.xargsgrep.portknocker.manager.HostDataManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.model.Port;
 import com.xargsgrep.portknocker.utils.BundleUtils;
@@ -33,7 +33,7 @@ import com.xargsgrep.portknocker.widget.HostWidget;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
-	HostDataManager hostDataManager;
+	DatabaseManager databaseManager;
     
     // null when creating a new host
     private Long hostId;
@@ -60,11 +60,11 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_edit);
         
-        hostDataManager = new HostDataManager(this);
+        databaseManager = new DatabaseManager(this);
         
 		Bundle extras = getIntent().getExtras();
 		hostId = (BundleUtils.contains(extras, KEY_HOST_ID)) ? extras.getLong(KEY_HOST_ID) : null;
-    	Host host = (hostId == null) ? null : hostDataManager.getHost(hostId);
+    	Host host = (hostId == null) ? null : databaseManager.getHost(hostId);
 		
     	if (host != null) getSupportActionBar().setSubtitle(host.getLabel());
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -165,7 +165,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
 		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
     	
-    	Host host = (hostId == null) ? new Host() : hostDataManager.getHost(hostId);
+    	Host host = (hostId == null) ? new Host() : databaseManager.getHost(hostId);
     	
     	host.setLabel(hostFragment.getHostLabelEditText().getText().toString());
     	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
@@ -193,10 +193,10 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    	boolean saveResult = false;
 	    	
 	    	if (hostId == null) {
-	    		saveResult  = hostDataManager.saveHost(host);
+	    		saveResult  = databaseManager.saveHost(host);
 	    	}
 	    	else {
-	    		saveResult  = hostDataManager.updateHost(host);
+	    		saveResult  = databaseManager.updateHost(host);
 		    	HostWidget.updateAllAppWidgetsForHost(this, hostId);
 	    	}
 	    	

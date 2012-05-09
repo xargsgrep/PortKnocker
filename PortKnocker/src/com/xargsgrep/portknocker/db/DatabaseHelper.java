@@ -1,11 +1,11 @@
-package com.xargsgrep.portknocker.manager;
+package com.xargsgrep.portknocker.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-public class DatabaseManager extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 	
     private static final int DATABASE_VERSION = 1;
     
@@ -27,7 +27,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String[] HOST_TABLE_COLUMNS = new String[] { HOST_ID_COLUMN, HOST_LABEL_COLUMN, HOST_HOSTNAME_COLUMN, HOST_DELAY_COLUMN, HOST_LAUNCH_INTENT_PACKAGE_COLUMN }; 
     public static final String[] PORT_TABLE_COLUMNS = new String[] { PORT_HOST_ID_COLUMN, PORT_INDEX_COLUMN, PORT_PORT_COLUMN, PORT_PROTOCOL_COLUMN }; 
 
-	public DatabaseManager(Context context) {
+	public DatabaseHelper(Context context) {
 		super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
 	}
 	

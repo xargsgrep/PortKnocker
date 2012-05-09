@@ -18,19 +18,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.manager.HostDataManager;
+import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 
 public class ConfigureWidgetHostArrayAdapter extends ArrayAdapter<Host> {
 	
-    HostDataManager hostDataManager;
+    DatabaseManager databaseManager;
 	Context context;
 	List<Host> hosts;
 	int appWidgetId;
 
 	public ConfigureWidgetHostArrayAdapter(Context context, List<Host> hosts, int appWidgetId) {
 		super(context, -1, hosts);
-        hostDataManager = new HostDataManager(context);
+        databaseManager = new DatabaseManager(context);
 		this.context = context;
 		this.hosts = hosts;
 		this.appWidgetId = appWidgetId;
