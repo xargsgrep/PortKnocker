@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -50,7 +51,10 @@ public class PortsFragment extends SherlockListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.list_view, container, false);
+        View view = inflater.inflate(R.layout.list_view, container, false);
+    	View header = getActivity().getLayoutInflater().inflate(R.layout.ports_header, null);
+    	((LinearLayout) view).addView(header, 0);
+    	return view;
     }
     
     @Override

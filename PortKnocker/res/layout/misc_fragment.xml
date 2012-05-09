@@ -7,47 +7,39 @@
 	android:paddingTop="8dp"
 	android:paddingBottom="8dp"
 	android:layout_marginLeft="8dp"
+	android:layout_marginRight="8dp"
+	android:layout_marginTop="8dp"
 >
 
-    <LinearLayout
-	    android:layout_width="fill_parent"
+    <TextView
+        android:text="@string/delay_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/labelSmall"
+    />
+	<EditText
+	    android:id="@+id/delay_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:inputType="number"
+		android:layout_marginBottom="8dp"
+        android:singleLine="true"
+        android:hint="@string/delay_hint"
+	    android:maxLength="4"
+	    android:ems="4"
+    />
+
+    <TextView
+        android:text="@string/launch_app_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/labelSmall"
+    />
+	<Spinner
+	    android:id="@+id/launch_intent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-    >
-		<TextView
-		    android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-			android:textSize="18sp"
-	        android:text="@string/delay_label"
-	    />
-		<EditText
-		    android:id="@+id/delay_edit"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-		    android:inputType="number"
-	        android:singleLine="true"
-	        android:hint="@string/delay_hint"
-		    android:maxLength="4"
-		    android:ems="4"
-	    />
-    </LinearLayout>
-	
-    <LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-    >
-		<TextView
-		    android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-			android:textSize="18sp"
-	        android:text="@string/launch_app_label"
-	    />
-		<Spinner
-		    android:id="@+id/launch_intent"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		/>
-    </LinearLayout>
+		android:layout_marginBottom="8dp"
+	/>
 	
 </LinearLayout>

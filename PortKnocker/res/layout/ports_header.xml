@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+>
+
+    <TextView
+        android:text="@string/port_label"
+        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+		android:paddingTop="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginRight="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="4dp"
+        style="@style/labelSmall"
+    />
+    <!-- i don't know how to properly line this up with the protocol spinner other than specifying a hardcoded layout_width in the above textview -->
+    <TextView
+        android:text="@string/protocol_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+		android:paddingTop="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginRight="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="4dp"
+        style="@style/labelSmall"
+    />
+    
+</LinearLayout>

@@ -4,16 +4,16 @@
     <string name="host_tab_name">Host</string>
     <string name="ports_tab_name">Ports</string>
     <string name="misc_tab_name">Other</string>
-    <string name="host_label_label">Label:</string>
+    <string name="host_label_label">Label</string>
     <string name="host_label_hint">Label</string>
-    <string name="host_name_label">Hostname or IP:</string>
+    <string name="host_name_label">Hostname/IP</string>
     <string name="host_name_hint">domain.com/192.168.10.1</string>
-    <string name="port_label">Port:</string>
+    <string name="port_label">Port</string>
     <string name="port_hint">1234</string>
-    <string name="protocol_label">Protocol:</string>
-    <string name="delay_label">Delay (ms):</string>
+	<string name="protocol_label">Protocol</string>
+    <string name="delay_label">Delay (ms)</string>
     <string name="delay_hint">1000</string>
-    <string name="launch_app_label">Launch Application:</string>
+    <string name="launch_app_label">Launch Application</string>
     <string name="confirm_dialog_confirm">Yes</string>
     <string name="confirm_dialog_cancel">No</string>
     <string name="confirm_dialog_delete_host_title">Delete host?</string>
@@ -30,5 +30,4 @@
     <string name="pref_key_hide_ports_widget_summary">Port sequence will not be displayed in widgets</string>
     <string name="settings_subtitle">Settings</string>
     <string name="empty_list">There are no items</string>
-   
 </resources>
