@@ -14,14 +14,14 @@ public class ProgressDialogFragment extends DialogFragment {
 	private static final String KEY_MESSAGE = "message";
 	private static final String KEY_INDETERMINATE = "indeterminate";
 	private static final String KEY_STYLE = "style";
+	private static final String KEY_MAX = "max";
 	
 	ProgressDialog mDialog;
 	AsyncTask<?, ?, ?> mAsyncTask;
 	
 	int mDialogProgress = 0;
-	int mDialogMax = 0;
 	
-    public static ProgressDialogFragment newInstance(AsyncTask<?, ?, ?> asyncTask, String message, boolean indeterminate, int style) {
+    public static ProgressDialogFragment newInstance(AsyncTask<?, ?, ?> asyncTask, String message, boolean indeterminate, int style, int max) {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
         fragment.mAsyncTask = asyncTask;
         
@@ -29,13 +29,14 @@ public class ProgressDialogFragment extends DialogFragment {
         args.putString(KEY_MESSAGE, message);
         args.putBoolean(KEY_INDETERMINATE, indeterminate);
         args.putInt(KEY_STYLE, style);
+        args.putInt(KEY_MAX, max);
         fragment.setArguments(args);
         
         return fragment;
     }
     
     public static ProgressDialogFragment newInstance(String message, boolean indeterminate, int style) {
-    	return newInstance(null, message, indeterminate, style);
+    	return newInstance(null, message, indeterminate, style, 100);
     }
     
 	@Override
@@ -55,7 +56,7 @@ public class ProgressDialogFragment extends DialogFragment {
 		mDialog.setMessage(getArguments().getString(KEY_MESSAGE));
 		mDialog.setIndeterminate(getArguments().getBoolean(KEY_INDETERMINATE));
 		mDialog.setProgressStyle(getArguments().getInt(KEY_STYLE));
-		mDialog.setMax(mDialogMax);
+		mDialog.setMax(getArguments().getInt(KEY_MAX));
 		return mDialog;
 	}
 	
@@ -69,7 +70,6 @@ public class ProgressDialogFragment extends DialogFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		mDialogProgress = mDialog.getProgress();
-		mDialogMax = mDialog.getMax();
 	}
 	
 	@Override

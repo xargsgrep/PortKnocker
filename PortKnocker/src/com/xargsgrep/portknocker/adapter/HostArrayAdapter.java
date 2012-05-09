@@ -71,7 +71,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host> {
 			@Override
 			public void onClick(View v) {
 				Host host = getItem(fPosition);
-				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(activity);
+				KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(activity, host.getPorts().size());
 				knockerAsyncTask.execute(host);
 			}
 		});

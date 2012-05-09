@@ -52,7 +52,7 @@ public class HostListActivity extends SherlockFragmentActivity {
 			Long hostId = extras.getLong("hostId");
 			Host host = hostDataManager.getHost(hostId);
 			
-			KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(this);
+			KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(this, host.getPorts().size());
 			knockerAsyncTask.execute(host);
 		}
     }

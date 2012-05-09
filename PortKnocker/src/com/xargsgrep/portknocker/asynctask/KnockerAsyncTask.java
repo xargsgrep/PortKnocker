@@ -19,9 +19,11 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 	
 	FragmentActivity activity;
+	int progressMax;
 	
-	public KnockerAsyncTask(FragmentActivity activity) {
+	public KnockerAsyncTask(FragmentActivity activity, int progressMax) {
 		this.activity = activity;
+		this.progressMax = progressMax;
 	}
 
 	@Override
@@ -33,25 +35,14 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
     	if (prev != null) ft.remove(prev);
     	ft.addToBackStack(null);
     	
-		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(this, activity.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL);
+		ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(this, activity.getString(R.string.progress_dialog_sending_packets), false, ProgressDialog.STYLE_HORIZONTAL, progressMax);
 		dialogFragment.setCancelable(true);
 		dialogFragment.show(ft, ProgressDialogFragment.TAG);
 	}
 	
 	@Override
 	protected KnockResult doInBackground(Host... params) {
-		FragmentManager fragmentManager = activity.getSupportFragmentManager();
 		Host host = params[0];
-		
-		while (true) {
-			// sometimes the ui thread has not instantiated the dialog when it reaches this point, so wait until it has been
-			ProgressDialogFragment dialogFragment = (ProgressDialogFragment) fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
-			if (dialogFragment != null && dialogFragment.getDialog() != null) {
-				((ProgressDialog) dialogFragment.getDialog()).setMax(host.getPorts().size());
-				break;
-			}
-		}
-		
 		// pass in 'this' so the progress dialog can be updated
 		return Knocker.doKnock(host, this);
 	}
