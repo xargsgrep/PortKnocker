@@ -66,7 +66,7 @@ public class HostWidget extends AppWidgetProvider {
         
 			Intent intent = new Intent(context, HostListActivity.class);
 			intent.putExtra("hostId", widgetHostId);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 			views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 		
 	        views.setTextViewText(R.id.widget_host_label, host.getLabel());
@@ -87,7 +87,7 @@ public class HostWidget extends AppWidgetProvider {
     		views.setViewVisibility(R.id.widget_host_ports, View.GONE);
     		
 			Intent intent = new Intent(context, HostListActivity.class);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 			views.setOnClickPendingIntent(R.id.widget, pendingIntent);
     	}
 

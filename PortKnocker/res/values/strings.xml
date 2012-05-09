@@ -29,4 +29,6 @@
     <string name="pref_key_hide_ports_widget_title">Hide ports in widget</string>
     <string name="pref_key_hide_ports_widget_summary">Port sequence will not be displayed in widgets</string>
     <string name="settings_subtitle">Settings</string>
+    <string name="empty_list">There are no items</string>
+   
 </resources>
