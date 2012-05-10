@@ -51,6 +51,6 @@
         android:paddingBottom="8dp"
         android:paddingRight="8dp"
         android:scaleType="center"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/selectable_item_background"
     />
 </LinearLayout>
