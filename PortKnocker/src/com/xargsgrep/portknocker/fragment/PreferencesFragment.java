@@ -19,7 +19,7 @@ public class PreferencesFragment extends PreferenceFragment implements OnSharedP
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (getString(R.string.pref_key_hide_ports_widget).equals(key)) {
+		if (isAdded() && getString(R.string.pref_key_hide_ports_widget).equals(key)) {
 			HostWidget.updateAllAppWidgets(getActivity());
 		}
 	}
