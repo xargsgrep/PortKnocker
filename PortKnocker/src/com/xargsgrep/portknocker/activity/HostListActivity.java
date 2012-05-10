@@ -1,6 +1,7 @@
 package com.xargsgrep.portknocker.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
@@ -72,9 +73,16 @@ public class HostListActivity extends SherlockFragmentActivity {
 		        startActivity(editHostIntent);
 		        return true;
 	    	case MENU_ITEM_ID_SETTINGS:
-				Intent settingsIntent = new Intent(this, SettingsActivity.class);
-				settingsIntent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
-				settingsIntent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, PreferencesFragment.class.getName());
+	    		Intent settingsIntent = null;
+	    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+	    			// PreferenceFragment is not part of the compatibility package
+					settingsIntent = new Intent(this, SettingsActivityCompat.class);
+	    		}
+	    		else {
+					settingsIntent = new Intent(this, SettingsActivity.class);
+					settingsIntent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
+					settingsIntent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, PreferencesFragment.class.getName());
+	    		}
 		        startActivity(settingsIntent);
 		        return true;
 		    default:
