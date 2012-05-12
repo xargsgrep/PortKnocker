@@ -1,6 +1,5 @@
 package com.xargsgrep.portknocker.fragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,8 +71,7 @@ public class PortsFragment extends SherlockListFragment {
 			setListAdapter(portAdapter);
     	}
     	else if (portAdapter == null) {
-    		List<Port> ports = new ArrayList<Port>();
-    		ports.add(new Port());
+    		List<Port> ports = Arrays.asList(new Port(), new Port(), new Port());
 			portAdapter = new PortArrayAdapter(getActivity(), ports);
 			setListAdapter(portAdapter);
     	}
