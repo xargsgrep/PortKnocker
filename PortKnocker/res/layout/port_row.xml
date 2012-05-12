@@ -20,7 +20,7 @@
     >
 		<EditText
 		    android:id="@+id/port_row_port"
-		    android:layout_width="wrap_content"
+        	android:layout_width="100dp"
 		    android:layout_height="wrap_content"
 		    android:inputType="number"
 		    android:singleLine="true"
