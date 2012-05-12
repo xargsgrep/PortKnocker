@@ -1,5 +1,6 @@
 package com.xargsgrep.portknocker.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +25,10 @@ public class HostListActivity extends SherlockFragmentActivity {
 	private static final int MENU_ITEM_ID_ADD = 1;
 	private static final int MENU_ITEM_ID_SETTINGS = 2;
 	
+	private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
+	
 	DatabaseManager databaseManager;
+	AlertDialog deleteDialog;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,10 @@ public class HostListActivity extends SherlockFragmentActivity {
 			
 			KnockerAsyncTask knockerAsyncTask = new KnockerAsyncTask(this, host.getPorts().size());
 			knockerAsyncTask.execute(host);
+		}
+		else if (savedInstanceState != null) {
+        	if (savedInstanceState.getBoolean(KEY_SHOW_DELETE_DIALOG))
+        		((HostListFragment) hostListFragment).showDeleteDialog();
 		}
     }
     
@@ -88,6 +96,22 @@ public class HostListActivity extends SherlockFragmentActivity {
 		    default:
 		    	return super.onOptionsItemSelected(item);
     	}
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	outState.putBoolean(KEY_SHOW_DELETE_DIALOG, (deleteDialog != null && deleteDialog.isShowing()));
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	if (deleteDialog != null && deleteDialog.isShowing()) deleteDialog.dismiss();
+    	super.onDestroy();
+    }
+    
+    public void setDeleteDialog(AlertDialog deleteDialog) {
+    	this.deleteDialog = deleteDialog;
     }
     
 }

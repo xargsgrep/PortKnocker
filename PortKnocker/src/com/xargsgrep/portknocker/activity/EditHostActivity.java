@@ -33,11 +33,6 @@ import com.xargsgrep.portknocker.widget.HostWidget;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
 	
-	DatabaseManager databaseManager;
-    
-    // null when creating a new host
-    private Long hostId;
-    
 	//public static final int MENU_ITEM_CANCEL = 1;
 	public static final int MENU_ITEM_SAVE = 2;
 	public static final int MENU_ITEM_ADD_PORT = 3;
@@ -49,11 +44,17 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public static final String KEY_HOST_ID = "hostId";
 	public static final String KEY_SELECTED_TAB_INDEX = "selectedTabIndex";
 	public static final String KEY_SAVE_HOST_RESULT = "saveHostResult";
+	public static final String KEY_SHOW_CANCEL_DIALOG = "showCancelDialog";
 	
     private static final int MAX_PORT_VALUE = 65535;
     private static final int MAX_DELAY_VALUE = 10000;
 
 	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
+	
+	DatabaseManager databaseManager;
+	AlertDialog cancelDialog;
+    // null when creating a new host
+    private Long hostId;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         
         if (savedInstanceState != null) {
         	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(KEY_SELECTED_TAB_INDEX));
+        	if (savedInstanceState.getBoolean(KEY_SHOW_CANCEL_DIALOG)) showCancelDialog();
         }
     }
     
@@ -158,6 +160,13 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     protected void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
     	outState.putInt(KEY_SELECTED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
+    	outState.putBoolean(KEY_SHOW_CANCEL_DIALOG, (cancelDialog != null && cancelDialog.isShowing()));
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	if (cancelDialog != null && cancelDialog.isShowing()) cancelDialog.dismiss();
+    	super.onDestroy();
     }
     
     private void saveHost() {
@@ -268,7 +277,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     		}
         );
         
-        dialogBuilder.create().show();
+        cancelDialog = dialogBuilder.create();
+        cancelDialog.show();
     }
 
 	@Override
