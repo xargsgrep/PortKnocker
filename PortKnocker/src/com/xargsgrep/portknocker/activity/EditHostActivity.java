@@ -151,7 +151,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    		saveHost();
 	    		return true;
 		    default:
-		    	// so fragment onOptionsItemSelected methods get called
+		    	// so PortsFragment.onOptionsItemSelected methods get called
 		    	return false;
     	}
     }
@@ -173,13 +173,15 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
 		PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
 		MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
-    	
+		
     	Host host = (hostId == null) ? new Host() : databaseManager.getHost(hostId);
     	
     	host.setLabel(hostFragment.getHostLabelEditText().getText().toString());
     	host.setHostname(hostFragment.getHostnameEditText().getText().toString());
     	
 		if (portsFragment != null) { // could be null if user saves without going to ports tab
+			// hackish, but if user clicks save while focused in a port EditText it won't get saved because that's done onFocusChange
+			portsFragment.clearFoci();
 			host.getPorts().clear();
 			
 			List<Port> ports = ((PortArrayAdapter) portsFragment.getListAdapter()).getPorts();
@@ -219,24 +221,24 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		
 		String errorText = "";
 		if (StringUtils.isBlank(host.getLabel())) {
-			errorText = "Please enter a label";
+			errorText = getString(R.string.toast_msg_enter_label);
 		}
 		else if (StringUtils.isBlank(host.getHostname())) {
-			errorText = "Please enter a hostname";
+			errorText = getString(R.string.toast_msg_enter_hostname);
 		}
 		else if (!validHostname && !validIP) {
-			errorText = "Invalid hostname/IP";
+			errorText = getString(R.string.toast_msg_invalid_hostname);
 		}
 		else if (host.getPorts() == null || host.getPorts().size() == 0) {
-			errorText = "Please enter at least one port";
+			errorText = getString(R.string.toast_msg_enter_port);
 		}
 		else if (host.getDelay() > MAX_DELAY_VALUE) {
-			errorText = "Delay can't be more than " + MAX_DELAY_VALUE;
+			errorText = getString(R.string.toast_msg_delay_max_value) + MAX_DELAY_VALUE;
 		}
 		else {
 			for (Port port : host.getPorts()) {
 				if (port.getPort() > MAX_PORT_VALUE) {
-					errorText = "Invalid port: " + port.getPort();
+					errorText = getString(R.string.toast_msg_invalid_port) + port.getPort();
 					break;
 				}
 			}

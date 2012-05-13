@@ -48,7 +48,7 @@ public class HostListActivity extends SherlockFragmentActivity {
 		Bundle extras = getIntent().getExtras();
 		if (BundleUtils.contains(extras, EditHostActivity.KEY_SAVE_HOST_RESULT) && savedInstanceState == null) {
 			Boolean saveResult = extras.getBoolean(EditHostActivity.KEY_SAVE_HOST_RESULT);
-			Toast.makeText(this, getResources().getString(saveResult ? R.string.save_success : R.string.save_failure), Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(saveResult ? R.string.toast_msg_save_success : R.string.toast_msg_save_failure), Toast.LENGTH_SHORT).show();
 		}
 		
 		if (BundleUtils.contains(extras, "hostId") && savedInstanceState == null) {

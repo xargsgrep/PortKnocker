@@ -25,10 +25,12 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class PortArrayAdapter extends ArrayAdapter<Port> {
 	
+	Context context;
 	List<Port> ports;
 
 	public PortArrayAdapter(Context context, List<Port> ports) {
 		super(context, -1, ports);
+		this.context = context;
 		this.ports = ports;
 	}
 	
@@ -88,7 +90,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 			@Override
 			public void onClick(View v) {
 				if (getCount() == 1) {
-					Toast toast = Toast.makeText(getContext(), "Can't delete all ports!", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(getContext(), context.getString(R.string.toast_msg_delete_all_ports), Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL, 0, 0);
 					toast.show();
 				}

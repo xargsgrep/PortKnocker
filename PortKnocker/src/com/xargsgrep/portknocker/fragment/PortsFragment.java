@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -101,6 +102,14 @@ public class PortsFragment extends SherlockListFragment {
     public void onSaveInstanceState(Bundle outState) {
     	super.onSaveInstanceState(outState);
 		savedInstanceState = true;
+    }
+    
+    public void clearFoci() {
+    	ListView view = getListView();
+    	for (int i=0; i<view.getChildCount(); i++) {
+    		View row = view.getChildAt(i);
+    		row.findViewById(R.id.port_row_port).clearFocus();
+    	}
     }
     
     private void addPort() {

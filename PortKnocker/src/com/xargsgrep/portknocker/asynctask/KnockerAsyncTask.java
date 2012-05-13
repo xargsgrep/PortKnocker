@@ -60,18 +60,18 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult> {
 				activity.startActivity(launchIntent);
 			}
 			else {
-				showToast("Knocking complete!");
+				showToast(activity.getString(R.string.toast_msg_knocking_complete));
 			}
 		}
 		else {
-			showToast("Knocking failed: " + result.getError());
+			showToast(activity.getString(R.string.toast_msg_knocking_failed) + result.getError());
 		}
 	}
 	
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
-		showToast("Knocking canceled");
+		showToast(activity.getString(R.string.toast_msg_knocking_canceled));
 	}
 	
 	@Override
