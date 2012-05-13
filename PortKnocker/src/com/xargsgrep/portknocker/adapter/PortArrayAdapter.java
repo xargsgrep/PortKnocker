@@ -71,7 +71,8 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 			public void onFocusChange(View view, boolean hasFocus) {
 				if (!hasFocus) {
 					String portStr = ((EditText) view).getText().toString();
-					ports.get(fPosition).setPort((StringUtils.isNotBlank(portStr)) ? Integer.parseInt(portStr) : -1);
+					// if fPosition is out of bounds, it means the last row was focused and a row before it was deleted
+					ports.get((fPosition >= getCount()) ? fPosition-1 : fPosition).setPort((StringUtils.isNotBlank(portStr)) ? Integer.parseInt(portStr) : -1);
 				}
 			}
 		});
