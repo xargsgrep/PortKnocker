@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	android:paddingTop="8dp"
+	android:paddingBottom="8dp"
+	android:layout_marginLeft="8dp"
+	android:layout_marginRight="8dp"
+	android:layout_marginTop="8dp"
+>
+
+    <TextView
+        android:text="@string/delay_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/labelSmall"
+    />
+	<EditText
+	    android:id="@+id/delay_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:inputType="number"
+		android:layout_marginBottom="8dp"
+        android:singleLine="true"
+        android:hint="@string/delay_hint"
+	    android:maxLength="4"
+	    android:ems="4"
+    />
+
+    <TextView
+        android:text="@string/launch_app_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/labelSmall"
+    />
+	<Spinner
+	    android:id="@+id/launch_intent"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+	/>
+	
+</LinearLayout>

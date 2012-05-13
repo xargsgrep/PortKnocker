@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Miscellaneous">
+        <CheckBoxPreference
+            android:key="@string/pref_key_hide_ports"
+            android:defaultValue="false"
+            android:title="@string/pref_key_hide_ports_title"
+            android:summary="@string/pref_key_hide_ports_summary"
+        />
+        <CheckBoxPreference
+            android:key="@string/pref_key_hide_ports_widget"
+            android:defaultValue="false"
+            android:title="@string/pref_key_hide_ports_widget_title"
+            android:summary="@string/pref_key_hide_ports_widget_summary"
+        />
+    </PreferenceCategory>
+
+</PreferenceScreen>
