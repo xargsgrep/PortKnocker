@@ -1,0 +1,4 @@
+key.store=/path/to/android-release.keystore
+key.alias=keystore_alias
+key.store.password=password
+key.alias.password=password
