@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -92,6 +93,9 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 					toast.show();
 				}
 				else {
+					LinearLayout parent = (LinearLayout) v.getParent();
+					EditText dPortView = (EditText) parent.findViewById(R.id.port_row_port);
+					dPortView.setOnFocusChangeListener(null);
 					remove(getItem(fPosition));
 				}
 			}
