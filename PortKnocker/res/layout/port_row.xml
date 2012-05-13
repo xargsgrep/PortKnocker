@@ -43,7 +43,7 @@
     />
     <ImageButton
         android:id="@+id/port_row_delete"
-        android:src="@drawable/ic_menu_delete"
+        android:src="@drawable/ic_menu_cancel"
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:paddingLeft="8dp"
