@@ -1,5 +1,6 @@
 package com.xargsgrep.portknocker.fragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class PortsFragment extends SherlockListFragment {
 	public static final String TAG = "PortsFragment";
 	
     DatabaseManager databaseManager;
-    
     PortArrayAdapter portAdapter;
     boolean savedInstanceState = false;
 	
@@ -51,7 +51,7 @@ public class PortsFragment extends SherlockListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.list_view, container, false);
-    	View header = getActivity().getLayoutInflater().inflate(R.layout.ports_header, null);
+    	View header = inflater.inflate(R.layout.ports_header, null);
     	((LinearLayout) view).addView(header, 0);
     	return view;
     }
@@ -62,17 +62,21 @@ public class PortsFragment extends SherlockListFragment {
     	
     	Bundle args = getArguments();
     	
+		List<Port> defaultPorts = new ArrayList<Port>();
+		defaultPorts.add(new Port());
+		defaultPorts.add(new Port());
+		defaultPorts.add(new Port());
+    	
     	if (args != null && !this.savedInstanceState) {
     		// only restore state from args if onSaveInstanceState hasn't been invoked
     		Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
     		Host host = databaseManager.getHost(hostId);
-    		List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : Arrays.asList(new Port());
+    		List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : defaultPorts;
 			portAdapter = new PortArrayAdapter(getActivity(), ports);
 			setListAdapter(portAdapter);
     	}
     	else if (portAdapter == null) {
-    		List<Port> ports = Arrays.asList(new Port(), new Port(), new Port());
-			portAdapter = new PortArrayAdapter(getActivity(), ports);
+			portAdapter = new PortArrayAdapter(getActivity(), defaultPorts);
 			setListAdapter(portAdapter);
     	}
     }
