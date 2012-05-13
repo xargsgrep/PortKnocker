@@ -6,6 +6,9 @@
          Version Control Systems. -->
     <loadproperties srcFile="local.properties" />
 
+    <!-- Contains information about the keystore used for signing a release apk  -->
+    <property file="build.properties" />
+ 
     <!-- The ant.properties file can be created by you. It is only edited by the
          'android' tool to add properties to it.
          This is the place to change some Ant specific build properties.
