@@ -14,18 +14,13 @@ public class Port {
 	
 	private long hostId;
 	private int index;
-	private int port;
+	private int port = -1;
 	private Protocol protocol = Protocol.TCP;
 	
 	public static enum Protocol { TCP, UDP }
 	
 	public Port() { }
 	
-	public Port(int port, Protocol protocol) {
-		this.port = port;
-		this.protocol = protocol;
-	}
-
 	public long getHostId() {
 		return hostId;
 	}

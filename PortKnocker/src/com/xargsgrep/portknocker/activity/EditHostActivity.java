@@ -196,7 +196,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 			
 			List<Port> ports = ((PortArrayAdapter) portsFragment.getListAdapter()).getPorts();
 			for (Port port : ports) {
-				if (port.getPort() > 0) host.getPorts().add(port);
+				if (port.getPort() > -1) host.getPorts().add(port);
 			}
 		}
     	

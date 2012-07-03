@@ -72,7 +72,7 @@ public class PortArrayAdapter extends ArrayAdapter<Port> {
 		protocolSpinner.setAdapter(protocolAdapter);
 		
 		Port port = ports.get(position);
-		portView.setText((port.getPort() > 0) ? new Integer(port.getPort()).toString() : "");
+		portView.setText((port.getPort() > -1) ? Integer.valueOf(port.getPort()).toString() : "");
 		protocolSpinner.setSelection(port.getProtocol().ordinal());
 		
 		final int fPosition = position;
