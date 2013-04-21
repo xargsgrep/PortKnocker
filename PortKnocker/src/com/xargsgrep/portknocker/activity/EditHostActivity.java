@@ -46,6 +46,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	//public static final int MENU_ITEM_CANCEL = 1;
 	public static final int MENU_ITEM_SAVE = 2;
 	public static final int MENU_ITEM_ADD_PORT = 3;
+	public static final int MENU_ITEM_DEBUG_INFO = 4;
 	
 	public static final int TAB_INDEX_HOST = 0;
 	public static final int TAB_INDEX_PORTS = 1;
@@ -59,7 +60,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     private static final int MAX_PORT_VALUE = 65535;
     private static final int MAX_DELAY_VALUE = 10000;
 
-	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
+//	private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 	
 	DatabaseManager databaseManager;
 	AlertDialog cancelDialog;
@@ -145,6 +146,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//menu.add(Menu.NONE, MENU_ITEM_CANCEL, 1, "Cancel").setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_menu_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(Menu.NONE, MENU_ITEM_DEBUG_INFO, 3, "Debug Info").setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         return true;
 	}
 
@@ -160,6 +162,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 	    	case MENU_ITEM_SAVE:
 	    		saveHost();
 	    		return true;
+	    	case MENU_ITEM_DEBUG_INFO:
+	    		Toast.makeText(this, "Host ID: " + hostId, Toast.LENGTH_LONG).show();
+		    	return false;
 		    default:
 		    	// so PortsFragment.onOptionsItemSelected methods get called
 		    	return false;
@@ -226,8 +231,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     }
     
     private boolean validateAndDisplayErrors(Host host) {
-		boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
-		boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
+//		boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
+//		boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
 		
 		String errorText = "";
 		if (StringUtils.isBlank(host.getLabel())) {
@@ -236,9 +241,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 		else if (StringUtils.isBlank(host.getHostname())) {
 			errorText = getString(R.string.toast_msg_enter_hostname);
 		}
-		else if (!validHostname && !validIP) {
-			errorText = getString(R.string.toast_msg_invalid_hostname);
-		}
+//		else if (!validHostname && !validIP) {
+//			errorText = getString(R.string.toast_msg_invalid_hostname);
+//		}
 		else if (host.getPorts() == null || host.getPorts().size() == 0) {
 			errorText = getString(R.string.toast_msg_enter_port);
 		}
