@@ -4,36 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:orientation="horizontal"
     android:gravity="center_vertical"
->
+    android:orientation="horizontal"
+    >
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_marginLeft="8dp"
-    >
-	    <TextView
-	        android:text="@string/port_label"
-	        android:layout_width="100dp"
-	        android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginBottom="4dp"
-	        style="@style/labelSmall"
-	    />
-	    <TextView
-	        android:text="@string/protocol_label"
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-			android:paddingTop="8dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginBottom="4dp"
-	        style="@style/labelSmall"
-	    />
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            style="@style/labelSmall"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/port_label"
+            />
+
+        <TextView
+            style="@style/labelSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/protocol_label"
+            />
     </LinearLayout>
-    
+
 </LinearLayout>
