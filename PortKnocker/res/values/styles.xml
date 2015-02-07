@@ -1,12 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-	
-	<style name="labelSmall">
-		<item name="android:textSize">13sp</item>
-		<item name="android:textColor">#FFAAAAAA</item>
-		<item name="android:textAllCaps">true</item>
-		<item name="android:minHeight">24dip</item>
-		<item name="android:layout_width">144dip</item>
-		<item name="android:layout_marginBottom">-6dip</item>
-	</style>
-</resources>

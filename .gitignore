@@ -1,5 +1,5 @@
-.metadata
-*/bin
-*/gen
-*/local.properties
-*/build.properties
+.gradle
+.idea
+*.iml
+local.properties
+build
