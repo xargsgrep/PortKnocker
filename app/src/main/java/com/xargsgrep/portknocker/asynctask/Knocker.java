@@ -35,7 +35,6 @@ import com.xargsgrep.portknocker.utils.StringUtils;
 public class Knocker
 {
     private static final String ENETUNREACH = "ENETUNREACH";
-    private static final int TCP_SOCKET_TIMEOUT = 1;
 
     public static KnockResult doKnock(Host host, KnockerAsyncTask asyncTask)
     {
@@ -43,7 +42,7 @@ public class Knocker
         for (int i = 0; i < host.getPorts().size(); i++)
         {
             Port port = host.getPorts().get(i);
-            result = doKnock(host.getHostname(), port);
+            result = doKnock(host, port);
 
             if (result.isSuccess())
             {
@@ -90,9 +89,9 @@ public class Knocker
      * router/firewall port open, socket closed & DROP packet --> no exception
      *
      */
-    private static KnockResult doKnock(String hostname, Port port)
+    private static KnockResult doKnock(Host host, Port port)
     {
-        SocketAddress socketAddress = new InetSocketAddress(hostname, port.getPort());
+        SocketAddress socketAddress = new InetSocketAddress(host.getHostname(), port.getPort());
 
         Socket socket = null;
         DatagramSocket datagramSocket = null;
@@ -103,12 +102,10 @@ public class Knocker
                 socket = new Socket();
                 // set timeout to the lowest possible value since we just want to transmit a packet, we don't care about receiving a syn-ack.
                 // this also prevents multiple syn packets being sent (invalidating knock sequence) while waiting for the timeout (if it's high enough)
-//                socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
-                socket.connect(socketAddress, 500);
+                socket.connect(socketAddress, host.getTcpConnectTimeout());
             }
             else
-            {
-                // Protocol.UDP
+            { // PROTOCOL.UDP
                 datagramSocket = new DatagramSocket();
                 byte[] data = new byte[] {0};
                 datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
@@ -153,14 +150,6 @@ public class Knocker
         }
 
         return new KnockResult(true, null);
-    }
-
-    public static void main(String[] args)
-    {
-        doKnock("10.0.0.8", new Port(1111, Protocol.TCP));
-        doKnock("10.0.0.8", new Port(1111, Protocol.UDP));
-        doKnock("10.0.0.8", new Port(3333, Protocol.TCP));
-        doKnock("10.0.0.8", new Port(4444, Protocol.TCP));
     }
 
     public static class KnockResult
