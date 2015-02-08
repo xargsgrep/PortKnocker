@@ -34,8 +34,6 @@ public class HostFragment extends Fragment
     public static final String TAG = "HostFragment";
 
     private DatabaseManager databaseManager;
-
-    private boolean savedInstanceState = false;
     private String hostLabel;
     private String hostname;
 
@@ -55,7 +53,6 @@ public class HostFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         databaseManager = new DatabaseManager(getActivity());
     }
 
@@ -75,13 +72,7 @@ public class HostFragment extends Fragment
         EditText hostnameEdit = getHostnameEditText();
 
         Bundle args = getArguments();
-
-        if (this.savedInstanceState)
-        {
-            hostLabelEdit.setText(hostLabel);
-            hostnameEdit.setText(hostname);
-        }
-        else if (args != null)
+        if (args != null)
         {
             Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
             Host host = databaseManager.getHost(hostId);
@@ -89,28 +80,38 @@ public class HostFragment extends Fragment
             hostnameEdit.setText(host.getHostname());
         }
 
+//        hostLabelEdit.setText(hostLabel);
+//        hostnameEdit.setText(hostname);
+
         hostnameEdit.setFilters(new InputFilter[] {hostnameCharacterFilter});
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
+    public void onPause()
     {
-        super.onSaveInstanceState(outState);
-
+        super.onPause();
         hostLabel = getHostLabelEditText().getText().toString();
         hostname = getHostnameEditText().getText().toString();
-
-        savedInstanceState = true;
     }
 
-    public EditText getHostLabelEditText()
+    public String getHostLabel()
     {
-        return (EditText) getView().findViewById(R.id.host_label_edit);
+        return (getHostLabelEditText() != null) ? getHostLabelEditText().getText().toString() : hostLabel;
     }
 
-    public EditText getHostnameEditText()
+    public String getHostname()
     {
-        return (EditText) getView().findViewById(R.id.host_name_edit);
+        return (getHostnameEditText() != null) ? getHostnameEditText().getText().toString() : hostname;
+    }
+
+    private EditText getHostLabelEditText()
+    {
+        return (getView() != null) ? (EditText) getView().findViewById(R.id.host_label_edit) : null;
+    }
+
+    private EditText getHostnameEditText()
+    {
+        return (getView() != null) ? (EditText) getView().findViewById(R.id.host_name_edit) : null;
     }
 
     private InputFilter hostnameCharacterFilter = new InputFilter()

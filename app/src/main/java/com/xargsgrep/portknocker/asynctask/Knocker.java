@@ -103,10 +103,12 @@ public class Knocker
                 socket = new Socket();
                 // set timeout to the lowest possible value since we just want to transmit a packet, we don't care about receiving a syn-ack.
                 // this also prevents multiple syn packets being sent (invalidating knock sequence) while waiting for the timeout (if it's high enough)
-                socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
+//                socket.connect(socketAddress, TCP_SOCKET_TIMEOUT);
+                socket.connect(socketAddress, 500);
             }
             else
-            { // PROTOCOL.UDP
+            {
+                // Protocol.UDP
                 datagramSocket = new DatagramSocket();
                 byte[] data = new byte[] {0};
                 datagramSocket.send(new DatagramPacket(data, data.length, socketAddress));
@@ -151,6 +153,14 @@ public class Knocker
         }
 
         return new KnockResult(true, null);
+    }
+
+    public static void main(String[] args)
+    {
+        doKnock("10.0.0.8", new Port(1111, Protocol.TCP));
+        doKnock("10.0.0.8", new Port(1111, Protocol.UDP));
+        doKnock("10.0.0.8", new Port(3333, Protocol.TCP));
+        doKnock("10.0.0.8", new Port(4444, Protocol.TCP));
     }
 
     public static class KnockResult

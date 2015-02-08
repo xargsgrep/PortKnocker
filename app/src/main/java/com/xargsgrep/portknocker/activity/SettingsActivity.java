@@ -20,9 +20,11 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.fragment.PreferencesFragment;
 
 public class SettingsActivity extends PreferenceActivity
 {
@@ -34,6 +36,12 @@ public class SettingsActivity extends PreferenceActivity
         getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected boolean isValidFragment(String fragmentName)
+    {
+        return PreferencesFragment.class.getCanonicalName().equals(fragmentName);
     }
 
     @Override

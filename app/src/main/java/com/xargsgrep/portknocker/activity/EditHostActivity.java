@@ -15,7 +15,9 @@
  */
 package com.xargsgrep.portknocker.activity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -75,30 +77,33 @@ public class EditHostActivity extends FragmentActivity
         @Override
         public Fragment getItem(int position)
         {
-            Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
-            Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
-            Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
+//            HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_HOST));
+//            PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_PORTS));
+//            MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_MISC));
 
             switch (position)
             {
                 case TAB_INDEX_HOST:
-                    if (hostFragment == null)
-                    {
-                        hostFragment = HostFragment.newInstance(hostId);
-                    }
-                    return hostFragment;
+                    return HostFragment.newInstance(hostId);
+//                    if (hostFragment == null)
+//                    {
+//                        hostFragment = HostFragment.newInstance(hostId);
+//                    }
+//                    return hostFragment;
                 case TAB_INDEX_PORTS:
-                    if (portsFragment == null)
-                    {
-                        portsFragment = PortsFragment.newInstance(hostId);
-                    }
-                    return portsFragment;
+                    return PortsFragment.newInstance(hostId);
+//                    if (portsFragment == null)
+//                    {
+//                        portsFragment = PortsFragment.newInstance(hostId);
+//                    }
+//                    return portsFragment;
                 case TAB_INDEX_MISC:
-                    if (miscFragment == null)
-                    {
-                        miscFragment = MiscFragment.newInstance(hostId);
-                    }
-                    return miscFragment;
+                    return MiscFragment.newInstance(hostId);
+//                    if (miscFragment == null)
+//                    {
+//                        miscFragment = MiscFragment.newInstance(hostId);
+//                    }
+//                    return miscFragment;
                 default:
                     throw new RuntimeException("Invalid position");
             }
@@ -153,7 +158,7 @@ public class EditHostActivity extends FragmentActivity
 
         if (savedInstanceState != null)
         {
-            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(KEY_SELECTED_TAB_INDEX));
+//            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(KEY_SELECTED_TAB_INDEX));
             if (savedInstanceState.getBoolean(KEY_SHOW_CANCEL_DIALOG)) showCancelDialog();
         }
     }
@@ -255,16 +260,20 @@ public class EditHostActivity extends FragmentActivity
         super.onDestroy();
     }
 
+    private String getFragmentTag(int position) {
+        return String.format("android:switcher:%d:%d", viewPager.getId(), position);
+    }
+
     private void saveHost()
     {
-        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
-        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
-        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
+        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_HOST));
+        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_PORTS));
+        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_MISC));
 
         Host host = (hostId == null) ? new Host() : databaseManager.getHost(hostId);
 
-        host.setLabel(hostFragment.getHostLabelEditText().getText().toString());
-        host.setHostname(hostFragment.getHostnameEditText().getText().toString());
+        host.setLabel(hostFragment.getHostLabel());
+        host.setHostname(hostFragment.getHostname());
 
         if (portsFragment != null)
         {
@@ -283,7 +292,7 @@ public class EditHostActivity extends FragmentActivity
         if (miscFragment != null)
         {
             // could be null if user saves without going to misc tab
-            String delayStr = miscFragment.getDelayEditText().getText().toString();
+            String delayStr = miscFragment.getDelayStr();
             int delay = (StringUtils.isNotBlank(delayStr)) ? Integer.parseInt(delayStr) : 0;
             host.setDelay(delay);
 
@@ -294,8 +303,7 @@ public class EditHostActivity extends FragmentActivity
         boolean isValid = validateAndDisplayErrors(host);
         if (isValid)
         {
-            boolean saveResult = false;
-
+            boolean saveResult;
             if (hostId == null)
             {
                 saveResult = databaseManager.saveHost(host);

@@ -42,7 +42,9 @@ public class PortsFragment extends ListFragment
 
     private DatabaseManager databaseManager;
     private PortArrayAdapter portAdapter;
-    private boolean savedInstanceState = false;
+    private List<Port> ports = new ArrayList<>(10);
+    private String foo;
+//    private boolean savedInstanceState = false;
 
     public static PortsFragment newInstance(Long hostId)
     {
@@ -60,7 +62,6 @@ public class PortsFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         setHasOptionsMenu(true);
         databaseManager = new DatabaseManager(getActivity());
     }
@@ -82,18 +83,23 @@ public class PortsFragment extends ListFragment
 
         Bundle args = getArguments();
 
-        List<Port> defaultPorts = new ArrayList<Port>();
+        List<Port> defaultPorts = new ArrayList<>();
         defaultPorts.add(new Port());
         defaultPorts.add(new Port());
         defaultPorts.add(new Port());
 
-        if (args != null && !this.savedInstanceState)
+//        if (args != null && !this.savedInstanceState)
+        if (args != null)
         {
             // only restore state from args if onSaveInstanceState hasn't been invoked
             Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
             Host host = databaseManager.getHost(hostId);
-            List<Port> ports = (host.getPorts().size() > 0) ? host.getPorts() : defaultPorts;
-            portAdapter = new PortArrayAdapter(getActivity(), ports);
+//            if (host.getPorts().size() > 0)
+//            {
+//                ports = host.getPorts();
+//            }
+//            ports = (host.getPorts().size() > 0) ? host.getPorts() : ports;
+            portAdapter = new PortArrayAdapter(getActivity(), host.getPorts());
             setListAdapter(portAdapter);
         }
         else if (portAdapter == null)
@@ -124,11 +130,26 @@ public class PortsFragment extends ListFragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
+    public void onPause()
     {
-        super.onSaveInstanceState(outState);
-        savedInstanceState = true;
+        super.onPause();
+        ports = portAdapter.getPorts();
+        foo = "foo";
+        System.out.println();
     }
+
+    public List<Port> getPorts()
+    {
+        foo.length();
+        return portAdapter.getPorts();
+    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState)
+//    {
+//        super.onSaveInstanceState(outState);
+//        savedInstanceState = true;
+//    }
 
     public void clearFoci()
     {

@@ -82,7 +82,9 @@ public class HostListActivity extends FragmentActivity
         else if (savedInstanceState != null)
         {
             if (savedInstanceState.getBoolean(KEY_SHOW_DELETE_DIALOG))
+            {
                 ((HostListFragment) hostListFragment).showDeleteDialog();
+            }
         }
     }
 

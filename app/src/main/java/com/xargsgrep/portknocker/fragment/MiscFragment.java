@@ -63,7 +63,7 @@ public class MiscFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+//        setRetainInstance(true);
         databaseManager = new DatabaseManager(getActivity());
     }
 
@@ -91,9 +91,7 @@ public class MiscFragment extends Fragment
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
         Bundle args = getArguments();
@@ -129,7 +127,7 @@ public class MiscFragment extends Fragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        delayStr = getDelayEditText().getText().toString();
+//        delayStr = getDelayEditText().getText().toString();
         savedInstanceState = true;
     }
 
@@ -155,13 +153,22 @@ public class MiscFragment extends Fragment
             }
         }
     }
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    public String getDelayStr() {
+        return delayStr;
+    }
 
     public String getSelectedLaunchIntent()
     {
         return selectedLaunchIntent;
     }
 
-    public EditText getDelayEditText()
+    private EditText getDelayEditText()
     {
         return (EditText) getView().findViewById(R.id.delay_edit);
     }

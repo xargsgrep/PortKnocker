@@ -26,6 +26,12 @@ public class Port
 
     public Port() { }
 
+    public Port(int port, Protocol protocol)
+    {
+        this.port = port;
+        this.protocol = protocol;
+    }
+
     public long getHostId()
     {
         return hostId;
