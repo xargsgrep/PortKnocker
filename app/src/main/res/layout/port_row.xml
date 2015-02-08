@@ -4,53 +4,57 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:orientation="horizontal"
     android:gravity="center_vertical"
->
+    android:orientation="horizontal"
+    >
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_marginLeft="8dp"
-    >
-		<EditText
-		    android:id="@+id/port_row_port"
-        	android:layout_width="100dp"
-		    android:layout_height="wrap_content"
-		    android:inputType="number"
-		    android:singleLine="true"
-		    android:hint="@string/port_hint"
-		    android:maxLength="5"
-		    android:ems="5"
-		/>
-		<Spinner
-		    android:id="@+id/port_row_protocol"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		/>
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        >
+
+        <EditText
+            android:id="@+id/port_row_port"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:hint="@string/port_hint"
+            android:inputType="number"
+            android:maxLength="5"
+            android:singleLine="true"
+            />
+
+        <Spinner
+            android:id="@+id/port_row_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
     </LinearLayout>
-    
+
     <ImageView
         android:layout_width="1dp"
         android:layout_height="32dp"
-        android:background="@drawable/ic_divider_dashed"
         android:layout_gravity="center_vertical"
-    />
+        android:background="@drawable/ic_divider_dashed"
+        />
+
     <ImageButton
         android:id="@+id/port_row_delete"
-        android:src="@drawable/ic_menu_cancel"
         android:layout_width="48dp"
         android:layout_height="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingRight="8dp"
-        android:scaleType="center"
         android:background="@drawable/selectable_item_background"
-    />
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_menu_cancel"
+        />
+
 </LinearLayout>
