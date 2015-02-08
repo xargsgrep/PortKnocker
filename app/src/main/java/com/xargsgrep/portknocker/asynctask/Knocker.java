@@ -15,6 +15,12 @@
  */
 package com.xargsgrep.portknocker.asynctask;
 
+import com.xargsgrep.portknocker.model.Host;
+import com.xargsgrep.portknocker.model.Port;
+import com.xargsgrep.portknocker.model.Port.Protocol;
+import com.xargsgrep.portknocker.utils.SocketUtils;
+import com.xargsgrep.portknocker.utils.StringUtils;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.DatagramPacket;
@@ -25,12 +31,6 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-
-import com.xargsgrep.portknocker.model.Host;
-import com.xargsgrep.portknocker.model.Port;
-import com.xargsgrep.portknocker.model.Port.Protocol;
-import com.xargsgrep.portknocker.utils.SocketUtils;
-import com.xargsgrep.portknocker.utils.StringUtils;
 
 public class Knocker
 {

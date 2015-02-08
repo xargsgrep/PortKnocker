@@ -15,8 +15,6 @@
  */
 package com.xargsgrep.portknocker.fragment;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,18 +36,19 @@ import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.StringUtils;
 
+import java.util.List;
+
 public class MiscFragment extends SherlockFragment
 {
     public static final String TAG = "MiscFragment";
 
-    DatabaseManager databaseManager;
-
+    private DatabaseManager databaseManager;
     private String delayStr;
     private String selectedLaunchIntent;
     private int delay;
     private int tcpConnectTimeout;
     private ApplicationArrayAdapter applicationAdapter;
-    boolean savedInstanceState = false;
+    private boolean savedInstanceState = false;
 
     public static MiscFragment newInstance(Long hostId)
     {
@@ -77,9 +76,10 @@ public class MiscFragment extends SherlockFragment
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.misc_fragment, container, false);
     }
-    
+
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         EditText delayEditText = getDelayEditText();
@@ -168,7 +168,7 @@ public class MiscFragment extends SherlockFragment
             retrieveAppsTask.execute();
         }
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
@@ -176,19 +176,20 @@ public class MiscFragment extends SherlockFragment
         delayStr = getDelayEditText().getText().toString();
         savedInstanceState = true;
     }
-    
+
     public void initializeApplicationAdapter(List<Application> applications)
     {
         applicationAdapter = new ApplicationArrayAdapter(getActivity(), applications);
         getLaunchIntentSpinner().setAdapter(applicationAdapter);
         setSelectedLaunchIntent();
     }
-    
+
     private void setSelectedLaunchIntent()
     {
         if (applicationAdapter != null && StringUtils.isNotBlank(selectedLaunchIntent))
         {
-            for (int i=0; i<applicationAdapter.getCount(); i++) {
+            for (int i = 0; i < applicationAdapter.getCount(); i++)
+            {
                 Application application = applicationAdapter.getItem(i);
                 if (application.getIntent().equals(selectedLaunchIntent))
                 {
@@ -208,7 +209,7 @@ public class MiscFragment extends SherlockFragment
     {
         return (EditText) getView().findViewById(R.id.delay_edit);
     }
-    
+
     private Spinner getLaunchIntentSpinner()
     {
         return (Spinner) getView().findViewById(R.id.launch_intent);

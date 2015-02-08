@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="8dp"
->
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    >
 
     <TextView
         style="@style/labelSmall"
@@ -42,8 +42,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
         >
         <SeekBar
             android:id="@+id/delay_seekbar"
@@ -54,11 +54,12 @@
             />
         <TextView
             android:id="@+id/delay_display"
+            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="500"
             android:layout_gravity="center"
-            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"/>
+            android:text="500"
+            />
     </LinearLayout>
 
     <TextView
@@ -68,6 +69,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/tcp_timeout_label"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,10 +85,12 @@
             />
         <TextView
             android:id="@+id/tcp_timeout_display"
+            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="500"
             android:layout_gravity="center"
-            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"/>
+            android:text="500"
+            />
     </LinearLayout>
+
 </LinearLayout>
