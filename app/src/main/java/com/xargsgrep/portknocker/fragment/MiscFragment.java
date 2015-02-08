@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,7 +42,6 @@ public class MiscFragment extends SherlockFragment
     public static final String TAG = "MiscFragment";
 
     private DatabaseManager databaseManager;
-    private String delayStr;
     private String selectedLaunchIntent;
     private int delay;
     private int tcpConnectTimeout;
@@ -82,12 +80,11 @@ public class MiscFragment extends SherlockFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        EditText delayEditText = getDelayEditText();
         Spinner launchIntentSpinner = getLaunchIntentSpinner();
         SeekBar delaySeekBar = (SeekBar) getView().findViewById(R.id.delay_seekbar);
-        SeekBar tcpTimeoutSeekBar = (SeekBar) getView().findViewById(R.id.tcp_timeout_seekbar);
+        SeekBar tcpConnectTimeoutSeekBar = (SeekBar) getView().findViewById(R.id.tcp_timeout_seekbar);
         final TextView delayDisplay = (TextView) getView().findViewById(R.id.delay_display);
-        final TextView tcpTimeoutDisplay = (TextView) getView().findViewById(R.id.tcp_timeout_display);
+        final TextView tcpConnectTimeoutDisplay = (TextView) getView().findViewById(R.id.tcp_timeout_display);
 
         launchIntentSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
         {
@@ -101,12 +98,12 @@ public class MiscFragment extends SherlockFragment
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        tcpTimeoutSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        tcpConnectTimeoutSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                tcpTimeoutDisplay.setText(String.valueOf(progress));
+                tcpConnectTimeoutDisplay.setText(String.valueOf(progress));
             }
 
             @Override
@@ -135,14 +132,14 @@ public class MiscFragment extends SherlockFragment
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) { }
-
         });
 
         Bundle args = getArguments();
 
         if (this.savedInstanceState)
         {
-            delayEditText.setText(delayStr);
+            delaySeekBar.setProgress(delay);
+            tcpConnectTimeoutSeekBar.setProgress(tcpConnectTimeout);
             launchIntentSpinner.setAdapter(applicationAdapter);
             setSelectedLaunchIntent();
         }
@@ -151,15 +148,15 @@ public class MiscFragment extends SherlockFragment
             Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
             Host host = databaseManager.getHost(hostId);
 
-            delayEditText.setText(new Integer(host.getDelay()).toString());
+            delaySeekBar.setProgress(host.getDelay());
+            tcpConnectTimeoutSeekBar.setProgress(host.getTcpConnectTimeout());
             selectedLaunchIntent = host.getLaunchIntentPackage();
         }
         else
         {
             // editing a new host
-            delayEditText.setText(new Integer(Host.DEFAULT_DELAY).toString());
             delaySeekBar.setProgress(Host.DEFAULT_DELAY);
-            tcpTimeoutSeekBar.setProgress(Host.DEFAULT_TCP_CONNECT_TIMEOUT);
+            tcpConnectTimeoutSeekBar.setProgress(Host.DEFAULT_TCP_CONNECT_TIMEOUT);
         }
 
         if (applicationAdapter == null)
@@ -173,7 +170,8 @@ public class MiscFragment extends SherlockFragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        delayStr = getDelayEditText().getText().toString();
+        delay = getDelaySeekBar().getProgress();
+        tcpConnectTimeout = getTcpConnectTimeoutSeekBar().getProgress();
         savedInstanceState = true;
     }
 
@@ -205,9 +203,14 @@ public class MiscFragment extends SherlockFragment
         return selectedLaunchIntent;
     }
 
-    public EditText getDelayEditText()
+    public SeekBar getDelaySeekBar()
     {
-        return (EditText) getView().findViewById(R.id.delay_edit);
+        return (SeekBar) getView().findViewById(R.id.delay_seekbar);
+    }
+
+    public SeekBar getTcpConnectTimeoutSeekBar()
+    {
+        return (SeekBar) getView().findViewById(R.id.tcp_timeout_seekbar);
     }
 
     private Spinner getLaunchIntentSpinner()

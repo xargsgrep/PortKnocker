@@ -4,7 +4,7 @@
     android:configure="com.xargsgrep.portknocker.widget.ConfigureWidgetActivity"
     android:initialLayout="@layout/widget"
     android:minHeight="40dp"
-    android:minWidth="180dp"
+    android:minWidth="40dp"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="0"
     >
