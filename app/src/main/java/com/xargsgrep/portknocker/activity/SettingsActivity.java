@@ -19,49 +19,38 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.util.Log;
-import android.view.MenuItem;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
-import com.xargsgrep.portknocker.fragment.PreferencesFragment;
 
-public class SettingsActivity extends PreferenceActivity
-{
+public class SettingsActivity extends SherlockPreferenceActivity {
+	
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        
+    	getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
+    
     @Override
-    protected boolean isValidFragment(String fragmentName)
-    {
-        return PreferencesFragment.class.getCanonicalName().equals(fragmentName);
-    }
-
-    @Override
-    public void onBuildHeaders(List<Header> target)
-    {
+    public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
     }
-
+    
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                Intent hostListIntent = new Intent(this, HostListActivity.class);
-                hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(hostListIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+	    	case android.R.id.home: 
+				Intent hostListIntent = new Intent(this, HostListActivity.class);
+				hostListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivity(hostListIntent);
+		        return true;
+		    default:
+		    	return super.onOptionsItemSelected(item);
+    	}
     }
+
 }

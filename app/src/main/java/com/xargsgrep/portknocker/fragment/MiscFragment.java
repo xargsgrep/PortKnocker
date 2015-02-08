@@ -18,15 +18,18 @@ package com.xargsgrep.portknocker.fragment;
 import java.util.List;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.adapter.ApplicationArrayAdapter;
@@ -36,16 +39,18 @@ import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.StringUtils;
 
-public class MiscFragment extends Fragment
+public class MiscFragment extends SherlockFragment
 {
     public static final String TAG = "MiscFragment";
 
-    private DatabaseManager databaseManager;
+    DatabaseManager databaseManager;
 
     private String delayStr;
     private String selectedLaunchIntent;
+    private int delay;
+    private int tcpConnectTimeout;
     private ApplicationArrayAdapter applicationAdapter;
-    private boolean savedInstanceState = false;
+    boolean savedInstanceState = false;
 
     public static MiscFragment newInstance(Long hostId)
     {
@@ -63,7 +68,7 @@ public class MiscFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//        setRetainInstance(true);
+        setRetainInstance(true);
         databaseManager = new DatabaseManager(getActivity());
     }
 
@@ -81,6 +86,10 @@ public class MiscFragment extends Fragment
 
         EditText delayEditText = getDelayEditText();
         Spinner launchIntentSpinner = getLaunchIntentSpinner();
+        SeekBar delaySeekBar = (SeekBar) getView().findViewById(R.id.delay_seekbar);
+        SeekBar tcpTimeoutSeekBar = (SeekBar) getView().findViewById(R.id.tcp_timeout_seekbar);
+        final TextView delayDisplay = (TextView) getView().findViewById(R.id.delay_display);
+        final TextView tcpTimeoutDisplay = (TextView) getView().findViewById(R.id.tcp_timeout_display);
 
         launchIntentSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
         {
@@ -92,6 +101,43 @@ public class MiscFragment extends Fragment
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        tcpTimeoutSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                tcpTimeoutDisplay.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                tcpConnectTimeout = seekBar.getProgress();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+        });
+
+        delaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                delayDisplay.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                delay = seekBar.getProgress();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
         });
 
         Bundle args = getArguments();
@@ -114,6 +160,8 @@ public class MiscFragment extends Fragment
         {
             // editing a new host
             delayEditText.setText(new Integer(Host.DEFAULT_DELAY).toString());
+            delaySeekBar.setProgress(Host.DEFAULT_DELAY);
+            tcpTimeoutSeekBar.setProgress(Host.DEFAULT_TCP_CONNECT_TIMEOUT);
         }
 
         if (applicationAdapter == null)
@@ -127,7 +175,7 @@ public class MiscFragment extends Fragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-//        delayStr = getDelayEditText().getText().toString();
+        delayStr = getDelayEditText().getText().toString();
         savedInstanceState = true;
     }
 
@@ -153,22 +201,13 @@ public class MiscFragment extends Fragment
             }
         }
     }
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    public String getDelayStr() {
-        return delayStr;
-    }
 
     public String getSelectedLaunchIntent()
     {
         return selectedLaunchIntent;
     }
 
-    private EditText getDelayEditText()
+    public EditText getDelayEditText()
     {
         return (EditText) getView().findViewById(R.id.delay_edit);
     }

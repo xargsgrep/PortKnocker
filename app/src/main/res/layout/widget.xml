@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/widget"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_weight="1"
-    android:background="@drawable/appwidget_dark_bg"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/widget"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_weight="1"
+	android:paddingTop="8dp"
+	android:paddingBottom="8dp"
+	android:paddingLeft="8dp"
+	android:paddingRight="8dp"
+	android:layout_marginLeft="8dp"
+	android:layout_marginRight="8dp"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp"
-    >
+    android:background="@drawable/appwidget_dark_bg"
+>
 
     <TextView
         android:id="@+id/widget_host_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        />
-
+        android:singleLine="true"
+    />
     <TextView
         android:id="@+id/widget_host_hostname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textColor="#888888"
         android:textSize="14sp"
-        />
-
+        android:singleLine="true"
+    />
     <TextView
         android:id="@+id/widget_host_ports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:singleLine="true"
         android:textColor="#888888"
         android:textSize="14sp"
-        />
-
+        android:singleLine="true"
+    />
+    
 </LinearLayout>

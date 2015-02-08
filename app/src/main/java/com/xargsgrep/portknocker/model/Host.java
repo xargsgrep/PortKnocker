@@ -21,13 +21,15 @@ import java.util.List;
 public class Host
 {
     public static final int DEFAULT_DELAY = 1000;
+    public static final int DEFAULT_TCP_CONNECT_TIMEOUT = 100;
 
     private long id;
     private String label;
     private String hostname;
     private int delay = DEFAULT_DELAY;
+    private int tcpConnectTimeout = DEFAULT_TCP_CONNECT_TIMEOUT;
     private String launchIntentPackage;
-    private List<Port> ports = new ArrayList<Port>();
+    private List<Port> ports = new ArrayList<>();
 
     public long getId()
     {
@@ -72,6 +74,16 @@ public class Host
     public String getLaunchIntentPackage()
     {
         return launchIntentPackage;
+    }
+
+    public int getTcpConnectTimeout()
+    {
+        return tcpConnectTimeout;
+    }
+
+    public void setTcpConnectTimeout(int tcpConnectTimeout)
+    {
+        this.tcpConnectTimeout = tcpConnectTimeout;
     }
 
     public void setLaunchIntentPackage(String launchIntentPackage)
