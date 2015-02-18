@@ -15,33 +15,73 @@
         style="@style/labelSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/delay_label"
-        />
-
-    <EditText
-        android:id="@+id/delay_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:ems="4"
-        android:hint="@string/delay_hint"
-        android:inputType="number"
-        android:maxLength="4"
-        android:singleLine="true"
-        />
-
-    <TextView
-        style="@style/labelSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/launch_app_label"
         />
-
     <Spinner
         android:id="@+id/launch_intent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         />
+
+    <TextView
+        style="@style/labelSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/delay_label"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        >
+        <SeekBar
+            android:id="@+id/delay_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="5000"
+            />
+        <TextView
+            android:id="@+id/delay_display"
+            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="500"
+            />
+    </LinearLayout>
+
+    <TextView
+        style="@style/labelSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/tcp_timeout_label"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        >
+        <SeekBar
+            android:id="@+id/tcp_timeout_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="1000"
+            />
+        <TextView
+            android:id="@+id/tcp_timeout_display"
+            style="@style/TextAppearance.Sherlock.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="500"
+            />
+    </LinearLayout>
 
 </LinearLayout>

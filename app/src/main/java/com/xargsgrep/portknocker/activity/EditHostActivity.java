@@ -45,7 +45,6 @@ import java.util.List;
 
 public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener
 {
-//    public static final int MENU_ITEM_CANCEL = 1;
     public static final int MENU_ITEM_SAVE = 2;
     public static final int MENU_ITEM_ADD_PORT = 3;
     public static final int MENU_ITEM_DEBUG_INFO = 4;
@@ -60,9 +59,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     public static final String KEY_SHOW_CANCEL_DIALOG = "showCancelDialog";
 
     private static final int MAX_PORT_VALUE = 65535;
-    private static final int MAX_DELAY_VALUE = 10000;
-
-//    private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-z0-9]+([-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}$", Pattern.CASE_INSENSITIVE);
 
     private DatabaseManager databaseManager;
     private AlertDialog cancelDialog;
@@ -156,7 +152,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-//        menu.add(Menu.NONE, MENU_ITEM_CANCEL, 1, "Cancel").setIcon(R.drawable.ic_action_cancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_menu_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         menu.add(Menu.NONE, MENU_ITEM_DEBUG_INFO, 3, "Debug Info").setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         return true;
@@ -170,9 +165,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
             case android.R.id.home:
                 showCancelDialog();
                 return true;
-//            case MENU_ITEM_CANCEL:
-//                showCancelDialog();
-//                return true;
             case MENU_ITEM_SAVE:
                 saveHost();
                 return true;
@@ -228,9 +220,11 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         if (miscFragment != null)
         {
             // could be null if user saves without going to misc tab
-            String delayStr = miscFragment.getDelayEditText().getText().toString();
-            int delay = (StringUtils.isNotBlank(delayStr)) ? Integer.parseInt(delayStr) : 0;
+            int delay = miscFragment.getDelaySeekBar().getProgress();
             host.setDelay(delay);
+
+            int tcpConnectTimeout = miscFragment.getTcpConnectTimeoutSeekBar().getProgress();
+            host.setTcpConnectTimeout(tcpConnectTimeout);
 
             String launchIntent = miscFragment.getSelectedLaunchIntent();
             host.setLaunchIntentPackage(launchIntent);
@@ -240,7 +234,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         if (isValid)
         {
             boolean saveResult;
-
             if (hostId == null)
             {
                 saveResult = databaseManager.saveHost(host);
@@ -257,9 +250,6 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
 
     private boolean validateAndDisplayErrors(Host host)
     {
-//        boolean validHostname = HOSTNAME_PATTERN.matcher(host.getHostname()).matches();
-//        boolean validIP = InetAddressUtils.isIPv4Address(host.getHostname());
-
         String errorText = "";
         if (StringUtils.isBlank(host.getLabel()))
         {
@@ -269,17 +259,9 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
         {
             errorText = getString(R.string.toast_msg_enter_hostname);
         }
-//        else if (!validHostname && !validIP)
-//        {
-//            errorText = getString(R.string.toast_msg_invalid_hostname);
-//        }
         else if (host.getPorts() == null || host.getPorts().size() == 0)
         {
             errorText = getString(R.string.toast_msg_enter_port);
-        }
-        else if (host.getDelay() > MAX_DELAY_VALUE)
-        {
-            errorText = getString(R.string.toast_msg_delay_max_value) + MAX_DELAY_VALUE;
         }
         else
         {

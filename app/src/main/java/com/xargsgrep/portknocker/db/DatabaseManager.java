@@ -107,6 +107,7 @@ public class DatabaseManager
             hostValues.put(DatabaseHelper.HOST_HOSTNAME_COLUMN, host.getHostname());
             hostValues.put(DatabaseHelper.HOST_DELAY_COLUMN, host.getDelay());
             hostValues.put(DatabaseHelper.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
+            hostValues.put(DatabaseHelper.HOST_TCP_CONNECT_TIMEOUT_COLUMN, host.getTcpConnectTimeout());
 
             long hostId = database.insert(DatabaseHelper.HOST_TABLE_NAME, null, hostValues);
             if (hostId == -1) return false;
@@ -148,6 +149,7 @@ public class DatabaseManager
             hostValues.put(DatabaseHelper.HOST_HOSTNAME_COLUMN, host.getHostname());
             hostValues.put(DatabaseHelper.HOST_DELAY_COLUMN, host.getDelay());
             hostValues.put(DatabaseHelper.HOST_LAUNCH_INTENT_PACKAGE_COLUMN, host.getLaunchIntentPackage());
+            hostValues.put(DatabaseHelper.HOST_TCP_CONNECT_TIMEOUT_COLUMN, host.getTcpConnectTimeout());
 
             String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
             int rowsAffected = database.update(DatabaseHelper.HOST_TABLE_NAME, hostValues, hostSelection, new String[] {new Long(host.getId()).toString()});
@@ -261,6 +263,7 @@ public class DatabaseManager
         host.setHostname(cursor.getString(2));
         host.setDelay(cursor.getInt(3));
         host.setLaunchIntentPackage(cursor.getString(4));
+        host.setTcpConnectTimeout(cursor.getInt(7));
         return host;
     }
 

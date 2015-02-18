@@ -11,6 +11,14 @@ android {
         versionCode 4
         versionName "1.0.3"
     }
+    signingConfigs {
+        release {
+            storeFile file("~/.android/android-release.keystore")
+            keyAlias "android"
+            storePassword System.getenv("KSTOREPWD")
+            keyPassword System.getenv("KEYPWD")
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
