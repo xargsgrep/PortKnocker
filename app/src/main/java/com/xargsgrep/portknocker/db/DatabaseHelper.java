@@ -47,23 +47,23 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final String PORT_PROTOCOL_COLUMN = "protocol";
 
     public static final String[] HOST_TABLE_COLUMNS = new String[]
-            {
-                    HOST_ID_COLUMN,
-                    HOST_LABEL_COLUMN,
-                    HOST_HOSTNAME_COLUMN,
-                    HOST_DELAY_COLUMN,
-                    HOST_LAUNCH_INTENT_PACKAGE_COLUMN,
-                    HOST_USERNAME_COLUMN,
-                    HOST_TARGET_PORT_COLUMN,
-                    HOST_TCP_CONNECT_TIMEOUT_COLUMN
-            };
+    {
+        HOST_ID_COLUMN,
+        HOST_LABEL_COLUMN,
+        HOST_HOSTNAME_COLUMN,
+        HOST_DELAY_COLUMN,
+        HOST_LAUNCH_INTENT_PACKAGE_COLUMN,
+        HOST_USERNAME_COLUMN,
+        HOST_TARGET_PORT_COLUMN,
+        HOST_TCP_CONNECT_TIMEOUT_COLUMN
+    };
     public static final String[] PORT_TABLE_COLUMNS = new String[]
-            {
-                    PORT_HOST_ID_COLUMN,
-                    PORT_INDEX_COLUMN,
-                    PORT_PORT_COLUMN,
-                    PORT_PROTOCOL_COLUMN
-            };
+    {
+        PORT_HOST_ID_COLUMN,
+        PORT_INDEX_COLUMN,
+        PORT_PORT_COLUMN,
+        PORT_PROTOCOL_COLUMN
+    };
 
     public DatabaseHelper(Context context)
     {
