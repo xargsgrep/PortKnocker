@@ -19,13 +19,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.widget.HostWidget;
 
-public class SettingsActivityCompat extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener
+public class SettingsActivityCompat extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
     @Override
     @SuppressWarnings("deprecation")
@@ -33,9 +33,9 @@ public class SettingsActivityCompat extends SherlockPreferenceActivity implement
     {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.preferences);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);

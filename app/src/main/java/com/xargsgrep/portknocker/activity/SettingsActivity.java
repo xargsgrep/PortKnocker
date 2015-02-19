@@ -17,23 +17,23 @@ package com.xargsgrep.portknocker.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 
 import java.util.List;
 
-public class SettingsActivity extends SherlockPreferenceActivity
+public class SettingsActivity extends PreferenceActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

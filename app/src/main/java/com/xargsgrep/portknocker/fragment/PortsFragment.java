@@ -16,16 +16,17 @@
 package com.xargsgrep.portknocker.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
@@ -36,7 +37,7 @@ import com.xargsgrep.portknocker.model.Port;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortsFragment extends SherlockListFragment
+public class PortsFragment extends ListFragment
 {
     public static final String TAG = "PortsFragment";
 
@@ -107,7 +108,8 @@ public class PortsFragment extends SherlockListFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.add(Menu.NONE, EditHostActivity.MENU_ITEM_ADD_PORT, 0, "Add Port").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem addPort = menu.add(Menu.NONE, EditHostActivity.MENU_ITEM_ADD_PORT, 0, "Add Port");
+        MenuItemCompat.setShowAsAction(addPort, MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override

@@ -22,11 +22,12 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.db.DatabaseManager;
@@ -35,7 +36,7 @@ import com.xargsgrep.portknocker.fragment.PreferencesFragment;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
-public class HostListActivity extends SherlockFragmentActivity
+public class HostListActivity extends ActionBarActivity
 {
     private static final int MENU_ITEM_ID_ADD = 1;
     private static final int MENU_ITEM_ID_SETTINGS = 2;
@@ -91,8 +92,12 @@ public class HostListActivity extends SherlockFragmentActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_menu_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem addHost = menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add);
+        MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_menu_settings);
+
+        MenuItemCompat.setShowAsAction(addHost, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
         return true;
     }
 

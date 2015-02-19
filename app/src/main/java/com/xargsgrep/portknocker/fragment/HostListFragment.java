@@ -18,12 +18,12 @@ package com.xargsgrep.portknocker.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.HostListActivity;
 import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
@@ -33,7 +33,7 @@ import com.xargsgrep.portknocker.widget.HostWidget;
 
 import java.util.List;
 
-public class HostListFragment extends SherlockListFragment
+public class HostListFragment extends ListFragment
 {
     public static final String TAG = "HostListFragment";
 

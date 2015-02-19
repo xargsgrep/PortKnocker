@@ -21,14 +21,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
 import com.xargsgrep.portknocker.db.DatabaseManager;
@@ -43,7 +43,7 @@ import com.xargsgrep.portknocker.widget.HostWidget;
 
 import java.util.List;
 
-public class EditHostActivity extends SherlockFragmentActivity implements ActionBar.TabListener
+public class EditHostActivity extends ActionBarActivity implements ActionBar.TabListener
 {
     public static final int MENU_ITEM_SAVE = 2;
     public static final int MENU_ITEM_ADD_PORT = 3;
@@ -102,7 +102,7 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft)
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
     {
         Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
         Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
@@ -152,8 +152,12 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_menu_save).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(Menu.NONE, MENU_ITEM_DEBUG_INFO, 3, "Debug Info").setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        MenuItem save = menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_menu_save);
+        MenuItem debugInfo = menu.add(Menu.NONE, MENU_ITEM_DEBUG_INFO, 3, "Debug Info");
+
+        MenuItemCompat.setShowAsAction(save, MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(debugInfo, MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
         return true;
     }
 
@@ -323,8 +327,8 @@ public class EditHostActivity extends SherlockFragmentActivity implements Action
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) { }
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) { }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) { }
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) { }
 }
