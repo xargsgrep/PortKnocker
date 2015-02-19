@@ -23,7 +23,7 @@ import android.preference.PreferenceFragment;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.widget.HostWidget;
 
-public class PreferencesFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener
+public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener
 {
     @Override
     public void onCreate(Bundle savedInstanceState)

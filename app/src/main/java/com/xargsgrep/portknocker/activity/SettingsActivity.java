@@ -17,29 +17,27 @@ package com.xargsgrep.portknocker.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.fragment.SettingsFragment;
 
-import java.util.List;
-
-public class SettingsActivity extends PreferenceActivity
+public class SettingsActivity extends ActionBarActivity
 {
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
 
-    @Override
-    public void onBuildHeaders(List<Header> target)
-    {
-        loadHeadersFromResource(R.xml.preference_headers, target);
+        getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

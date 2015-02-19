@@ -66,7 +66,7 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
     private Long hostId;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_edit);

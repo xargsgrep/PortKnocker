@@ -32,7 +32,7 @@ import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
-import com.xargsgrep.portknocker.fragment.PreferencesFragment;
+import com.xargsgrep.portknocker.fragment.SettingsFragment;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
@@ -47,7 +47,7 @@ public class HostListActivity extends ActionBarActivity
     private AlertDialog deleteDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_list);
@@ -121,7 +121,7 @@ public class HostListActivity extends ActionBarActivity
                 {
                     settingsIntent = new Intent(this, SettingsActivity.class);
                     settingsIntent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
-                    settingsIntent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, PreferencesFragment.class.getName());
+                    settingsIntent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsFragment.class.getName());
                 }
                 startActivity(settingsIntent);
                 return true;
