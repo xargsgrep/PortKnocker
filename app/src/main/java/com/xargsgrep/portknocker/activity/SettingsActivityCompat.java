@@ -33,10 +33,6 @@ public class SettingsActivityCompat extends PreferenceActivity implements OnShar
     {
         super.onCreate(savedInstanceState);
 
-        getActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         addPreferencesFromResource(R.xml.preferences);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
