@@ -237,6 +237,11 @@ public class HostListActivity extends ActionBarActivity
                     try
                     {
                         List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
+                        for (Host host : hosts)
+                        {
+                            databaseManager.saveHost(host);
+                        }
+
                         Toast.makeText(
                                 HostListActivity.this,
                                 "Imported hosts from file: " + filePath,
