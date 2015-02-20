@@ -16,6 +16,7 @@
 package com.xargsgrep.portknocker.activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -25,8 +26,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ipaulpro.afilechooser.utils.FileUtils;
@@ -37,8 +41,13 @@ import com.xargsgrep.portknocker.fragment.HostListFragment;
 import com.xargsgrep.portknocker.fragment.SettingsFragment;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
+import com.xargsgrep.portknocker.utils.SerializationUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class HostListActivity extends ActionBarActivity
 {
@@ -51,6 +60,8 @@ public class HostListActivity extends ActionBarActivity
 
     private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
 
+    private static final SimpleDateFormat FILE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+
     private DatabaseManager databaseManager;
     private AlertDialog deleteDialog;
 
@@ -58,6 +69,8 @@ public class HostListActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        databaseManager = new DatabaseManager(this);
+
         setContentView(R.layout.host_list);
         getSupportActionBar().setHomeButtonEnabled(false);
 
@@ -81,7 +94,6 @@ public class HostListActivity extends ActionBarActivity
         if (BundleUtils.contains(extras, "hostId") && savedInstanceState == null)
         {
             // clicked on widget
-            databaseManager = new DatabaseManager(this);
             Long hostId = extras.getLong("hostId");
             Host host = databaseManager.getHost(hostId);
 
@@ -138,6 +150,7 @@ public class HostListActivity extends ActionBarActivity
                 startActivity(settingsIntent);
                 return true;
             case MENU_ITEM_ID_EXPORT:
+                showExportHostDialog();
                 return true;
             case MENU_ITEM_ID_IMPORT:
                 Intent getContentIntent = FileUtils.createGetContentIntent();
@@ -149,6 +162,68 @@ public class HostListActivity extends ActionBarActivity
         }
     }
 
+    private void showExportHostDialog()
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Export Hosts");
+        alert.setMessage("Enter filename");
+
+        final EditText input = new EditText(this);
+        input.setText(String.format("hosts-%s.json", FILE_DATE_FORMAT.format(new Date())));
+
+        input.setFilters(new InputFilter[] {
+                new InputFilter()
+                {
+                    @Override
+                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
+                    {
+                        for (int i = start; i < end; i++)
+                        {
+                            char c = source.charAt(i);
+                            if (!Character.isLetterOrDigit(c) && c != '.' && c != '-' && c != '_') return "";
+                        }
+                        return null;
+                    }
+                }
+        });
+
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int whichButton)
+            {
+                String value = input.getText().toString();
+                List<Host> hosts = databaseManager.getAllHosts();
+                try
+                {
+                    String filePath = SerializationUtils.serializeHosts(value, hosts);
+                    Toast.makeText(
+                            HostListActivity.this,
+                            "Exported hosts to file: " + filePath,
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(
+                            HostListActivity.this,
+                            "Exporting hosts failed: " + e.getMessage(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int whichButton) { }
+        });
+
+        alert.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -158,14 +233,25 @@ public class HostListActivity extends ActionBarActivity
                 if (resultCode == RESULT_OK)
                 {
                     Uri uri = data.getData();
-                    String path = FileUtils.getPath(this, uri);
-                    Toast.makeText(this, "Selected file: " + path, Toast.LENGTH_LONG).show();
+                    String filePath = FileUtils.getPath(this, uri);
 
-                    // Alternatively, use FileUtils.getFile(Context, Uri)
-//                    if (path != null && FileUtils.isLocal(path))
-//                    {
-//                        File file = new File(path);
-//                    }
+                    try
+                    {
+                        List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
+                        Toast.makeText(
+                                HostListActivity.this,
+                                "Imported hosts from file: " + filePath,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                    catch (Exception e)
+                    {
+                        Toast.makeText(
+                                HostListActivity.this,
+                                "Importing hosts failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
                 }
                 break;
         }

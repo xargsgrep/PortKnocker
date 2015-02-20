@@ -9,57 +9,43 @@ import com.xargsgrep.portknocker.model.Host;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class SerializationUtils
 {
-    private static final String FILE_NAME = "hosts.json";
-
-    public static void serializeHosts(List<Host> hosts)
+    public static String serializeHosts(String fileName, List<Host> hosts) throws Exception
     {
         if (!isExternalStorageAccessible())
         {
-            throw new RuntimeException("External storage is not currently accessible.");
+            throw new Exception("External storage is not currently accessible");
         }
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        try
+        File storageDir = new File(Environment.getExternalStorageDirectory(), "PortKnocker");
+        if (!storageDir.exists())
         {
-            File storageDir = new File(Environment.getExternalStorageDirectory(), "PortKnocker");
-            if (!storageDir.exists())
-            {
-                storageDir.mkdirs();
-            }
-            FileWriter fileWriter = new FileWriter(new File(storageDir, FILE_NAME));
-            mapper.writeValue(fileWriter, hosts);
+            storageDir.mkdirs();
         }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+
+        File file = new File(storageDir, fileName);
+        FileWriter fileWriter = new FileWriter(file);
+
+        mapper.writeValue(fileWriter, hosts);
+
+        return file.getAbsolutePath();
     }
 
-    public static List<Host> deserializeHosts()
+    public static List<Host> deserializeHosts(String filePath) throws Exception
     {
         if (!isExternalStorageAccessible())
         {
-            throw new RuntimeException("External storage is not currently accessible.");
+            throw new Exception("External storage is not currently accessible");
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-
-        try
-        {
-            File storageDir = new File(Environment.getExternalStorageDirectory(), "PortKnocker");
-            return objectMapper.readValue(new File(storageDir, FILE_NAME), new TypeReference<List<Host>>() {});
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.readValue(new File(filePath), new TypeReference<List<Host>>() {});
     }
 
     private static boolean isExternalStorageAccessible()
