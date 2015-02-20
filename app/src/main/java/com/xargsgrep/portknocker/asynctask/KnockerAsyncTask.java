@@ -78,7 +78,14 @@ public class KnockerAsyncTask extends AsyncTask<Host, Integer, KnockResult>
             if (StringUtils.isNotBlank(result.getLaunchIntentPackage()))
             {
                 Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(result.getLaunchIntentPackage());
-                activity.startActivity(launchIntent);
+                if (launchIntent == null)
+                {
+                    showToast("Unable to launch intent " + result.getLaunchIntentPackage());
+                }
+                else
+                {
+                    activity.startActivity(launchIntent);
+                }
             }
             else
             {
