@@ -15,6 +15,8 @@
  */
 package com.xargsgrep.portknocker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class Host
     private String launchIntentPackage;
     private List<Port> ports = new ArrayList<>();
 
+    @JsonIgnore
     public long getId()
     {
         return id;
@@ -101,6 +104,7 @@ public class Host
         this.ports = ports;
     }
 
+    @JsonIgnore
     public String getPortsString()
     {
         StringBuilder portsString = new StringBuilder();

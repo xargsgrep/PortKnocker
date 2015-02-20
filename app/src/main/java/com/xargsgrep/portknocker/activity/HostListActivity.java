@@ -17,6 +17,7 @@ package com.xargsgrep.portknocker.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -28,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.db.DatabaseManager;
@@ -36,10 +38,16 @@ import com.xargsgrep.portknocker.fragment.SettingsFragment;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.BundleUtils;
 
+import java.io.File;
+
 public class HostListActivity extends ActionBarActivity
 {
     private static final int MENU_ITEM_ID_ADD = 1;
     private static final int MENU_ITEM_ID_SETTINGS = 2;
+    private static final int MENU_ITEM_ID_EXPORT = 3;
+    private static final int MENU_ITEM_ID_IMPORT = 4;
+
+    private static final int FILE_CHOOSER_REQUEST_CODE = 1000;
 
     private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
 
@@ -93,10 +101,14 @@ public class HostListActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuItem addHost = menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add);
-        MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings").setIcon(R.drawable.ic_menu_settings);
+        MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings");
+        MenuItem exportItem = menu.add(Menu.NONE, MENU_ITEM_ID_EXPORT, 0, "Export Hosts");
+        MenuItem importItem = menu.add(Menu.NONE, MENU_ITEM_ID_IMPORT, 0, "Import Hosts");
 
         MenuItemCompat.setShowAsAction(addHost, MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setShowAsAction(exportItem, MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setShowAsAction(importItem, MenuItem.SHOW_AS_ACTION_NEVER);
 
         return true;
     }
@@ -125,9 +137,40 @@ public class HostListActivity extends ActionBarActivity
                 }
                 startActivity(settingsIntent);
                 return true;
+            case MENU_ITEM_ID_EXPORT:
+                return true;
+            case MENU_ITEM_ID_IMPORT:
+                Intent getContentIntent = FileUtils.createGetContentIntent();
+                Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+                startActivityForResult(intent, FILE_CHOOSER_REQUEST_CODE);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch (requestCode)
+        {
+            case FILE_CHOOSER_REQUEST_CODE:
+                if (resultCode == RESULT_OK)
+                {
+                    Uri uri = data.getData();
+                    String path = FileUtils.getPath(this, uri);
+                    Toast.makeText(this, "Selected file: " + path, Toast.LENGTH_LONG).show();
+
+                    // Alternatively, use FileUtils.getFile(Context, Uri)
+//                    if (path != null && FileUtils.isLocal(path))
+//                    {
+//                        File file = new File(path);
+//                    }
+                }
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -15,6 +15,8 @@
  */
 package com.xargsgrep.portknocker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Port
 {
     private long hostId;
@@ -26,6 +28,7 @@ public class Port
 
     public Port() { }
 
+    @JsonIgnore
     public long getHostId()
     {
         return hostId;
@@ -36,6 +39,7 @@ public class Port
         this.hostId = hostId;
     }
 
+    @JsonIgnore
     public int getIndex()
     {
         return index;
