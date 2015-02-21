@@ -59,6 +59,11 @@ public class HostArrayAdapter extends ArrayAdapter<Host>
         return hosts.get(position);
     }
 
+    public void setHosts(List<Host> hosts)
+    {
+        this.hosts = hosts;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {

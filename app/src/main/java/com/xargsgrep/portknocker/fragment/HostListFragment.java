@@ -106,4 +106,15 @@ public class HostListFragment extends ListFragment
     {
         this.deleteHostPosition = position;
     }
+
+    public void refreshHosts()
+    {
+        ((ArrayAdapter) getListAdapter()).clear();
+
+        List<Host> hosts = databaseManager.getAllHosts();
+        for (Host host : hosts)
+        {
+            ((ArrayAdapter) getListAdapter()).add(host);
+        }
+    }
 }

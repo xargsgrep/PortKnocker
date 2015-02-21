@@ -27,7 +27,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -37,6 +36,7 @@ import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.asynctask.KnockerAsyncTask;
 import com.xargsgrep.portknocker.db.DatabaseManager;
+import com.xargsgrep.portknocker.filter.FilenameInputFilter;
 import com.xargsgrep.portknocker.fragment.HostListFragment;
 import com.xargsgrep.portknocker.fragment.SettingsFragment;
 import com.xargsgrep.portknocker.model.Host;
@@ -56,10 +56,9 @@ public class HostListActivity extends ActionBarActivity
     private static final int MENU_ITEM_ID_IMPORT = 4;
 
     private static final int FILE_CHOOSER_REQUEST_CODE = 1000;
-
     private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
-
     private static final SimpleDateFormat FILE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+    private static final InputFilter FILENAME_INPUT_FILTER = new FilenameInputFilter();
 
     private DatabaseManager databaseManager;
     private AlertDialog deleteDialog;
@@ -170,22 +169,7 @@ public class HostListActivity extends ActionBarActivity
 
         final EditText input = new EditText(this);
         input.setText(String.format("hosts-%s.json", FILE_DATE_FORMAT.format(new Date())));
-
-        input.setFilters(new InputFilter[] {
-                new InputFilter()
-                {
-                    @Override
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
-                    {
-                        for (int i = start; i < end; i++)
-                        {
-                            char c = source.charAt(i);
-                            if (!Character.isLetterOrDigit(c) && c != '.' && c != '-' && c != '_') return "";
-                        }
-                        return null;
-                    }
-                }
-        });
+        input.setFilters(new InputFilter[] {FILENAME_INPUT_FILTER});
 
         alert.setView(input);
 
@@ -198,19 +182,11 @@ public class HostListActivity extends ActionBarActivity
                 try
                 {
                     String filePath = SerializationUtils.serializeHosts(value, hosts);
-                    Toast.makeText(
-                            HostListActivity.this,
-                            "Exported hosts to file: " + filePath,
-                            Toast.LENGTH_LONG
-                    ).show();
+                    showToast("Exported hosts to file: " + filePath);
                 }
                 catch (Exception e)
                 {
-                    Toast.makeText(
-                            HostListActivity.this,
-                            "Exporting hosts failed: " + e.getMessage(),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    showToast("Exporting hosts failed: " + e.getMessage());
                 }
             }
         });
@@ -242,19 +218,14 @@ public class HostListActivity extends ActionBarActivity
                             databaseManager.saveHost(host);
                         }
 
-                        Toast.makeText(
-                                HostListActivity.this,
-                                "Imported hosts from file: " + filePath,
-                                Toast.LENGTH_LONG
-                        ).show();
+                        Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
+                        ((HostListFragment) hostListFragment).refreshHosts();
+
+                        showToast("Imported hosts from file: " + filePath);
                     }
                     catch (Exception e)
                     {
-                        Toast.makeText(
-                                HostListActivity.this,
-                                "Importing hosts failed: " + e.getMessage(),
-                                Toast.LENGTH_LONG
-                        ).show();
+                        showToast("Importing hosts failed: " + e.getMessage());
                     }
                 }
                 break;
@@ -280,5 +251,10 @@ public class HostListActivity extends ActionBarActivity
     public void setDeleteDialog(AlertDialog deleteDialog)
     {
         this.deleteDialog = deleteDialog;
+    }
+
+    private void showToast(String text)
+    {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 }

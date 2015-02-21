@@ -18,7 +18,6 @@ package com.xargsgrep.portknocker.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +26,14 @@ import android.widget.EditText;
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.db.DatabaseManager;
+import com.xargsgrep.portknocker.filter.HostnameInputFilter;
 import com.xargsgrep.portknocker.model.Host;
 
 public class HostFragment extends Fragment
 {
     public static final String TAG = "HostFragment";
+
+    private static final InputFilter HOSTNAME_INPUT_FILTER = new HostnameInputFilter();
 
     private DatabaseManager databaseManager;
     private boolean savedInstanceState = false;
@@ -88,7 +90,7 @@ public class HostFragment extends Fragment
             hostnameEdit.setText(host.getHostname());
         }
 
-        hostnameEdit.setFilters(new InputFilter[] {hostnameCharacterFilter});
+        hostnameEdit.setFilters(new InputFilter[] {HOSTNAME_INPUT_FILTER});
     }
 
     @Override
@@ -111,18 +113,4 @@ public class HostFragment extends Fragment
     {
         return (EditText) getView().findViewById(R.id.host_name_edit);
     }
-
-    InputFilter hostnameCharacterFilter = new InputFilter()
-    {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
-        {
-            for (int i = start; i < end; i++)
-            {
-                char c = source.charAt(i);
-                if (!Character.isLetterOrDigit(c) && c != '.' && c != '-') return "";
-            }
-            return null;
-        }
-    };
 }
