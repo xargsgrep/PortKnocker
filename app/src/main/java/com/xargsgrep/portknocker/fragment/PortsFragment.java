@@ -24,8 +24,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
@@ -72,7 +72,7 @@ public class PortsFragment extends ListFragment
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.list_view, container, false);
         View header = inflater.inflate(R.layout.ports_header, null);
-        ((LinearLayout) view).addView(header, 0);
+        ((RelativeLayout) view).addView(header, 0);
         return view;
     }
 
