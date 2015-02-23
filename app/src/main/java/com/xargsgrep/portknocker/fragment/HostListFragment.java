@@ -17,14 +17,17 @@ package com.xargsgrep.portknocker.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.activity.EditHostActivity;
 import com.xargsgrep.portknocker.activity.HostListActivity;
 import com.xargsgrep.portknocker.adapter.HostArrayAdapter;
 import com.xargsgrep.portknocker.db.DatabaseManager;
@@ -64,6 +67,17 @@ public class HostListFragment extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.fab_image_button);
+        addButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent editHostIntent = new Intent(getActivity(), EditHostActivity.class);
+                startActivity(editHostIntent);
+            }
+        });
 
         List<Host> hosts = databaseManager.getAllHosts();
         HostArrayAdapter hostAdapter = new HostArrayAdapter(this, hosts);

@@ -1,4 +1,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:state_pressed="true">
         <layer-list>
             <!-- Shadow -->
@@ -106,10 +107,10 @@
                 </layer-list>
             </item>
 
-            <!-- Blue button pressed -->
+            <!-- floating action button pressed -->
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="#90CAF9"/>
+                    <solid android:color="#263238"/>
                 </shape>
             </item>
         </layer-list>
@@ -222,10 +223,10 @@
                 </layer-list>
             </item>
 
-            <!-- Blue button -->
+            <!-- floating action button -->
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="#03A9F4"/>
+                    <solid android:color="#37474F"/>
                 </shape>
             </item>
         </layer-list>

@@ -17,15 +17,12 @@ package com.xargsgrep.portknocker.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.xargsgrep.portknocker.R;
 import com.xargsgrep.portknocker.activity.EditHostActivity;
@@ -72,7 +69,7 @@ public class PortsFragment extends ListFragment
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.list_view, container, false);
         View header = inflater.inflate(R.layout.ports_header, null);
-        ((RelativeLayout) view).addView(header, 0);
+        ((LinearLayout) view.findViewById(R.id.list_header)).addView(header);
         return view;
     }
 
@@ -80,6 +77,16 @@ public class PortsFragment extends ListFragment
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.fab_image_button);
+        addButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                addPort();
+            }
+        });
 
         Bundle args = getArguments();
 
@@ -101,27 +108,6 @@ public class PortsFragment extends ListFragment
         {
             portAdapter = new PortArrayAdapter(getActivity(), defaultPorts);
             setListAdapter(portAdapter);
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem addPort = menu.add(Menu.NONE, EditHostActivity.MENU_ITEM_ADD_PORT, 0, "Add Port");
-        MenuItemCompat.setShowAsAction(addPort, MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case EditHostActivity.MENU_ITEM_ADD_PORT:
-                addPort();
-                return true;
-            default:
-                return false;
         }
     }
 

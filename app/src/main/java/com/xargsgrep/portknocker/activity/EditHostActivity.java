@@ -46,7 +46,6 @@ import java.util.List;
 public class EditHostActivity extends ActionBarActivity implements ActionBar.TabListener
 {
     public static final int MENU_ITEM_SAVE = 2;
-    public static final int MENU_ITEM_ADD_PORT = 3;
     public static final int MENU_ITEM_DEBUG_INFO = 4;
 
     public static final int TAB_INDEX_HOST = 0;

@@ -50,7 +50,6 @@ import java.util.Locale;
 
 public class HostListActivity extends ActionBarActivity
 {
-    private static final int MENU_ITEM_ID_ADD = 1;
     private static final int MENU_ITEM_ID_SETTINGS = 2;
     private static final int MENU_ITEM_ID_EXPORT = 3;
     private static final int MENU_ITEM_ID_IMPORT = 4;
@@ -110,12 +109,10 @@ public class HostListActivity extends ActionBarActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        MenuItem addHost = menu.add(Menu.NONE, MENU_ITEM_ID_ADD, 0, "Add Host").setIcon(R.drawable.ic_menu_add);
         MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings");
         MenuItem exportItem = menu.add(Menu.NONE, MENU_ITEM_ID_EXPORT, 0, "Export Hosts");
         MenuItem importItem = menu.add(Menu.NONE, MENU_ITEM_ID_IMPORT, 0, "Import Hosts");
 
-        MenuItemCompat.setShowAsAction(addHost, MenuItem.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_NEVER);
         MenuItemCompat.setShowAsAction(exportItem, MenuItem.SHOW_AS_ACTION_NEVER);
         MenuItemCompat.setShowAsAction(importItem, MenuItem.SHOW_AS_ACTION_NEVER);
@@ -128,10 +125,6 @@ public class HostListActivity extends ActionBarActivity
     {
         switch (item.getItemId())
         {
-            case MENU_ITEM_ID_ADD:
-                Intent editHostIntent = new Intent(this, EditHostActivity.class);
-                startActivity(editHostIntent);
-                return true;
             case MENU_ITEM_ID_SETTINGS:
                 Intent settingsIntent;
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
