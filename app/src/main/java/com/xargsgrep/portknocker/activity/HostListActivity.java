@@ -53,6 +53,7 @@ public class HostListActivity extends ActionBarActivity
     private static final int MENU_ITEM_ID_SETTINGS = 2;
     private static final int MENU_ITEM_ID_EXPORT = 3;
     private static final int MENU_ITEM_ID_IMPORT = 4;
+    private static final int MENU_ITEM_ID_SORT = 5;
 
     private static final int FILE_CHOOSER_REQUEST_CODE = 1000;
     private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
@@ -112,10 +113,12 @@ public class HostListActivity extends ActionBarActivity
         MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings");
         MenuItem exportItem = menu.add(Menu.NONE, MENU_ITEM_ID_EXPORT, 0, "Export Hosts");
         MenuItem importItem = menu.add(Menu.NONE, MENU_ITEM_ID_IMPORT, 0, "Import Hosts");
+        MenuItem sortItem = menu.add(Menu.NONE, MENU_ITEM_ID_SORT, 0, "Sort Hosts").setIcon(R.drawable.ic_sort_variant);
 
         MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_NEVER);
         MenuItemCompat.setShowAsAction(exportItem, MenuItem.SHOW_AS_ACTION_NEVER);
         MenuItemCompat.setShowAsAction(importItem, MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setShowAsAction(sortItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return true;
     }

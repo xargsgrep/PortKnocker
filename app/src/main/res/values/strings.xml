@@ -29,14 +29,14 @@
     <string name="pref_key_hide_ports_widget_summary">Port sequence will not be displayed in widgets</string>
     <string name="settings_subtitle">Settings</string>
     <string name="empty_list">There are no items</string>
-    <string name="toast_msg_delete_all_ports">"Can't delete all ports!"</string>
+    <string name="toast_msg_delete_all_ports">"Can't delete all ports"</string>
     <string name="toast_msg_enter_label">Please enter a label</string>
     <string name="toast_msg_enter_hostname">Please enter a hostname</string>
     <string name="toast_msg_invalid_hostname">Invalid hostname/IP</string>
     <string name="toast_msg_enter_port">Please enter at least one port</string>
     <string name="toast_msg_delay_max_value">"Delay can't be more than "</string>
     <string name="toast_msg_invalid_port">"Invalid port: "</string>
-    <string name="toast_msg_save_success">Saved!</string>
+    <string name="toast_msg_save_success">Saved</string>
     <string name="toast_msg_save_failure">Save failed</string>
     <string name="toast_msg_knocking_complete">Knocking complete</string>
     <string name="toast_msg_knocking_canceled">Knocking canceled</string>

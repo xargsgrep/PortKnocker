@@ -70,7 +70,7 @@
         android:paddingRight="8dp"
         android:paddingTop="8dp"
         android:scaleType="center"
-        android:src="@drawable/ic_menu_delete"
+        android:src="@drawable/ic_delete"
         />
 
     <ImageView
@@ -91,7 +91,7 @@
         android:paddingRight="8dp"
         android:paddingTop="8dp"
         android:scaleType="center"
-        android:src="@drawable/ic_menu_edit"
+        android:src="@drawable/ic_pencil"
         />
 
 </LinearLayout> 

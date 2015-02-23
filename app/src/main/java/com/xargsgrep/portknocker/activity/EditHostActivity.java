@@ -151,7 +151,7 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        MenuItem save = menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_menu_save);
+        MenuItem save = menu.add(Menu.NONE, MENU_ITEM_SAVE, 2, "Save").setIcon(R.drawable.ic_content_save);
         MenuItem debugInfo = menu.add(Menu.NONE, MENU_ITEM_DEBUG_INFO, 3, "Debug Info");
 
         MenuItemCompat.setShowAsAction(save, MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -301,7 +301,7 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.confirm_dialog_cancel_edit_title);
-        dialogBuilder.setIcon(R.drawable.ic_dialog_confirm);
+        dialogBuilder.setIcon(R.drawable.ic_alert);
 
         dialogBuilder.setPositiveButton(
                 R.string.confirm_dialog_confirm,

@@ -88,7 +88,7 @@ public class HostListFragment extends ListFragment
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setTitle(R.string.confirm_dialog_delete_host_title);
-        dialogBuilder.setIcon(R.drawable.ic_dialog_confirm);
+        dialogBuilder.setIcon(R.drawable.ic_alert);
 
         final int position = deleteHostPosition;
         dialogBuilder.setPositiveButton(R.string.confirm_dialog_confirm,
