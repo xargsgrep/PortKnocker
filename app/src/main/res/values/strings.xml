@@ -41,4 +41,11 @@
     <string name="toast_msg_knocking_complete">Knocking complete</string>
     <string name="toast_msg_knocking_canceled">Knocking canceled</string>
     <string name="toast_msg_knocking_failed">"Knocking failed: "</string>
+    <string name="menu_item_settings_title">Settings</string>
+    <string name="menu_item_export_title">Export Hosts</string>
+    <string name="menu_item_import_title">Import Hosts</string>
+    <string name="menu_item_sort_title">Sort Hosts</string>
+    <string name="menu_item_sort_hostname_title">By hostname</string>
+    <string name="menu_item_sort_label_title">By label</string>
+    <string name="menu_item_sort_newest_title">By newest</string>
 </resources>

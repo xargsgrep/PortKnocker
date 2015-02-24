@@ -38,30 +38,11 @@ import java.util.List;
 public class HostArrayAdapter extends ArrayAdapter<Host>
 {
     private Fragment fragment;
-    private List<Host> hosts;
 
     public HostArrayAdapter(Fragment fragment, List<Host> hosts)
     {
         super(fragment.getActivity(), -1, hosts);
         this.fragment = fragment;
-        this.hosts = hosts;
-    }
-
-    @Override
-    public int getCount()
-    {
-        return hosts.size();
-    }
-
-    @Override
-    public Host getItem(int position)
-    {
-        return hosts.get(position);
-    }
-
-    public void setHosts(List<Host> hosts)
-    {
-        this.hosts = hosts;
     }
 
     @Override
@@ -74,7 +55,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host>
         TextView hostnameView = (TextView) view.findViewById(R.id.host_row_hostname);
         TextView portsView = (TextView) view.findViewById(R.id.host_row_ports);
 
-        Host host = hosts.get(position);
+        Host host = getItem(position);
 
         labelView.setText(host.getLabel());
         hostnameView.setText(host.getHostname());
@@ -115,7 +96,7 @@ public class HostArrayAdapter extends ArrayAdapter<Host>
             @Override
             public void onClick(View v)
             {
-                Host host = hosts.get(fPosition);
+                Host host = getItem(fPosition);
                 Intent editHostIntent = new Intent(fragment.getActivity(), EditHostActivity.class);
                 editHostIntent.putExtra(EditHostActivity.KEY_HOST_ID, host.getId());
                 fragment.getActivity().startActivity(editHostIntent);

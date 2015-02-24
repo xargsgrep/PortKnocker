@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.view.Menu;
@@ -50,11 +49,6 @@ import java.util.Locale;
 
 public class HostListActivity extends ActionBarActivity
 {
-    private static final int MENU_ITEM_ID_SETTINGS = 2;
-    private static final int MENU_ITEM_ID_EXPORT = 3;
-    private static final int MENU_ITEM_ID_IMPORT = 4;
-    private static final int MENU_ITEM_ID_SORT = 5;
-
     private static final int FILE_CHOOSER_REQUEST_CODE = 1000;
     private static final String KEY_SHOW_DELETE_DIALOG = "showDeleteDialog";
     private static final SimpleDateFormat FILE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
@@ -110,25 +104,18 @@ public class HostListActivity extends ActionBarActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        MenuItem settings = menu.add(Menu.NONE, MENU_ITEM_ID_SETTINGS, 0, "Settings");
-        MenuItem exportItem = menu.add(Menu.NONE, MENU_ITEM_ID_EXPORT, 0, "Export Hosts");
-        MenuItem importItem = menu.add(Menu.NONE, MENU_ITEM_ID_IMPORT, 0, "Import Hosts");
-        MenuItem sortItem = menu.add(Menu.NONE, MENU_ITEM_ID_SORT, 0, "Sort Hosts").setIcon(R.drawable.ic_sort_variant);
-
-        MenuItemCompat.setShowAsAction(settings, MenuItem.SHOW_AS_ACTION_NEVER);
-        MenuItemCompat.setShowAsAction(exportItem, MenuItem.SHOW_AS_ACTION_NEVER);
-        MenuItemCompat.setShowAsAction(importItem, MenuItem.SHOW_AS_ACTION_NEVER);
-        MenuItemCompat.setShowAsAction(sortItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        return true;
+        getMenuInflater().inflate(R.menu.host_list, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
+
         switch (item.getItemId())
         {
-            case MENU_ITEM_ID_SETTINGS:
+            case R.id.menu_item_settings:
                 Intent settingsIntent;
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
                 {
@@ -143,13 +130,22 @@ public class HostListActivity extends ActionBarActivity
                 }
                 startActivity(settingsIntent);
                 return true;
-            case MENU_ITEM_ID_EXPORT:
+            case R.id.menu_item_export:
                 showExportHostDialog();
                 return true;
-            case MENU_ITEM_ID_IMPORT:
+            case R.id.menu_item_import:
                 Intent getContentIntent = FileUtils.createGetContentIntent();
                 Intent intent = Intent.createChooser(getContentIntent, "Select a file");
                 startActivityForResult(intent, FILE_CHOOSER_REQUEST_CODE);
+                return true;
+            case R.id.menu_item_sort_hostname:
+                ((HostListFragment) hostListFragment).sortByHostname();
+                return true;
+            case R.id.menu_item_sort_label:
+                ((HostListFragment) hostListFragment).sortByLabel();
+                return true;
+            case R.id.menu_item_sort_newest:
+                ((HostListFragment) hostListFragment).sortByNewest();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

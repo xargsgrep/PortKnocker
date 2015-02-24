@@ -34,6 +34,8 @@ import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.widget.HostWidget;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HostListFragment extends ListFragment
@@ -123,9 +125,57 @@ public class HostListFragment extends ListFragment
 
     public void refreshHosts()
     {
+        List<Host> hosts = databaseManager.getAllHosts();
+        setHosts(hosts);
+    }
+
+    public void sortByHostname()
+    {
+        sortHosts(new Comparator<Host>()
+        {
+            @Override
+            public int compare(Host lhs, Host rhs)
+            {
+                return lhs.getHostname().compareTo(rhs.getHostname());
+            }
+        });
+    }
+
+    public void sortByLabel()
+    {
+        sortHosts(new Comparator<Host>()
+        {
+            @Override
+            public int compare(Host lhs, Host rhs)
+            {
+                return lhs.getLabel().compareTo(rhs.getLabel());
+            }
+        });
+    }
+
+    public void sortByNewest()
+    {
+        sortHosts(new Comparator<Host>()
+        {
+            @Override
+            public int compare(Host lhs, Host rhs)
+            {
+                return Long.valueOf(rhs.getId()).compareTo(lhs.getId());
+            }
+        });
+    }
+
+    private void sortHosts(Comparator<Host> comparator)
+    {
+        List<Host> hosts = databaseManager.getAllHosts();
+        Collections.sort(hosts, comparator);
+        setHosts(hosts);
+    }
+
+    private void setHosts(List<Host> hosts)
+    {
         ((ArrayAdapter) getListAdapter()).clear();
 
-        List<Host> hosts = databaseManager.getAllHosts();
         for (Host host : hosts)
         {
             ((ArrayAdapter) getListAdapter()).add(host);
