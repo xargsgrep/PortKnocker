@@ -18,6 +18,7 @@ package com.xargsgrep.portknocker.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.xargsgrep.portknocker.R;
@@ -29,11 +30,15 @@ public class SettingsActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings);
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+                .replace(R.id.fragment_content, new SettingsFragment())
                 .commit();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setSubtitle(getResources().getString(R.string.settings_subtitle));
         getSupportActionBar().setHomeButtonEnabled(true);

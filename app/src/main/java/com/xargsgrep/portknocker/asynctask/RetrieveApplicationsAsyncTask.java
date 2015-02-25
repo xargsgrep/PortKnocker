@@ -55,9 +55,9 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
         if (prev != null) ft.remove(prev);
         ft.addToBackStack(null);
 
-        ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(activity.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
-        dialogFragment.setCancelable(false);
-        dialogFragment.show(ft, ProgressDialogFragment.TAG);
+//        ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(activity.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
+//        dialogFragment.setCancelable(false);
+//        dialogFragment.show(ft, ProgressDialogFragment.TAG);
     }
 
     @Override
@@ -90,11 +90,11 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
     @Override
     protected void onPostExecute(List<Application> applications)
     {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//        FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
         ((MiscFragment) fragment).initializeApplicationAdapter(applications);
-        Fragment dialog = fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
-        if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
+//        Fragment dialog = fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
+//        if (dialog != null) ((ProgressDialogFragment) dialog).dismiss();
     }
 
     private boolean isSystemPackage(ApplicationInfo applicationInfo)

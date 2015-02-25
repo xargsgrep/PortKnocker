@@ -19,17 +19,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.xargsgrep.portknocker.R;
+import com.xargsgrep.portknocker.adapter.EditHostFragmentPagerAdapter;
 import com.xargsgrep.portknocker.adapter.PortArrayAdapter;
 import com.xargsgrep.portknocker.db.DatabaseManager;
 import com.xargsgrep.portknocker.fragment.HostFragment;
@@ -43,7 +43,7 @@ import com.xargsgrep.portknocker.widget.HostWidget;
 
 import java.util.List;
 
-public class EditHostActivity extends ActionBarActivity implements ActionBar.TabListener
+public class EditHostActivity extends ActionBarActivity
 {
     public static final int MENU_ITEM_SAVE = 2;
     public static final int MENU_ITEM_DEBUG_INFO = 4;
@@ -53,22 +53,27 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
     public static final int TAB_INDEX_MISC = 2;
 
     public static final String KEY_HOST_ID = "hostId";
-    public static final String KEY_SELECTED_TAB_INDEX = "selectedTabIndex";
     public static final String KEY_SAVE_HOST_RESULT = "saveHostResult";
     public static final String KEY_SHOW_CANCEL_DIALOG = "showCancelDialog";
 
     private static final int MAX_PORT_VALUE = 65535;
 
     private DatabaseManager databaseManager;
+    private ViewPager viewPager;
     private AlertDialog cancelDialog;
-    // null when creating a new host
-    private Long hostId;
+    private Long hostId; // null when creating a new host
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_edit);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new EditHostFragmentPagerAdapter(getSupportFragmentManager(), this, hostId));
 
         databaseManager = new DatabaseManager(this);
 
@@ -79,66 +84,10 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
         if (host != null) getSupportActionBar().setSubtitle(host.getLabel());
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        addTab(getString(R.string.host_tab_name));
-        addTab(getString(R.string.ports_tab_name));
-        addTab(getString(R.string.misc_tab_name));
 
         if (savedInstanceState != null)
         {
-            getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(KEY_SELECTED_TAB_INDEX));
             if (savedInstanceState.getBoolean(KEY_SHOW_CANCEL_DIALOG)) showCancelDialog();
-        }
-    }
-
-    private void addTab(String text)
-    {
-        ActionBar.Tab tab = getSupportActionBar().newTab();
-        tab.setText(text);
-        tab.setTabListener(this);
-        getSupportActionBar().addTab(tab);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
-    {
-        Fragment hostFragment = getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
-        Fragment portsFragment = getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
-        Fragment miscFragment = getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
-
-        switch (tab.getPosition())
-        {
-            case TAB_INDEX_HOST:
-                if (hostFragment == null)
-                {
-                    hostFragment = HostFragment.newInstance(hostId);
-                    ft.add(R.id.fragment_content, hostFragment, HostFragment.TAG);
-                }
-                ft.show(hostFragment);
-                if (portsFragment != null) ft.hide(portsFragment);
-                if (miscFragment != null) ft.hide(miscFragment);
-                break;
-            case TAB_INDEX_PORTS:
-                if (portsFragment == null)
-                {
-                    portsFragment = PortsFragment.newInstance(hostId);
-                    ft.add(R.id.fragment_content, portsFragment, PortsFragment.TAG);
-                }
-                ft.show(portsFragment);
-                if (hostFragment != null) ft.hide(hostFragment);
-                if (miscFragment != null) ft.hide(miscFragment);
-                break;
-            case TAB_INDEX_MISC:
-                if (miscFragment == null)
-                {
-                    miscFragment = MiscFragment.newInstance(hostId);
-                    ft.add(R.id.fragment_content, miscFragment, MiscFragment.TAG);
-                }
-                ft.show(miscFragment);
-                if (hostFragment != null) ft.hide(hostFragment);
-                if (portsFragment != null) ft.hide(portsFragment);
-                break;
         }
     }
 
@@ -184,7 +133,6 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putInt(KEY_SELECTED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
         outState.putBoolean(KEY_SHOW_CANCEL_DIALOG, (cancelDialog != null && cancelDialog.isShowing()));
     }
 
@@ -197,14 +145,14 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
 
     private void saveHost()
     {
-        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(HostFragment.TAG);
-        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(PortsFragment.TAG);
-        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(MiscFragment.TAG);
+        HostFragment hostFragment = (HostFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_HOST));
+        PortsFragment portsFragment = (PortsFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_PORTS));
+        MiscFragment miscFragment = (MiscFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(TAB_INDEX_MISC));
 
         Host host = (hostId == null) ? new Host() : databaseManager.getHost(hostId);
 
-        host.setLabel(hostFragment.getHostLabelEditText().getText().toString());
-        host.setHostname(hostFragment.getHostnameEditText().getText().toString());
+        host.setLabel(hostFragment.getHostLabel());
+        host.setHostname(hostFragment.getHostname());
 
         if (portsFragment != null)
         {
@@ -223,10 +171,10 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
         if (miscFragment != null)
         {
             // could be null if user saves without going to misc tab
-            int delay = miscFragment.getDelaySeekBar().getProgress();
+            int delay = miscFragment.getDelay();
             host.setDelay(delay);
 
-            int tcpConnectTimeout = miscFragment.getTcpConnectTimeoutSeekBar().getProgress();
+            int tcpConnectTimeout = miscFragment.getTcpConnectTimeout();
             host.setTcpConnectTimeout(tcpConnectTimeout);
 
             String launchIntent = miscFragment.getSelectedLaunchIntent();
@@ -325,9 +273,8 @@ public class EditHostActivity extends ActionBarActivity implements ActionBar.Tab
         cancelDialog.show();
     }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) { }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) { }
+    private String getFragmentTag(int fragmentPosition)
+    {
+        return "android:switcher:" + viewPager.getId() + ":" + fragmentPosition;
+    }
 }

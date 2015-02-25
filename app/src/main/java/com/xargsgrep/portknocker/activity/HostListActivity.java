@@ -25,6 +25,7 @@ import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,9 +62,13 @@ public class HostListActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.host_list);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         databaseManager = new DatabaseManager(this);
 
-        setContentView(R.layout.host_list);
         getSupportActionBar().setHomeButtonEnabled(false);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

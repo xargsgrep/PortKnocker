@@ -17,7 +17,9 @@ package com.xargsgrep.portknocker.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,6 @@ public class HostFragment extends Fragment
     private static final InputFilter HOSTNAME_INPUT_FILTER = new HostnameInputFilter();
 
     private DatabaseManager databaseManager;
-    private boolean savedInstanceState = false;
     private String hostLabel;
     private String hostname;
 
@@ -75,12 +76,15 @@ public class HostFragment extends Fragment
         EditText hostLabelEdit = getHostLabelEditText();
         EditText hostnameEdit = getHostnameEditText();
 
+        hostLabelEdit.addTextChangedListener(new FieldSettingTextWatcher("hostLabel"));
+        hostnameEdit.addTextChangedListener(new FieldSettingTextWatcher("hostname"));
+
         Bundle args = getArguments();
 
-        if (this.savedInstanceState)
+        if (savedInstanceState != null)
         {
-            hostLabelEdit.setText(hostLabel);
-            hostnameEdit.setText(hostname);
+            hostLabelEdit.setText(savedInstanceState.getString("hostLabel"));
+            hostnameEdit.setText(savedInstanceState.getString("hostname"));
         }
         else if (args != null)
         {
@@ -97,20 +101,56 @@ public class HostFragment extends Fragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-
-        hostLabel = getHostLabelEditText().getText().toString();
-        hostname = getHostnameEditText().getText().toString();
-
-        savedInstanceState = true;
+        outState.putString("hostLabel", hostLabel);
+        outState.putString("hostname", hostname);
     }
 
-    public EditText getHostLabelEditText()
+    public String getHostLabel()
+    {
+        return hostLabel;
+    }
+
+    public String getHostname()
+    {
+        return hostname;
+    }
+
+    private EditText getHostLabelEditText()
     {
         return (EditText) getView().findViewById(R.id.host_label_edit);
     }
 
-    public EditText getHostnameEditText()
+    private EditText getHostnameEditText()
     {
         return (EditText) getView().findViewById(R.id.host_name_edit);
+    }
+
+    private class FieldSettingTextWatcher implements TextWatcher
+    {
+        private String field;
+
+        private FieldSettingTextWatcher(String field)
+        {
+            this.field = field;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+            if (field.equals("hostLabel"))
+            {
+                hostLabel = s.toString();
+            }
+            else if (field.equals("hostname"))
+            {
+                hostname = s.toString();
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
     }
 }

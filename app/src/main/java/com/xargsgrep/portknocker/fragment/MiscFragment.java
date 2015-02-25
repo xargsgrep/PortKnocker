@@ -35,6 +35,7 @@ import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MiscFragment extends Fragment
@@ -46,7 +47,6 @@ public class MiscFragment extends Fragment
     private int delay;
     private int tcpConnectTimeout;
     private ApplicationArrayAdapter applicationAdapter;
-    private boolean savedInstanceState = false;
 
     public static MiscFragment newInstance(Long hostId)
     {
@@ -98,48 +98,18 @@ public class MiscFragment extends Fragment
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        tcpConnectTimeoutSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
-                tcpConnectTimeoutDisplay.setText(String.valueOf(progress));
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                tcpConnectTimeout = seekBar.getProgress();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-        });
-
-        delaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
-                delayDisplay.setText(String.valueOf(progress));
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                delay = seekBar.getProgress();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-        });
+        delaySeekBar.setOnSeekBarChangeListener(new FieldSettingSeekBarChangeListener("delay", delayDisplay));
+        tcpConnectTimeoutSeekBar.setOnSeekBarChangeListener(
+                new FieldSettingSeekBarChangeListener("tcpConnectTimeout", tcpConnectTimeoutDisplay)
+        );
 
         Bundle args = getArguments();
 
-        if (this.savedInstanceState)
+        if (savedInstanceState != null)
         {
-            delaySeekBar.setProgress(delay);
-            tcpConnectTimeoutSeekBar.setProgress(tcpConnectTimeout);
+            delaySeekBar.setProgress(savedInstanceState.getInt("delay"));
+            tcpConnectTimeoutSeekBar.setProgress(savedInstanceState.getInt("tcpConnectTimeout"));
+            selectedLaunchIntent = savedInstanceState.getString("selectedLaunchIntent");
             launchIntentSpinner.setAdapter(applicationAdapter);
             setSelectedLaunchIntent();
         }
@@ -148,8 +118,12 @@ public class MiscFragment extends Fragment
             Long hostId = args.getLong(EditHostActivity.KEY_HOST_ID);
             Host host = databaseManager.getHost(hostId);
 
+            delay = host.getDelay();
             delaySeekBar.setProgress(host.getDelay());
+
+            tcpConnectTimeout = host.getTcpConnectTimeout();
             tcpConnectTimeoutSeekBar.setProgress(host.getTcpConnectTimeout());
+
             selectedLaunchIntent = host.getLaunchIntentPackage();
         }
         else
@@ -161,6 +135,7 @@ public class MiscFragment extends Fragment
 
         if (applicationAdapter == null)
         {
+            initializeApplicationAdapter(Arrays.asList(new Application("Retrieving apps...   ", null, "")));
             RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(getActivity(), this);
             retrieveAppsTask.execute();
         }
@@ -170,16 +145,41 @@ public class MiscFragment extends Fragment
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        delay = getDelaySeekBar().getProgress();
-        tcpConnectTimeout = getTcpConnectTimeoutSeekBar().getProgress();
-        savedInstanceState = true;
+        outState.putInt("delay", delay);
+        outState.putInt("tcpConnectTimeout", tcpConnectTimeout);
+        outState.putString("selectedLaunchIntent", selectedLaunchIntent);
     }
 
-    public void initializeApplicationAdapter(List<Application> applications)
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        initializeLaunchIntentSpinner();
+    }
+
+    public int getDelay()
+    {
+        return delay;
+    }
+
+    public int getTcpConnectTimeout()
+    {
+        return tcpConnectTimeout;
+    }
+
+    public synchronized void initializeApplicationAdapter(List<Application> applications)
     {
         applicationAdapter = new ApplicationArrayAdapter(getActivity(), applications);
-        getLaunchIntentSpinner().setAdapter(applicationAdapter);
-        setSelectedLaunchIntent();
+        initializeLaunchIntentSpinner();
+    }
+
+    private void initializeLaunchIntentSpinner()
+    {
+        if (applicationAdapter != null)
+        {
+            getLaunchIntentSpinner().setAdapter(applicationAdapter);
+            setSelectedLaunchIntent();
+        }
     }
 
     private void setSelectedLaunchIntent()
@@ -203,18 +203,42 @@ public class MiscFragment extends Fragment
         return selectedLaunchIntent;
     }
 
-    public SeekBar getDelaySeekBar()
-    {
-        return (SeekBar) getView().findViewById(R.id.delay_seekbar);
-    }
-
-    public SeekBar getTcpConnectTimeoutSeekBar()
-    {
-        return (SeekBar) getView().findViewById(R.id.tcp_timeout_seekbar);
-    }
-
     private Spinner getLaunchIntentSpinner()
     {
         return (Spinner) getView().findViewById(R.id.launch_intent);
+    }
+
+    private class FieldSettingSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener
+    {
+        private String field;
+        private TextView textView;
+
+        private FieldSettingSeekBarChangeListener(String field, TextView textView)
+        {
+            this.field = field;
+            this.textView = textView;
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+        {
+            textView.setText(String.valueOf(progress));
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar)
+        {
+            if (field.equals("delay"))
+            {
+                delay = seekBar.getProgress();
+            }
+            else if (field.equals("tcpConnectTimeout"))
+            {
+                tcpConnectTimeout = seekBar.getProgress();
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) { }
     }
 }
