@@ -43,8 +43,8 @@ public class MiscFragment extends Fragment
 
     private DatabaseManager databaseManager;
     private String selectedLaunchIntent;
-    private int delay;
-    private int tcpConnectTimeout;
+    private int delay = Host.DEFAULT_DELAY;
+    private int tcpConnectTimeout = Host.DEFAULT_TCP_CONNECT_TIMEOUT;
     private ApplicationArrayAdapter applicationAdapter;
 
     public static MiscFragment newInstance(Long hostId)
@@ -128,8 +128,8 @@ public class MiscFragment extends Fragment
         else
         {
             // editing a new host
-            delaySeekBar.setProgress(Host.DEFAULT_DELAY);
-            tcpConnectTimeoutSeekBar.setProgress(Host.DEFAULT_TCP_CONNECT_TIMEOUT);
+            delaySeekBar.setProgress(delay);
+            tcpConnectTimeoutSeekBar.setProgress(tcpConnectTimeout);
         }
 
         if (applicationAdapter == null)
