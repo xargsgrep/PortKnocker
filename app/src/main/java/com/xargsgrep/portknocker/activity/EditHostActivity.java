@@ -72,14 +72,14 @@ public class EditHostActivity extends ActionBarActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new EditHostFragmentPagerAdapter(getSupportFragmentManager(), this, hostId));
-
         databaseManager = new DatabaseManager(this);
 
         Bundle extras = getIntent().getExtras();
         hostId = (BundleUtils.contains(extras, KEY_HOST_ID)) ? extras.getLong(KEY_HOST_ID) : null;
         Host host = (hostId == null) ? null : databaseManager.getHost(hostId);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new EditHostFragmentPagerAdapter(getSupportFragmentManager(), this, hostId));
 
         if (host != null) getSupportActionBar().setSubtitle(host.getLabel());
         getSupportActionBar().setHomeButtonEnabled(true);

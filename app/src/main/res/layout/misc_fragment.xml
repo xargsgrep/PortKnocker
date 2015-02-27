@@ -24,6 +24,13 @@
         android:layout_marginBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        android:visibility="gone"
+        />
+    <ProgressBar
+        android:id="@+id/launch_intent_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
         />
 
     <TextView

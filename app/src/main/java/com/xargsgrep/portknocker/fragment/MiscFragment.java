@@ -35,7 +35,6 @@ import com.xargsgrep.portknocker.model.Application;
 import com.xargsgrep.portknocker.model.Host;
 import com.xargsgrep.portknocker.utils.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MiscFragment extends Fragment
@@ -135,7 +134,6 @@ public class MiscFragment extends Fragment
 
         if (applicationAdapter == null)
         {
-            initializeApplicationAdapter(Arrays.asList(new Application("Retrieving apps...   ", null, "")));
             RetrieveApplicationsAsyncTask retrieveAppsTask = new RetrieveApplicationsAsyncTask(getActivity(), this);
             retrieveAppsTask.execute();
         }
@@ -167,7 +165,7 @@ public class MiscFragment extends Fragment
         return tcpConnectTimeout;
     }
 
-    public synchronized void initializeApplicationAdapter(List<Application> applications)
+    public void initializeApplicationAdapter(List<Application> applications)
     {
         applicationAdapter = new ApplicationArrayAdapter(getActivity(), applications);
         initializeLaunchIntentSpinner();
@@ -179,6 +177,8 @@ public class MiscFragment extends Fragment
         {
             getLaunchIntentSpinner().setAdapter(applicationAdapter);
             setSelectedLaunchIntent();
+            getView().findViewById(R.id.launch_intent).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.launch_intent_progress_bar).setVisibility(View.GONE);
         }
     }
 
