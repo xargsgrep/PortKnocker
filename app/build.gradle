@@ -8,8 +8,8 @@ android {
         applicationId "com.xargsgrep.portknocker"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 8
+        versionName "1.0.7"
     }
     signingConfigs {
         release {
@@ -21,7 +21,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -177,8 +177,12 @@ public class MiscFragment extends Fragment
         {
             getLaunchIntentSpinner().setAdapter(applicationAdapter);
             setSelectedLaunchIntent();
-            getView().findViewById(R.id.launch_intent).setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.launch_intent_progress_bar).setVisibility(View.GONE);
+
+            if (getView() != null)
+            {
+                getView().findViewById(R.id.launch_intent).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.launch_intent_progress_bar).setVisibility(View.GONE);
+            }
         }
     }
 
