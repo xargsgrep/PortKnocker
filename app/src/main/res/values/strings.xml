@@ -14,6 +14,7 @@
     <string name="delay_label">Delay Between Packets (ms)</string>
     <string name="delay_hint">1000</string>
     <string name="launch_app_label">Launch Application</string>
+    <string name="launch_app_list_default">None</string>
     <string name="tcp_timeout_label">TCP Connect Timeout (ms)</string>
     <string name="confirm_dialog_confirm">Yes</string>
     <string name="confirm_dialog_cancel">No</string>
@@ -27,6 +28,7 @@
     <string name="pref_key_hide_ports_widget">hide_ports_widget</string>
     <string name="pref_key_hide_ports_widget_title">Hide ports in widget</string>
     <string name="pref_key_hide_ports_widget_summary">Port sequence will not be displayed in widgets</string>
+    <string name="pref_key_hide_ports_category_title">Miscellaneous</string>
     <string name="settings_subtitle">Settings</string>
     <string name="empty_list">There are no items</string>
     <string name="toast_msg_delete_all_ports">"Can't delete all ports"</string>
@@ -48,4 +50,10 @@
     <string name="menu_item_sort_hostname_title">By hostname</string>
     <string name="menu_item_sort_label_title">By label</string>
     <string name="menu_item_sort_newest_title">By newest</string>
+    <string name="export_host_dialog_title">Export Hosts</string>
+    <string name="export_host_dialog_message">Enter filename</string>
+    <string name="export_host_dialog_ok_button">OK</string>
+    <string name="export_host_dialog_cancel_button">Cancel</string>
+    <string name="export_host_dialog_export_complete">"Exported hosts to file: "</string>
+    <string name="export_host_dialog_export_failure">"Exporting hosts failed: "</string>
 </resources>

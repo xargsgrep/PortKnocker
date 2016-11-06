@@ -161,8 +161,8 @@ public class HostListActivity extends ActionBarActivity
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Export Hosts");
-        alert.setMessage("Enter filename");
+        alert.setTitle(R.string.export_host_dialog_title);
+        alert.setMessage(R.string.export_host_dialog_message);
 
         final EditText input = new EditText(this);
         input.setText(String.format("hosts-%s.json", FILE_DATE_FORMAT.format(new Date())));
@@ -170,7 +170,7 @@ public class HostListActivity extends ActionBarActivity
 
         alert.setView(input);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+        alert.setPositiveButton(R.string.export_host_dialog_ok_button, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int whichButton)
             {
@@ -179,16 +179,16 @@ public class HostListActivity extends ActionBarActivity
                 try
                 {
                     String filePath = SerializationUtils.serializeHosts(value, hosts);
-                    showToast("Exported hosts to file: " + filePath);
+                    showToast(getString(R.string.export_host_dialog_export_complete) + filePath);
                 }
                 catch (Exception e)
                 {
-                    showToast("Exporting hosts failed: " + e.getMessage());
+                    showToast(getString(R.string.export_host_dialog_export_failure) + e.getMessage());
                 }
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        alert.setNegativeButton(R.string.export_host_dialog_cancel_button, new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog, int whichButton) { }
         });

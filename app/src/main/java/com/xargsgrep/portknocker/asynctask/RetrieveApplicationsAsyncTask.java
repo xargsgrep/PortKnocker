@@ -15,7 +15,6 @@
  */
 package com.xargsgrep.portknocker.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -82,7 +81,7 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
                 return app1.getLabel().compareTo(app2.getLabel());
             }
         });
-        applications.add(0, new Application("None", null, ""));
+        applications.add(0, new Application(activity.getString(R.string.launch_app_list_default), null, ""));
 
         return applications;
     }
