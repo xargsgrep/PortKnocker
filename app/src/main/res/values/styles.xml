@@ -3,6 +3,7 @@
 
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
     </style>
