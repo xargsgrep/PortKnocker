@@ -26,7 +26,7 @@ public class HostnameInputFilter implements InputFilter
         for (int i = start; i < end; i++)
         {
             char c = source.charAt(i);
-            if (!Character.isLetterOrDigit(c) && c != '.' && c != '-') return "";
+            if (!Character.isLetterOrDigit(c) && c != '.' && c != '-' && c != ':') return "";
         }
         return null;
     }
