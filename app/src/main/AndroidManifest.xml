@@ -11,6 +11,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
+        android:allowBackup="true"
         >
 
         <activity
@@ -44,8 +45,8 @@
         </activity>
 
         <receiver
-            android:name=".widget.HostWidget"
-            android:label="@string/app_name"
+            android:name=".widget.HostWidget1x1"
+            android:label="@string/widget1x1_name"
             >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -53,7 +54,46 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget"
+                android:resource="@xml/widget1x1"
+                />
+        </receiver>
+        <receiver
+            android:name=".widget.HostWidget2x1"
+            android:label="@string/widget2x1_name"
+            >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget2x1"
+                />
+        </receiver>
+        <receiver
+            android:name=".widget.HostWidget3x1"
+            android:label="@string/widget3x1_name"
+            >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget3x1"
+                />
+        </receiver>
+        <receiver
+            android:name=".widget.HostWidget4x1"
+            android:label="@string/widget4x1_name"
+            >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget4x1"
                 />
         </receiver>
 

@@ -84,6 +84,7 @@ public class HostWidget extends AppWidgetProvider
         DatabaseManager hostDataManager = new DatabaseManager(context);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 
+
         boolean hostExists = hostDataManager.hostExists(widgetHostId);
         if (hostExists)
         {

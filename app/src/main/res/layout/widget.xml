@@ -12,35 +12,31 @@
     android:paddingBottom="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="8dp"
-    >
+    android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/widget_host_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        />
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/widget_host_hostname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:textColor="#888888"
         android:textSize="14sp"
-        />
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/widget_host_ports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:singleLine="true"
         android:textColor="#888888"
         android:textSize="14sp"
-        />
+        android:maxLines="1" />
 
 </LinearLayout>
