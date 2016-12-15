@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Port Knocker</string>
+    <string name="widget1x1_name">Port Knocker 1x1</string>
+    <string name="widget2x1_name">Port Knocker 2x1</string>
+    <string name="widget3x1_name">Port Knocker 3x1</string>
+    <string name="widget4x1_name">Port Knocker 4x1</string>
     <string name="host_tab_name">Host</string>
     <string name="ports_tab_name">Ports</string>
     <string name="misc_tab_name">Other</string>

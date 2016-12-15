@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Port Knocker</string>
+    <string name="widget1x1_name">Port Knocker 1x1</string>
+    <string name="widget2x1_name">Port Knocker 2x1</string>
+    <string name="widget3x1_name">Port Knocker 3x1</string>
+    <string name="widget4x1_name">Port Knocker 4x1</string>
     <string name="host_tab_name">Host</string>
     <string name="ports_tab_name">Ports</string>
     <string name="misc_tab_name">Weitere Einstellungen</string>
@@ -30,7 +34,7 @@
     <string name="pref_key_hide_ports_widget_summary">Portsequenz nicht im Widget anzeigen</string>
     <string name="pref_key_hide_ports_category_title">Weitere Einstellungen</string>
     <string name="settings_subtitle">Einstellungen</string>
-    <string name="empty_list">Liste is leer</string>
+    <string name="empty_list">Liste ist leer</string>
     <string name="toast_msg_delete_all_ports">\"Es können nicht alle Ports gelöscht werden\"</string>
     <string name="toast_msg_enter_label">Bitte Titel eingeben</string>
     <string name="toast_msg_enter_hostname">Hostnamen eingeben</string>
