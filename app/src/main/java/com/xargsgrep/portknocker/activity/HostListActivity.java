@@ -143,6 +143,9 @@ public class HostListActivity extends ActionBarActivity
                 Intent intent = Intent.createChooser(getContentIntent, "Select a file");
                 startActivityForResult(intent, FILE_CHOOSER_REQUEST_CODE);
                 return true;
+            case R.id.menu_item_send:
+                sendHostsToOtherApp();
+                return true;
             case R.id.menu_item_sort_hostname:
                 ((HostListFragment) hostListFragment).sortByHostname();
                 return true;
@@ -194,6 +197,26 @@ public class HostListActivity extends ActionBarActivity
         });
 
         alert.show();
+    }
+
+    private void sendHostsToOtherApp() {
+        List<Host> hosts = databaseManager.getAllHosts();
+        try {
+            // Sharing per e-mail app but also others works reliable only by using a file
+            String path = SerializationUtils.serializeHosts("PortKnockerConfig.json", hosts);
+
+            Intent shareIntent = new Intent();
+            Uri uriToCsvFile = Uri.parse(path);
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uriToCsvFile);
+            shareIntent.setType("application/json");
+
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_dialog_chooser_title)));
+        }
+        catch (Exception e)
+        {
+            showToast(getString(R.string.export_host_dialog_export_failure) + e.getMessage());
+        }
     }
 
     @Override

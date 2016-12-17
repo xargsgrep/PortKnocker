@@ -50,6 +50,7 @@
     <string name="menu_item_settings_title">Einstellungen</string>
     <string name="menu_item_export_title">Exportiere Hostliste</string>
     <string name="menu_item_import_title">Importiere Hostliste</string>
+    <string name="menu_item_send_title">Sende Hostliste</string>
     <string name="menu_item_sort_title">Sortiere Hostliste</string>
     <string name="menu_item_sort_hostname_title">Nach Hostname</string>
     <string name="menu_item_sort_label_title">Nach Titel</string>
@@ -60,4 +61,5 @@
     <string name="export_host_dialog_cancel_button">Abbrechen</string>
     <string name="export_host_dialog_export_complete">"Hostliste exportiert in file: "</string>
     <string name="export_host_dialog_export_failure">"Exportieren von Hostliste fehlgeschlagen: "</string>
+    <string name="share_dialog_chooser_title">"Teile mit... "</string>
 </resources>
