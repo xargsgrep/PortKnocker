@@ -44,6 +44,7 @@ import com.xargsgrep.portknocker.utils.BundleUtils;
 import com.xargsgrep.portknocker.utils.SerializationUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -103,6 +104,45 @@ public class HostListActivity extends ActionBarActivity
             {
                 ((HostListFragment) hostListFragment).showDeleteDialog();
             }
+        }
+
+        // Check if this application was started by an intent.
+        checkForActionViewIntent();
+    }
+
+    private void checkForActionViewIntent() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        if (action!=null && Arrays.asList(Intent.ACTION_VIEW, Intent.ACTION_EDIT).contains(action))
+        {
+            Uri uri = intent.getData();
+            importHostsFromUri(uri);
+            // Make sure we don't read in again on device canvas change
+            intent.setAction(Intent.ACTION_MAIN);
+        }
+    }
+
+    private void importHostsFromUri(Uri uri) {
+        String filePath = FileUtils.getPath(this, uri);
+
+        try
+        {
+            List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
+            for (Host host : hosts)
+            {
+                databaseManager.saveHost(host);
+            }
+
+            Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
+            if(hostListFragment != null) {
+                ((HostListFragment) hostListFragment).refreshHosts();
+            }
+            showToast("Imported hosts from file: " + filePath);
+        }
+        catch (Exception e)
+        {
+            showToast("Importing hosts failed: " + e.getMessage());
         }
     }
 
@@ -209,7 +249,7 @@ public class HostListActivity extends ActionBarActivity
             Uri uriToCsvFile = Uri.parse(path);
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, uriToCsvFile);
-            shareIntent.setType("application/json");
+            shareIntent.setType(getString(R.string.data_mime_type));
 
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_dialog_chooser_title)));
         }
@@ -228,25 +268,7 @@ public class HostListActivity extends ActionBarActivity
                 if (resultCode == RESULT_OK)
                 {
                     Uri uri = data.getData();
-                    String filePath = FileUtils.getPath(this, uri);
-
-                    try
-                    {
-                        List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
-                        for (Host host : hosts)
-                        {
-                            databaseManager.saveHost(host);
-                        }
-
-                        Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
-                        ((HostListFragment) hostListFragment).refreshHosts();
-
-                        showToast("Imported hosts from file: " + filePath);
-                    }
-                    catch (Exception e)
-                    {
-                        showToast("Importing hosts failed: " + e.getMessage());
-                    }
+                    importHostsFromUri(uri);
                 }
                 break;
         }

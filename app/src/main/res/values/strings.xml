@@ -62,4 +62,5 @@
     <string name="export_host_dialog_export_complete">"Exported hosts to file: "</string>
     <string name="export_host_dialog_export_failure">"Exporting hosts failed: "</string>
     <string name="share_dialog_chooser_title">"Share with... "</string>
+    <string name="data_mime_type" translatable="false">application/octet-stream</string>
 </resources>

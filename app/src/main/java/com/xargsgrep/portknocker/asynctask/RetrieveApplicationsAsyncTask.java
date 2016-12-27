@@ -53,6 +53,7 @@ public class RetrieveApplicationsAsyncTask extends AsyncTask<Void, Void, List<Ap
         Fragment prev = fragmentManager.findFragmentByTag(ProgressDialogFragment.TAG);
         if (prev != null) ft.remove(prev);
         ft.addToBackStack(null);
+        ft.commit();
 
 //        ProgressDialogFragment dialogFragment = ProgressDialogFragment.newInstance(activity.getString(R.string.progress_dialog_retrieving_applications), true, ProgressDialog.STYLE_SPINNER);
 //        dialogFragment.setCancelable(false);

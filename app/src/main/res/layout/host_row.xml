@@ -27,29 +27,26 @@
             android:id="@+id/host_row_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            />
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/host_row_hostname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:textColor="#888888"
             android:textSize="14sp"
-            />
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/host_row_ports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:singleLine="true"
             android:textColor="#888888"
             android:textSize="14sp"
-            />
+            android:maxLines="1" />
     </LinearLayout>
 
     <ImageView

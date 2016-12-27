@@ -77,7 +77,7 @@ public class DatabaseManager
                 DatabaseHelper.HOST_TABLE_NAME,
                 DatabaseHelper.HOST_TABLE_COLUMNS,
                 hostSelection,
-                new String[] {new Long(hostId).toString()},
+                new String[] {Long.toString(hostId)},
                 null,
                 null,
                 DatabaseHelper.HOST_ID_COLUMN
@@ -152,11 +152,11 @@ public class DatabaseManager
             hostValues.put(DatabaseHelper.HOST_TCP_CONNECT_TIMEOUT_COLUMN, host.getTcpConnectTimeout());
 
             String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
-            int rowsAffected = database.update(DatabaseHelper.HOST_TABLE_NAME, hostValues, hostSelection, new String[] {new Long(host.getId()).toString()});
+            int rowsAffected = database.update(DatabaseHelper.HOST_TABLE_NAME, hostValues, hostSelection, new String[] {Long.toString(host.getId())});
             if (rowsAffected == 0) return false;
 
             String portsSelection = String.format("%s = ?", DatabaseHelper.PORT_HOST_ID_COLUMN);
-            database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] {new Long(host.getId()).toString()});
+            database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] {Long.toString(host.getId())});
 
             int i = 0;
             for (Port port : host.getPorts())
@@ -191,10 +191,10 @@ public class DatabaseManager
         try
         {
             String portsSelection = String.format("%s = ?", DatabaseHelper.PORT_HOST_ID_COLUMN);
-            database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] {new Long(host.getId()).toString()});
+            database.delete(DatabaseHelper.PORT_TABLE_NAME, portsSelection, new String[] {Long.toString(host.getId())});
 
             String hostSelection = String.format("%s = ?", DatabaseHelper.HOST_ID_COLUMN);
-            database.delete(DatabaseHelper.HOST_TABLE_NAME, hostSelection, new String[] {new Long(host.getId()).toString()});
+            database.delete(DatabaseHelper.HOST_TABLE_NAME, hostSelection, new String[] {Long.toString(host.getId())});
 
             database.setTransactionSuccessful();
         }
@@ -214,7 +214,7 @@ public class DatabaseManager
                 DatabaseHelper.HOST_TABLE_NAME,
                 DatabaseHelper.HOST_TABLE_COLUMNS,
                 hostSelection,
-                new String[] {new Long(hostId).toString()},
+                new String[] {Long.toString(hostId)},
                 null,
                 null,
                 DatabaseHelper.HOST_ID_COLUMN
@@ -236,7 +236,7 @@ public class DatabaseManager
                 DatabaseHelper.PORT_TABLE_NAME,
                 DatabaseHelper.PORT_TABLE_COLUMNS,
                 portsSelection,
-                new String[] {new Long(hostId).toString()},
+                new String[] {Long.toString(hostId)},
                 null,
                 null,
                 DatabaseHelper.PORT_INDEX_COLUMN

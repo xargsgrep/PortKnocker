@@ -21,6 +21,16 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:scheme="file"
+                    android:mimeType="@string/data_mime_type"
+                    android:host="*"
+                    android:pathPattern=".*\\.json" />
+            </intent-filter>
         </activity>
 
         <activity
