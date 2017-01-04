@@ -44,6 +44,7 @@ import com.xargsgrep.portknocker.utils.BundleUtils;
 import com.xargsgrep.portknocker.utils.SerializationUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -104,6 +105,45 @@ public class HostListActivity extends ActionBarActivity
                 ((HostListFragment) hostListFragment).showDeleteDialog();
             }
         }
+
+        // Check if this application was started by an intent.
+        checkForActionViewIntent();
+    }
+
+    private void checkForActionViewIntent() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        if (action!=null && Arrays.asList(Intent.ACTION_VIEW, Intent.ACTION_EDIT).contains(action))
+        {
+            Uri uri = intent.getData();
+            importHostsFromUri(uri);
+            // Make sure we don't read in again on device canvas change
+            intent.setAction(Intent.ACTION_MAIN);
+        }
+    }
+
+    private void importHostsFromUri(Uri uri) {
+        String filePath = FileUtils.getPath(this, uri);
+
+        try
+        {
+            List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
+            for (Host host : hosts)
+            {
+                databaseManager.saveHost(host);
+            }
+
+            Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
+            if(hostListFragment != null) {
+                ((HostListFragment) hostListFragment).refreshHosts();
+            }
+            showToast("Imported hosts from file: " + filePath);
+        }
+        catch (Exception e)
+        {
+            showToast("Importing hosts failed: " + e.getMessage());
+        }
     }
 
     @Override
@@ -142,6 +182,9 @@ public class HostListActivity extends ActionBarActivity
                 Intent getContentIntent = FileUtils.createGetContentIntent();
                 Intent intent = Intent.createChooser(getContentIntent, "Select a file");
                 startActivityForResult(intent, FILE_CHOOSER_REQUEST_CODE);
+                return true;
+            case R.id.menu_item_send:
+                sendHostsToOtherApp();
                 return true;
             case R.id.menu_item_sort_hostname:
                 ((HostListFragment) hostListFragment).sortByHostname();
@@ -196,6 +239,26 @@ public class HostListActivity extends ActionBarActivity
         alert.show();
     }
 
+    private void sendHostsToOtherApp() {
+        List<Host> hosts = databaseManager.getAllHosts();
+        try {
+            // Sharing per e-mail app but also others works reliable only by using a file
+            String path = SerializationUtils.serializeHosts("PortKnockerConfig.json", hosts);
+
+            Intent shareIntent = new Intent();
+            Uri uriToCsvFile = Uri.parse(path);
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uriToCsvFile);
+            shareIntent.setType(getString(R.string.data_mime_type));
+
+            startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_dialog_chooser_title)));
+        }
+        catch (Exception e)
+        {
+            showToast(getString(R.string.export_host_dialog_export_failure) + e.getMessage());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -205,25 +268,7 @@ public class HostListActivity extends ActionBarActivity
                 if (resultCode == RESULT_OK)
                 {
                     Uri uri = data.getData();
-                    String filePath = FileUtils.getPath(this, uri);
-
-                    try
-                    {
-                        List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
-                        for (Host host : hosts)
-                        {
-                            databaseManager.saveHost(host);
-                        }
-
-                        Fragment hostListFragment = getSupportFragmentManager().findFragmentByTag(HostListFragment.TAG);
-                        ((HostListFragment) hostListFragment).refreshHosts();
-
-                        showToast("Imported hosts from file: " + filePath);
-                    }
-                    catch (Exception e)
-                    {
-                        showToast("Importing hosts failed: " + e.getMessage());
-                    }
+                    importHostsFromUri(uri);
                 }
                 break;
         }

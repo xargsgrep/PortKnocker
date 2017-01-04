@@ -27,8 +27,7 @@
         android:paddingRight="8dp"
         android:hint="@string/host_label_hint"
         android:inputType="text"
-        android:singleLine="true"
-        />
+        android:maxLines="1" />
 
     <TextView
         style="@style/labelSmall"
@@ -48,7 +47,6 @@
         android:paddingRight="8dp"
         android:hint="@string/host_name_hint"
         android:inputType="text"
-        android:singleLine="true"
-        />
+        android:maxLines="1" />
 
 </LinearLayout>

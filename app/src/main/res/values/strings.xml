@@ -50,6 +50,7 @@
     <string name="menu_item_settings_title">Settings</string>
     <string name="menu_item_export_title">Export Hosts</string>
     <string name="menu_item_import_title">Import Hosts</string>
+    <string name="menu_item_send_title">Send Hosts</string>
     <string name="menu_item_sort_title">Sort Hosts</string>
     <string name="menu_item_sort_hostname_title">By hostname</string>
     <string name="menu_item_sort_label_title">By label</string>
@@ -60,4 +61,6 @@
     <string name="export_host_dialog_cancel_button">Cancel</string>
     <string name="export_host_dialog_export_complete">"Exported hosts to file: "</string>
     <string name="export_host_dialog_export_failure">"Exporting hosts failed: "</string>
+    <string name="share_dialog_chooser_title">"Share with... "</string>
+    <string name="data_mime_type" translatable="false">application/octet-stream</string>
 </resources>
