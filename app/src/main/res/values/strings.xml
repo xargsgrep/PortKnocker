@@ -47,6 +47,9 @@
     <string name="toast_msg_knocking_complete">Knocking complete</string>
     <string name="toast_msg_knocking_canceled">Knocking canceled</string>
     <string name="toast_msg_knocking_failed">"Knocking failed: "</string>
+    <string name="toast_msg_import_from_file_success">"Imported hosts from file: "</string>
+    <string name="toast_msg_import_error">"Importing hosts failed: "</string>
+    <string name="toast_msg_no_permission_for_external_mem_access">No permission to access external memory.</string>
     <string name="menu_item_settings_title">Settings</string>
     <string name="menu_item_export_title">Export Hosts</string>
     <string name="menu_item_import_title">Import Hosts</string>
@@ -62,5 +65,4 @@
     <string name="export_host_dialog_export_complete">"Exported hosts to file: "</string>
     <string name="export_host_dialog_export_failure">"Exporting hosts failed: "</string>
     <string name="share_dialog_chooser_title">"Share with... "</string>
-    <string name="data_mime_type" translatable="false">application/octet-stream</string>
 </resources>
