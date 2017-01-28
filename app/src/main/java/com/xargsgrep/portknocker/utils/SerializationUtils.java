@@ -1,6 +1,7 @@
 package com.xargsgrep.portknocker.utils;
 
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,11 +24,7 @@ public class SerializationUtils
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        File storageDir = new File(Environment.getExternalStorageDirectory(), "PortKnocker");
-        if (!storageDir.exists())
-        {
-            storageDir.mkdirs();
-        }
+        File storageDir = createPortKnockerFolderIfNotExists();
 
         File file = new File(storageDir, fileName);
         FileWriter fileWriter = new FileWriter(file);
@@ -35,6 +32,16 @@ public class SerializationUtils
         mapper.writeValue(fileWriter, hosts);
 
         return file.getAbsolutePath();
+    }
+
+    @NonNull
+    public static File createPortKnockerFolderIfNotExists() {
+        File storageDir = new File(Environment.getExternalStorageDirectory(), "PortKnocker");
+        if (!storageDir.exists())
+        {
+            storageDir.mkdirs();
+        }
+        return storageDir;
     }
 
     public static List<Host> deserializeHosts(String filePath) throws Exception

@@ -47,6 +47,9 @@
     <string name="toast_msg_knocking_complete">Anklopfen komplett</string>
     <string name="toast_msg_knocking_canceled">Anklopfen abgebrochen</string>
     <string name="toast_msg_knocking_failed">\"Anklopfen fehlgeschlagen: \"</string>
+    <string name="toast_msg_import_from_file_success">"Importiert aus: "</string>
+    <string name="toast_msg_import_error">"Import fehlgeschlagen: "</string>
+    <string name="toast_msg_no_permission_for_external_mem_access">Keine Rechte um auf externen Speicher zuzugreifen.</string>
     <string name="menu_item_settings_title">Einstellungen</string>
     <string name="menu_item_export_title">Exportiere Hostliste</string>
     <string name="menu_item_import_title">Importiere Hostliste</string>
