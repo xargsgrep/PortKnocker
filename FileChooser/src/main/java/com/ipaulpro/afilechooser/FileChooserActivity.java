@@ -30,6 +30,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -172,7 +173,10 @@ public class FileChooserActivity extends FragmentActivity implements
      */
     private void finishWithResult(File file) {
         if (file != null) {
-            Uri uri = Uri.fromFile(file);
+            Uri uri = FileProvider.getUriForFile(this.getBaseContext(), "com.ipaulpro.afilechooser", file);
+            Intent newIntent = new Intent();
+            newIntent.setData(uri);
+            newIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION + Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             setResult(RESULT_OK, new Intent().setData(uri));
             finish();
         } else {
