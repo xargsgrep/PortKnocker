@@ -168,21 +168,17 @@ public class HostListActivity extends ActionBarActivity
     }
 
     private String getFileName(Uri uri) {
-        String result = "";
-        if("content".equals(uri.getScheme())) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        String result = null;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
             try {
-                if (cursor != null && cursor.moveToFirst()) {
+                if (cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
             } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+                cursor.close();
             }
-        }
-        else {
-            // In case of "file" scheme, we can get it per getPath
+        } else {
             result = uri.getPath();
         }
         return result;
