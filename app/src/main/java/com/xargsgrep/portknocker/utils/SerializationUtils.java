@@ -1,5 +1,8 @@
 package com.xargsgrep.portknocker.utils;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
@@ -10,6 +13,7 @@ import com.xargsgrep.portknocker.model.Host;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.List;
 
 public class SerializationUtils
@@ -44,7 +48,7 @@ public class SerializationUtils
         return storageDir;
     }
 
-    public static List<Host> deserializeHosts(String filePath) throws Exception
+    public static List<Host> deserializeHosts(Context context, Uri fileUri) throws Exception
     {
         if (!isExternalStorageAccessible())
         {
@@ -52,7 +56,10 @@ public class SerializationUtils
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(new File(filePath), new TypeReference<List<Host>>() {});
+        ContentResolver resolver = context.getContentResolver();
+        InputStream input = resolver.openInputStream(fileUri);
+
+        return objectMapper.readValue(input, new TypeReference<List<Host>>() {});
     }
 
     private static boolean isExternalStorageAccessible()

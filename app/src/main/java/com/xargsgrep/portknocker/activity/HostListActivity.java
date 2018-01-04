@@ -152,13 +152,12 @@ public class HostListActivity extends ActionBarActivity
                         // Read in the content stream into local file to be able
                         // to open it in import function
                         InputStreamToFile(input, filename);
-                        importHostsFromFullyQualifiedFilename(filename);
+                        importHostsFromFullyQualifiedFilename(uri);
                     } catch (FileNotFoundException io) {
-                        showToast(getString(R.string.toast_msg_import_error) + filename);
+                        showToast(getString(R.string.toast_msg_import_error) + getFileName(uri));
                     }
                 } else {
-                    String filename = uri.getPath();
-                    importHostsFromFullyQualifiedFilename(filename);
+                    importHostsFromFullyQualifiedFilename(uri);
                     // Make sure we don't read in again on device canvas change
                 }
                 intent.setAction(Intent.ACTION_MAIN);
@@ -171,12 +170,16 @@ public class HostListActivity extends ActionBarActivity
     private String getFileName(Uri uri) {
         String result = null;
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
             }
-        } finally {
-            cursor.close();
+        } else {
+            result = uri.getPath();
         }
         return result;
     }
@@ -198,10 +201,10 @@ public class HostListActivity extends ActionBarActivity
         }
     }
 
-    private void importHostsFromFullyQualifiedFilename(String filePath) {
+    private void importHostsFromFullyQualifiedFilename(Uri uri) {
         try
         {
-            List<Host> hosts = SerializationUtils.deserializeHosts(filePath);
+            List<Host> hosts = SerializationUtils.deserializeHosts(getApplicationContext(), uri);
             for (Host host : hosts)
             {
                 databaseManager.saveHost(host);
@@ -211,7 +214,7 @@ public class HostListActivity extends ActionBarActivity
             if(hostListFragment != null) {
                 ((HostListFragment) hostListFragment).refreshHosts();
             }
-            showToast(getString(R.string.toast_msg_import_from_file_success) + filePath);
+            showToast(getString(R.string.toast_msg_import_from_file_success) + getFileName(uri));
         }
         catch (Exception e)
         {
@@ -349,8 +352,7 @@ public class HostListActivity extends ActionBarActivity
                 if (resultCode == RESULT_OK)
                 {
                     Uri uri = data.getData();
-                    String filename = uri.getPath();
-                    importHostsFromFullyQualifiedFilename(filename);
+                    importHostsFromFullyQualifiedFilename(uri);
                 }
                 break;
         }
